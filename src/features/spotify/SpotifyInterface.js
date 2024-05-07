@@ -292,7 +292,7 @@ const SpotifyInterface = () => {
     const content = (
         <div className='spotifyBlock'>
             <div className='conversationButton'
-                title={`${currentSong}`}
+                title={`${currentSong[0]}`}
                 onClick={() => {
                     setShowSearchBar(!showSearchBar)
                     setInput('')
@@ -315,7 +315,7 @@ const SpotifyInterface = () => {
                 {musicBars}
                 <div className={currentSong[0]?.length > 15 && playState === 1 ? 'scrollingSongTitle' : 'songTitle'}
                     style={{cursor: 'pointer'}}>
-                    {currentSong}
+                    {currentSong[0]}
                 </div>
             </div>
             {searchBar}
