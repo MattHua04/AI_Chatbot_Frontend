@@ -67,7 +67,7 @@ const SpotifyInterface = () => {
         if (spotifyState) {
             setPlayState(spotifyState.playState)
             setControlPlayState(spotifyState.controlPlayState)
-            setCurrentSong(spotifyState.currentSong[0])
+            setCurrentSong(spotifyState.currentSong)
             setSearchResults(spotifyState.searchResults)
             setSongRequest(spotifyState.songRequest)
             setVolume(spotifyState.volume)
