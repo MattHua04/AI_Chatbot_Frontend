@@ -176,7 +176,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                     <div style={{display: 'block', marginBottom: '5px'}}>
                         <button
                             className='home_button addConversationButton'
-                            title="Edit Conversations"
+                            title="Create a New Conversation"
                             onClick={openNewConversationForm}
                             style={{ width: '12rem',
                                     border: 'none',
