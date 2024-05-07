@@ -6,7 +6,6 @@ import SearchResult from './SearchResult'
 import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
-import { cloneDeep } from 'lodash'
 
 const SpotifyInterface = () => {
     const {id} = useSelector(state => state.auth)
@@ -24,6 +23,7 @@ const SpotifyInterface = () => {
     const searchBarRef = useRef()
     const [pressedKeys, setPressedKeys] = useState({})
     const [previousPressedKeys, setPreviousPressedKeys] = useState({})
+    const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
 
     const {
         data,
@@ -38,6 +38,7 @@ const SpotifyInterface = () => {
     
     useEffect(() => {
         if (data) {
+            setHasBeenSuccess(true)
             setSpotifyState(data.entities[data.ids[0]])
         }
     }, [data])
@@ -74,7 +75,9 @@ const SpotifyInterface = () => {
     }, [spotifyState])
 
     useEffect(() => {
-        updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+        if (hasBeenSuccess) {
+            updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+        }
     }, [playState, controlPlayState, songRequest, input, volume])
 
     useEffect(() => {

@@ -159,7 +159,7 @@ const NewUserForm = () => {
                     name="roles"
                     className={`form__select`}
                     multiple={true}
-                    size="2"
+                    size="3"
                     value={roles}
                     onChange={onRolesChanged}
                     style={{

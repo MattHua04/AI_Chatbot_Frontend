@@ -120,7 +120,7 @@ const EditUserForm = ({user}) => {
     const {id} = useSelector(state => state.auth)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
 
-    const visibleRoles = loggedInUser?.roles.includes(ROLES.ADMIN) ? [ROLES.ADMIN, ROLES.USER] : []
+    const visibleRoles = loggedInUser?.roles.includes(ROLES.ADMIN) ? [ROLES.ADMIN, ROLES.USER, ROLES.DEMO] : []
 
     const options = Object.values(ROLES)
         .filter(role => visibleRoles.includes(role))
