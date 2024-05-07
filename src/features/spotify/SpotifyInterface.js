@@ -13,7 +13,8 @@ const SpotifyInterface = () => {
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
     const [controlPlayState, setControlPlayState] = useState(0) // -1 for prev, 0 for nothing, 1 for next
-    const [song, setSong] = useState('') // The currently playing song
+    const [currentSong, setCurrentSong] = useState(['', '']) // The currently playing song
+    const [songRequest, setSongRequest] = useState(['', '']) // The requested song
     const [input, setInput] = useState('') // The text in song search box
     const [searchResults, setSearchResults] = useState([]) // The search results for the song search box
     const [volume, setVolume] = useState(50) // Playback volume
@@ -55,31 +56,33 @@ const SpotifyInterface = () => {
         error: updateStateError
     }] = useUpdateStateMutation()
 
-    useEffect(() => {
-        if (isError) {
-            createState({sourceId: id, song, input, playState, controlPlayState, volume})
-        }
-    }, [isError])
+    // useEffect(() => {
+    //     if (isError) {
+    //         createState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+    //     }
+    // }, [isError])
 
     useEffect(() => {
         if (spotifyState) {
             setPlayState(spotifyState.playState)
             setControlPlayState(spotifyState.controlPlayState)
-            setSong(spotifyState.song)
+            setCurrentSong(spotifyState.currentSong[0])
             setSearchResults(spotifyState.searchResults)
+            setSongRequest(spotifyState.songRequest)
             setVolume(spotifyState.volume)
         }
     }, [spotifyState])
 
     useEffect(() => {
-        updateState({sourceId: id, song, input, playState, controlPlayState, volume})
-    }, [playState, controlPlayState, song, volume, searchResults])
+        updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+    }, [playState, controlPlayState, songRequest, input, volume])
 
     useEffect(() => {
         if (input.length) {
             setShowSearchResults(true)
         } else {
             setShowSearchResults(false)
+            setSearchResults([])
         }
     }, [input])
 
@@ -101,7 +104,7 @@ const SpotifyInterface = () => {
 
     const handleSubmit = () => {
         if (input.length && searchResults.length) {
-            setSong(selectedSearchResult ? selectedSearchResult : searchResults[0])
+            setSongRequest(searchResults[selectedSearchResult])
             setInput('')
             setShowSearchBar(false)
             setShowSearchResults(false)
@@ -246,7 +249,7 @@ const SpotifyInterface = () => {
                     <SearchResult
                         key={index}
                         result={result}
-                        setSong={setSong}
+                        setSongRequest={setSongRequest}
                         setInput={setInput}
                         setShowSearchBar={setShowSearchBar}
                         searchResults={searchResults}
@@ -256,12 +259,37 @@ const SpotifyInterface = () => {
                         />)}
             </div>
         )
+    } else if (showSearchResults) {
+        searchResultsContent = (
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '5px', marginBottom: '10px' }}>
+                <button
+                    className="songButton">
+                    <div className='songTitle'
+                        style={{
+                            cursor: 'pointer',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: '1',
+                            width: '100%',
+                            height: '100%',
+                            justifyContent: 'center',
+                            alignItems: 'flex-end',
+                            paddingBottom: '3px',
+                            marginBottom: '-10px',
+                        }}>
+                        <div className="wave"></div>
+                        <div className="wave"></div>
+                        <div className="wave"></div>
+                    </div>
+                </button>
+            </div>
+        )
     }
 
     const content = (
         <div className='spotifyBlock'>
             <div className='conversationButton'
-                title={`${song}`}
+                title={`${currentSong}`}
                 onClick={() => {
                     setShowSearchBar(!showSearchBar)
                     setInput('')
@@ -282,9 +310,9 @@ const SpotifyInterface = () => {
                         cursor: 'pointer'
                     }}>
                 {musicBars}
-                <div className={song.length > 15 && playState === 1 ? 'scrollingSongTitle' : 'songTitle'}
+                <div className={currentSong[0]?.length > 15 && playState === 1 ? 'scrollingSongTitle' : 'songTitle'}
                     style={{cursor: 'pointer'}}>
-                    {song}
+                    {currentSong}
                 </div>
             </div>
             {searchBar}

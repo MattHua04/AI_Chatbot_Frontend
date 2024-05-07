@@ -1,6 +1,6 @@
-const SearchResult = ({ result, setSong, setInput, setShowSearchBar, searchResults, setShowSearchResults, selectedSearchResult, setSelectedSearchResult }) => {
+const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, searchResults, setShowSearchResults, selectedSearchResult, setSelectedSearchResult }) => {
     const handleClick = () => {
-        setSong(result)
+        setSongRequest(result)
         setInput('')
         setShowSearchBar(false)
         setShowSearchResults(false)
@@ -13,13 +13,13 @@ const SearchResult = ({ result, setSong, setInput, setShowSearchBar, searchResul
             <button
                 className="selectedSongButton"
                 onClick={handleClick}>
-                <div className={result.length > 15 ? 'scrollingSongTitle' : 'songTitle'}
+                <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
                     style={{
                         cursor: 'pointer',
                         width: 'fit-content',
                         margin: 'auto',
                     }}>
-                    {result}
+                    {result[0]}
                 </div>
             </button>
         )
@@ -34,7 +34,7 @@ const SearchResult = ({ result, setSong, setInput, setShowSearchBar, searchResul
                         width: 'fit-content',
                         margin: 'auto',
                     }}>
-                    {result}
+                    {result[0]}
                 </div>
             </button>
         )

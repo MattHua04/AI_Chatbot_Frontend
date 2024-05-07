@@ -239,6 +239,7 @@ a:focus-visible {
 }
 
 .welcome__default_box {
+  z-index: -9999;
   background-color: rgba(203, 214, 238, 0.917);
   position: fixed;
   left: 30%;
