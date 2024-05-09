@@ -26,7 +26,7 @@ const SpotifyInterface = () => {
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
     const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
     const [timerId, setTimerId] = useState(null)
-
+    
     const {
         data,
         isLoading,
@@ -79,10 +79,10 @@ const SpotifyInterface = () => {
     }, [spotifyState])
 
     useEffect(() => {
-        if (hasBeenSuccess) {
+        if (hasBeenSuccess && !isVolumeSliderFocused) {
             updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
         }
-    }, [playState, controlPlayState, songRequest, input, volume])
+    }, [playState, controlPlayState, songRequest, input, volume, isVolumeSliderFocused])
 
     useEffect(() => {
         if (input.length) {
