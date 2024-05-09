@@ -1,6 +1,6 @@
 import ReactSlider from "react-slider"
         
-const VolumeSlider = ({volume, setVolume}) => {
+const VolumeSlider = ({volume, setVolume, setIsVolumeSliderFocused, resetVolumeSliderFocus, cancelVolumeSliderCooldown}) => {
     return (
         <ReactSlider
             min={0}
@@ -9,7 +9,12 @@ const VolumeSlider = ({volume, setVolume}) => {
             trackClassName="customSlider-track"
             thumbClassName="customSlider-thumb"
             value={volume}
-            onChange={(newValue) => setVolume(newValue)}
+            onChange={(newValue) => {
+                cancelVolumeSliderCooldown()
+                setIsVolumeSliderFocused(true)
+                setVolume(newValue)
+                resetVolumeSliderFocus()
+            }}
         />
     )
 }

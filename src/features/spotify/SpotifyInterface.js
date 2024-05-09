@@ -24,6 +24,8 @@ const SpotifyInterface = () => {
     const [pressedKeys, setPressedKeys] = useState({})
     const [previousPressedKeys, setPreviousPressedKeys] = useState({})
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
+    const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
+    const [timerId, setTimerId] = useState(null)
 
     const {
         data,
@@ -70,7 +72,9 @@ const SpotifyInterface = () => {
             setCurrentSong(spotifyState.currentSong)
             setSearchResults(spotifyState.searchResults)
             setSongRequest(spotifyState.songRequest)
-            setVolume(spotifyState.volume)
+            if (!isVolumeSliderFocused) {
+                setVolume(spotifyState.volume)
+            }
         }
     }, [spotifyState])
 
@@ -179,6 +183,19 @@ const SpotifyInterface = () => {
             }
         }
     }, [pressedKeys])
+
+    const resetVolumeSliderFocus = () => {
+        const id = setTimeout(() => {
+            setIsVolumeSliderFocused(false)
+        }, 1000)
+        setTimerId(id)
+    }
+
+    const cancelVolumeSliderCooldown = () => {
+        if (timerId) {
+            clearTimeout(timerId)
+        }
+    }
 
     let musicBars
     if (playState === 1) {
@@ -363,7 +380,12 @@ const SpotifyInterface = () => {
                 {volume > 0 && volume < 33 && <IoVolumeLow />}
                 {volume >= 33 && volume < 66 && <IoVolumeMedium />}
                 {volume >= 66 && volume <= 100 && <IoVolumeHigh />}
-                <VolumeSlider volume={volume} setVolume={setVolume} />
+                <VolumeSlider
+                    volume={volume}
+                    setVolume={setVolume}
+                    setIsVolumeSliderFocused={setIsVolumeSliderFocused}
+                    resetVolumeSliderFocus={resetVolumeSliderFocus}
+                    cancelVolumeSliderCooldown={cancelVolumeSliderCooldown} />
             </div>
         </div>
     )
