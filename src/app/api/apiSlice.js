@@ -2,7 +2,8 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import { setCredentials } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'https://ai-chatbot-server.hbypjt.com',
+    // baseUrl: 'https://ai-chatbot-server.hbypjt.com',
+    baseUrl: 'http://192.168.0.190:3500',
     // baseUrl: 'http://localhost:3500',
     credentials: 'include',
     prepareHeaders: (headers, {getState}) => {
