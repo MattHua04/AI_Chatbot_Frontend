@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faSave, faXmarkCircle } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faSave, faXmarkCircle, faCopy, faCheck } from "@fortawesome/free-solid-svg-icons"
 import { useUpdateConversationMutation } from '../conversations/conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
 import Latex from 'react-latex'
@@ -11,6 +11,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     const [edit, setEdit] = useState(false)
     const textareaRef = useRef(null)
     const [input, setInput] = useState(promptContent)
+    const [copied, setCopied] = useState(false)
+    const [copiedArray, setCopiedArray] = useState([])
 
     const codeStyle = {
         fontFamily: 'monospace',
@@ -34,17 +36,45 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                 const language = part.substring(0, part.indexOf("\n"))
                 const code = part.substring(part.indexOf("\n") + 1)
                 const key = language.trim()
+
+                const copyToClipboard = (text, index) => {
+                    navigator.clipboard.writeText(text)
+                        .then(() => {
+                            const newCopiedArray = [...copiedArray]
+                            newCopiedArray[index] = true
+                            setCopiedArray(newCopiedArray)
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy text: ', err)
+                        })
+                }
+
                 return (
-                    <div key={key}>
+                    <div key={index}>
                         <div style={{
                             borderRadius: '5px',
                             backgroundColor: 'rgba(137, 83, 223, 0.718)',
                             color: 'rgb(255, 255, 255)',
                             border: '3px solid rgba(84, 71, 209, 0.718)',
                             padding: '0.2em 2em',
-                            minHeight: '2em'
+                            minHeight: '2em',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: '1',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}>
                             <p>{language ? language : 'command'}</p>
+                            <button className="conversationButton"
+                                onClick={() => {
+                                    copyToClipboard(code, index)
+                                }}
+                                style={{
+                                    width: 'auto',
+                                    padding: '0.3em 0.7em',
+                                }}>
+                                    {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faCopy} />}
+                            </button>
                         </div>
                         <pre key={index} style={codeStyle}>
                             {code}
@@ -56,6 +86,18 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     
         return parsedContent
     }
+
+    useEffect(() => {
+        if (copiedArray.includes(true)) {
+            setTimeout(() => {
+                setCopiedArray(Array(promptContent.length).fill(false))
+            }, 1000)
+        }
+    }, [copiedArray])
+
+    useEffect(() => {
+        setCopiedArray(Array(promptContent.length).fill(false))
+    }, [promptContent])
 
     const [updateConversation, {
         isLoading,
