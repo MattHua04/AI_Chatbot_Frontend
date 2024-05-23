@@ -308,7 +308,7 @@ const SpotifyInterface = () => {
 
     const content = (
         <div className='spotifyBlock'>
-            <div className='conversationButton'
+            <div className='songTitleButton'
                 title={`${currentSong[0]}`}
                 onClick={() => {
                     setShowSearchBar(!showSearchBar)

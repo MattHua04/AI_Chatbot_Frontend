@@ -9,35 +9,69 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
 
     let searchResult
     if (selectedSearchResult === searchResults.indexOf(result)) {
-        searchResult = (
-            <button
-                className="selectedSongButton"
-                onClick={handleClick}>
-                <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
-                    style={{
-                        cursor: 'pointer',
-                        width: 'fit-content',
-                        margin: 'auto',
-                    }}>
-                    {result[0]}
-                </div>
-            </button>
-        )
+        if (result[1].includes("playlist")) {
+            searchResult = (
+                <button
+                    className="selectedPlaylistButton"
+                    onClick={handleClick}>
+                    <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
+                        style={{
+                            cursor: 'pointer',
+                            width: 'fit-content',
+                            margin: 'auto',
+                        }}>
+                        {result[0]}
+                    </div>
+                </button>
+            )
+        } else {
+            searchResult = (
+                <button
+                    className="selectedSongButton"
+                    onClick={handleClick}>
+                    <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
+                        style={{
+                            cursor: 'pointer',
+                            width: 'fit-content',
+                            margin: 'auto',
+                        }}>
+                        {result[0]}
+                    </div>
+                </button>
+            )
+        }
     } else {
-        searchResult = (
-            <button
-                className="songButton"
-                onClick={handleClick}>
-                <div className={'songTitle'}
-                    style={{
-                        cursor: 'pointer',
-                        width: 'fit-content',
-                        margin: 'auto',
-                    }}>
-                    {result[0]}
-                </div>
-            </button>
-        )
+        if (result[1].includes("playlist")) {
+            searchResult = (
+                <button
+                    className="playlistButton"
+                    onClick={handleClick}>
+                    <div className={'songTitle'}
+                        style={{
+                            cursor: 'pointer',
+                            width: 'fit-content',
+                            margin: 'auto',
+                        }}>
+                        {result[0]}
+                    </div>
+                </button>
+            )
+        } else {
+            searchResult = (
+                <button
+                    className="songButton"
+                    onClick={handleClick}>
+                    <div className={'songTitle'}
+                        style={{
+                            cursor: 'pointer',
+                            width: 'fit-content',
+                            margin: 'auto',
+                        }}>
+                        {result[0]}
+                    </div>
+                </button>
+            )
+        }
     }
 
     return searchResult

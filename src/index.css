@@ -282,7 +282,7 @@ a:focus-visible {
   color: #ffffff;
   transition: 0.3s ease;
   animation: pulse 1.5s infinite alternate ease-in-out;
-  transform: scaleX(1.1) translateX(-4%);
+  /* transform: scaleX(1.1) translateX(-4%); */
   max-width: 60vw,
 }
 
@@ -297,7 +297,7 @@ a:focus-visible {
   color: #ffffff;
   transition: 0.3s ease;
   animation: pulse 1.5s infinite alternate ease-in-out;
-  transform: scaleX(1.1) translateX(4%);
+  /* transform: scaleX(1.1) translateX(4%); */
   max-width: 60vw;
 }
 
@@ -745,6 +745,55 @@ tr {
   }
 }
 
+.songTitleButton {
+  background-color: rgba(203, 214, 238, 0.718);
+  color: #5136d5;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 0.3em 0.3em;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 2rem;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.songTitleButton:hover {
+  color: #ffffff;
+  transition: 0.3s ease;
+  animation: pulse 1.5s infinite alternate ease-in-out;
+  transform: scale(1.03)
+}
+
+.playlistButton {
+  background-color: rgba(203, 214, 238, 0.718);
+  color: #5136d5;
+  cursor: pointer;
+  border: 2px solid #5136d5;
+  outline: 2px solid rgba(221, 213, 231, 0.718);
+  border-radius: 10px;
+  padding: 0.3em 0.3em;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 2rem;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.playlistButton:hover {
+  color: #ffffff;
+  transition: 0.3s ease;
+  animation: pulse 1.5s infinite alternate ease-in-out;
+  transform: scale(1.1);
+}
+
 .songButton {
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;
@@ -787,6 +836,29 @@ tr {
 }
 
 .selectedSongButton:hover {
+  transition: 0.3s ease;
+  transform: scale(1.1)
+}
+
+.selectedPlaylistButton {
+  cursor: pointer;
+  width: 100%;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  outline: 2px solid rgba(221, 213, 231, 0.718);
+  padding: 0.3em 0.3em;
+  text-decoration: none;
+  color: #ffffff;
+  animation: pulse 1.5s infinite alternate ease-in-out;
+  display: flex;
+  flex-direction: row;
+  height: 2rem;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.selectedPlaylistButton:hover {
   transition: 0.3s ease;
   transform: scale(1.1)
 }
