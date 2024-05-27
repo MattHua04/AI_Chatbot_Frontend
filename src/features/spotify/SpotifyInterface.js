@@ -294,6 +294,7 @@ const SpotifyInterface = () => {
                             height: '100%',
                             justifyContent: 'center',
                             alignItems: 'flex-end',
+                            marginTop: '3px',
                             paddingBottom: '3px',
                             marginBottom: '-10px',
                         }}>

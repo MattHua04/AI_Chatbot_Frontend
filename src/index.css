@@ -776,15 +776,16 @@ tr {
   border: 2px solid #5136d5;
   outline: 2px solid rgba(221, 213, 231, 0.718);
   border-radius: 10px;
-  padding: 0.3em 0.3em;
+  /* padding: 0.3em 0.3em; */
   text-decoration: none;
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 2rem;
+  height: 100%;
   font-size: 15px;
   overflow: hidden;
   transition: 0.3s ease;
+  min-height: 2em;
 }
 
 .playlistButton:hover {
@@ -800,15 +801,16 @@ tr {
   cursor: pointer;
   border: none;
   border-radius: 10px;
-  padding: 0.3em 0.3em;
+  /* padding: 0.3em 0.3em; */
   text-decoration: none;
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 2rem;
+  height: 100%;
   font-size: 15px;
   overflow: hidden;
   transition: 0.3s ease;
+  min-height: 2em;
 }
 
 .songButton:hover {
@@ -821,18 +823,19 @@ tr {
 .selectedSongButton {
   cursor: pointer;
   width: 100%;
+  height: 100%;
   border: none;
   border-radius: 10px;
-  padding: 0.3em 0.3em;
+  /* padding: 0.3em 0.3em; */
   text-decoration: none;
   color: #ffffff;
   animation: pulse 1.5s infinite alternate ease-in-out;
   display: flex;
   flex-direction: row;
-  height: 2rem;
   font-size: 15px;
   overflow: hidden;
   transition: 0.3s ease;
+  min-height: 2em;
 }
 
 .selectedSongButton:hover {
@@ -843,19 +846,20 @@ tr {
 .selectedPlaylistButton {
   cursor: pointer;
   width: 100%;
+  height: 100%;
   border: 2px solid transparent;
   border-radius: 10px;
   outline: 2px solid rgba(221, 213, 231, 0.718);
-  padding: 0.3em 0.3em;
+  /* padding: 0.3em 0.3em; */
   text-decoration: none;
   color: #ffffff;
   animation: pulse 1.5s infinite alternate ease-in-out;
   display: flex;
   flex-direction: row;
-  height: 2rem;
   font-size: 15px;
   overflow: hidden;
   transition: 0.3s ease;
+  min-height: 2em;
 }
 
 .selectedPlaylistButton:hover {
@@ -864,7 +868,9 @@ tr {
 }
 
 .songTitle {
+  text-align: left;
   width: 100%;
+  min-height: 1.5em;
   white-space: nowrap;
   font-size: 15px;
   text-indent: 5px;
@@ -873,6 +879,7 @@ tr {
 }
 
 .scrollingSongTitle {
+  text-align: left;
   width: fit-content;
   white-space: nowrap;
   font-size: 15px;
@@ -886,7 +893,7 @@ tr {
     transform: translateX(13em);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-105%);
   }
 }
 

@@ -14,13 +14,28 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                 <button
                     className="selectedPlaylistButton"
                     onClick={handleClick}>
-                    <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
+                    <div
                         style={{
-                            cursor: 'pointer',
-                            width: 'fit-content',
-                            margin: 'auto',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontSize: '15px',
+                            fontWeight: 'bolder',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            gap: '5px',
+                            cursor: 'pointer'
                         }}>
-                        {result[0]}
+                        <img src={result[2]} alt="" style={{
+                            height: '2.5em',
+                            borderRadius: '10px',
+                            marginRight: '5px',
+                            width: '2.5em',
+                            zIndex: '999',
+                        }}/>
+                        <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result[0]}</div>
                     </div>
                 </button>
             )
@@ -29,13 +44,28 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                 <button
                     className="selectedSongButton"
                     onClick={handleClick}>
-                    <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}
+                    <div
                         style={{
-                            cursor: 'pointer',
-                            width: 'fit-content',
-                            margin: 'auto',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontSize: '15px',
+                            fontWeight: 'bolder',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            gap: '5px',
+                            cursor: 'pointer'
                         }}>
-                        {result[0]}
+                        <img src={result[2]} alt="" style={{
+                            height: '2.5em',
+                            borderRadius: '10px',
+                            marginRight: '5px',
+                            width: '2.5em',
+                            zIndex: '999',
+                        }}/>
+                        <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result[0]}</div>
                     </div>
                 </button>
             )
@@ -46,13 +76,28 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                 <button
                     className="playlistButton"
                     onClick={handleClick}>
-                    <div className={'songTitle'}
+                    <div
                         style={{
-                            cursor: 'pointer',
-                            width: 'fit-content',
-                            margin: 'auto',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontSize: '15px',
+                            fontWeight: 'bolder',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            gap: '5px',
+                            cursor: 'pointer'
                         }}>
-                        {result[0]}
+                        <img src={result[2]} alt="" style={{
+                            height: '2.5em',
+                            borderRadius: '10px',
+                            marginRight: '5px',
+                            width: '2.5em',
+                            zIndex: '999',
+                        }}/>
+                        <div className="songTitle">{result[0]}</div>
                     </div>
                 </button>
             )
@@ -61,13 +106,28 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                 <button
                     className="songButton"
                     onClick={handleClick}>
-                    <div className={'songTitle'}
+                    <div
                         style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontSize: '15px',
+                            fontWeight: 'bolder',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            gap: '5px',
                             cursor: 'pointer',
-                            width: 'fit-content',
-                            margin: 'auto',
                         }}>
-                        {result[0]}
+                        <img src={result[2]} alt="" style={{
+                            height: '2.5em',
+                            borderRadius: '10px',
+                            marginRight: '5px',
+                            width: '2.5em',
+                            zIndex: '999',
+                        }}/>
+                        <div className="songTitle">{result[0]}</div>
                     </div>
                 </button>
             )
