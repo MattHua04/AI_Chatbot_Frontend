@@ -115,6 +115,7 @@ const SpotifyInterface = () => {
             setInput('')
             setShowSearchBar(false)
             setShowSearchResults(false)
+            setSelectedSearchResult(0)
         }
     }
 
@@ -132,6 +133,7 @@ const SpotifyInterface = () => {
                 setShowSearchBar(false)
                 setInput('')
                 setShowSearchResults(false)
+                setSelectedSearchResult(0)
             }
         }
     })
