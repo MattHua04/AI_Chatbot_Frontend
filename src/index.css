@@ -890,7 +890,7 @@ tr {
 
 @keyframes scroll-left {
   0% {
-    transform: translateX(13em);
+    transform: translateX(10em);
   }
   100% {
     transform: translateX(-105%);
