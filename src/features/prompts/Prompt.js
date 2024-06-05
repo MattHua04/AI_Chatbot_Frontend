@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faSave, faXmarkCircle, faCopy, faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faSave, faXmarkCircle, faCopy, faCheck, faRotate } from "@fortawesome/free-solid-svg-icons"
 import { useUpdateConversationMutation } from '../conversations/conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
 import Latex from 'react-latex'
@@ -11,7 +11,6 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     const [edit, setEdit] = useState(false)
     const textareaRef = useRef(null)
     const [input, setInput] = useState(promptContent)
-    const [copied, setCopied] = useState(false)
     const [copiedArray, setCopiedArray] = useState([])
 
     const codeStyle = {
@@ -116,7 +115,7 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
 
     useEffect(() => {
         setInput(promptContent)
-        adjustTextareaWidth()
+        // adjustTextareaWidth()
         adjustTextareaHeight()
     }, [edit])
 
@@ -149,7 +148,7 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     const handleInputChange = (e) => {
         setPromptContent(e.target.value)
         setInput(e.target.value)
-        adjustTextareaWidth()
+        // adjustTextareaWidth()
         adjustTextareaHeight()
     }
 
@@ -180,6 +179,18 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
         const handleEdit = () => {
             setEdit(true)
             setEditingPromptIndex(promptId)
+        }
+
+        const regenerate = async () => {
+            const updatedContent = [
+                ...conversationContent.slice(0, promptId),
+            ]
+            await updateConversation({
+                id: conversationId,
+                user: conversation.user,
+                title: conversation.title,
+                content: updatedContent,
+            })
         }
 
         const handleSave = async () => {
@@ -284,7 +295,9 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                                 display: 'flex',
                                 alignItems: 'center',
                                 marginRight: '1em',
-                                maxWidth: '65vw',
+                                marginLeft: '1em',
+                                // maxWidth: '65vw',
+                                width: '100%',
                             }}>
                             <textarea
                                 className="conversationInput"
@@ -390,6 +403,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                             alignItems: 'center',
                             marginLeft: '1em',
                             maxWidth: '65vw',
+                            display: 'flex',
+                            flexDirection: 'column',
                         }}>
                         <pre
                             style={{
@@ -402,6 +417,18 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                             }}>
                             {parsePromptContent(promptContent)}
                         </pre>
+                        <button
+                            className="conversationOptionsButton"
+                            title="Regenerate response"
+                            onClick={regenerate}
+                            style={{
+                                backgroundColor: 'none',
+                                animation: 'none',
+                                padding: '0',
+                                height: '2rem',
+                            }}>
+                            <FontAwesomeIcon icon={faRotate} />
+                        </button>
                     </div>
                 </div>
             )
