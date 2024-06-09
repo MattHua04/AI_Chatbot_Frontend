@@ -5,7 +5,7 @@ import { faSave } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from "react-redux"
 import { selectUserById } from "../../features/users/usersApiSlice"
 
-const NewConversationForm = ({uid, setView, setCurrentConversationId}) => {
+const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNewConversation}) => {
     const user = useSelector(state => selectUserById(state, uid))
 
     const [addNewConversation, {
@@ -30,6 +30,7 @@ const NewConversationForm = ({uid, setView, setCurrentConversationId}) => {
             localStorage.setItem('currentConversationId', data.id)
             setCurrentConversationId(data.id)
             setTitle('')
+            setShowNewConversation(false)
         }
     }, [isSuccess])
 

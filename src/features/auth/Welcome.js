@@ -155,7 +155,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     if (showNewConversation) {
         newConversation = (
             <div ref={newConversationRef}>
-                <NewConversation setView={setView} setCurrentConversationId={setCurrentConversationId}/>
+                <NewConversation setView={setView} setCurrentConversationId={setCurrentConversationId} setShowNewConversation={setShowNewConversation}/>
             </div>
         )
     }
