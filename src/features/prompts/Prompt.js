@@ -23,6 +23,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
         transition: 'color 0.3s',
         color: '#5136d5',
         paddingLeft: '2rem',
+        textOverflow: 'clip',
+        overflowX: 'auto',
     }
 
     const parsePromptContent = (content) => {
@@ -49,7 +51,7 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                 }
 
                 return (
-                    <div key={index}>
+                    <div key={index} style={{maxWidth: '60vw'}}>
                         <div style={{
                             borderRadius: '5px',
                             backgroundColor: 'rgba(137, 83, 223, 0.718)',
