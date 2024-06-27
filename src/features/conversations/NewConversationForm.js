@@ -69,7 +69,7 @@ const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNew
                 marginTop: '5px'
                 }}>
             <div className={`conversationButton`}
-                style={{width: '9.75rem', height: '100%'}}>
+                style={{width: '9.75rem', height: '100%', padding: '0.3em 0.3em'}}>
                 {err}
                 <input
                     className={`conversationInput`}

@@ -357,6 +357,9 @@ a:focus-visible {
   margin-right: 0.3em;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .conversationButton:hover {
@@ -375,8 +378,6 @@ a:focus-visible {
   padding: 0.3em 0.3em;
   text-decoration: none;
   margin-right: 0.3em;
-  overflow: hidden;
-  text-overflow: ellipsis;
   color: #ffffff;
   transition: 0.3s ease;
   animation: pulse 1.5s infinite alternate ease-in-out;

@@ -139,7 +139,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     className={`conversationButton`}
                     onClick={handleConversationClick}
                     >
-                    <div style={{marginBottom: '10px', overflow: 'hidden', textOverflow: 'ellipsis'}}>{title}</div>
+                    <div style={{marginBottom: '10px', wordWrap: 'break-word'}}>{title}</div>
                     <div>{created}</div>
                 </button>
             )
