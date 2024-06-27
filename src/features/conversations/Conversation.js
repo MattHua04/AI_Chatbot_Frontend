@@ -206,10 +206,24 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     </button>
                 </>
             )
+        } else if (showOptions) {
+            optionsButton = (
+                <button
+                    className="conversationOptionsButton"
+                    onClick={(e) => {
+                        handleOptions()
+                        e.stopPropagation()
+                    }}
+                    disabled={!title?.length}
+                    >
+                    <FontAwesomeIcon icon={faEllipsis} />
+                </button>
+            )
         } else {
             optionsButton = (
                 <button
                     className="conversationOptionsButton"
+                    style={{height: '100%'}}
                     onClick={(e) => {
                         handleOptions()
                         e.stopPropagation()

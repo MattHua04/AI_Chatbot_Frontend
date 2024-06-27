@@ -414,7 +414,6 @@ a:focus-visible {
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
-  height: 100%;
 }
 
 .conversationOptionsButton:hover {
