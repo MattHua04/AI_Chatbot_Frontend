@@ -139,7 +139,15 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     className={`conversationButton`}
                     onClick={handleConversationClick}
                     >
-                    <div style={{marginBottom: '10px', wordWrap: 'break-word'}}>{title}</div>
+                    <div style={{
+                        marginBottom: '10px',
+                        whiteSpace: 'normal',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'break-word',
+                        hyphens: 'auto',
+                    }}>
+                        {title}
+                    </div>
                     <div>{created}</div>
                 </button>
             )
@@ -148,6 +156,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                 <div
                     title={`${title}`}
                     className={`conversationButton`}
+                    style={{padding: '0.3em 0.3em'}}
                 >
                     {message}
                     <textarea

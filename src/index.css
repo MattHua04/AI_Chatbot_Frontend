@@ -381,6 +381,11 @@ a:focus-visible {
   color: #ffffff;
   transition: 0.3s ease;
   animation: pulse 1.5s infinite alternate ease-in-out;
+  overflow: auto;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .selectedConversationButton:hover {
