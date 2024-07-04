@@ -149,21 +149,31 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         }
     })
 
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && fullScreen) {
-            setFullScreen(false)
-        }
-    })
-
-    window.addEventListener('click', (e) => {
-        const conversationTitleLink = document.querySelector('.conversationTitle')
-        if (conversationListRef.current && !conversationListRef.current.contains(e.target)) {
-            if (!conversationTitleLink || !conversationTitleLink.contains(e.target)) {
-                setShowConversationsList(false)
-                setShowNewConversation(false)
+    useEffect(() => {
+        const handleEscapeKey = (e) => {
+            if (e.key === 'Escape' && fullScreen) {
+                setFullScreen(false)
             }
         }
-    })
+
+        const handleClickAwayFromConversationTitle = (e) => {
+            const conversationTitleLink = document.querySelector('.conversationTitle')
+            if (conversationListRef.current && !conversationListRef.current.contains(e.target)) {
+                if (!conversationTitleLink || !conversationTitleLink.contains(e.target)) {
+                    setShowConversationsList(false)
+                    setShowNewConversation(false)
+                }
+            }
+        }
+
+        window.addEventListener('keydown', handleEscapeKey)
+        window.addEventListener('click', handleClickAwayFromConversationTitle)
+
+        return () => {
+            window.removeEventListener('keydown', handleEscapeKey)
+            window.removeEventListener('click', handleClickAwayFromConversationTitle)
+        }
+    }, [])
 
     let fullScreenButton
     if (fullScreen) {

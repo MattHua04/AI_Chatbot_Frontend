@@ -26,20 +26,6 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     }, [])
 
     useEffect(() => {
-        const handleEscapeKey = (event) => {
-            if (event.key === 'Escape') {
-                setShowNewConversation(false)
-            }
-        }
-
-        window.addEventListener('keydown', handleEscapeKey)
-
-        return () => {
-            window.removeEventListener('keydown', handleEscapeKey)
-        }
-    }, [])
-
-    useEffect(() => {
         localStorage.setItem('view', view)
     }, [view])
 
@@ -55,14 +41,30 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
         setShowNewConversation(!showNewConversation)
     }
 
-    window.addEventListener('click', (e) => {
-        const addConversationButton = document.querySelector('.addConversationButton')
-        if (newConversationRef.current && !newConversationRef.current.contains(e.target)) {
-            if (!addConversationButton || !addConversationButton.contains(e.target)) {
+    useEffect(() => {
+        const handleEscapeKey = (event) => {
+            if (event.key === 'Escape') {
                 setShowNewConversation(false)
             }
         }
-    })
+
+        const handleClickAwayFromAddConversationButton = (e) => {
+            const addConversationButton = document.querySelector('.addConversationButton')
+            if (newConversationRef.current && !newConversationRef.current.contains(e.target)) {
+                if (!addConversationButton || !addConversationButton.contains(e.target)) {
+                    setShowNewConversation(false)
+                }
+            }
+        }
+
+        window.addEventListener('keydown', handleEscapeKey)
+        window.addEventListener('click', handleClickAwayFromAddConversationButton)
+
+        return () => {
+            window.removeEventListener('keydown', handleEscapeKey)
+            window.removeEventListener('click', handleClickAwayFromAddConversationButton)
+        }
+    }, [])
 
     let defaultContent
     if (view === "") {

@@ -126,49 +126,55 @@ const SpotifyInterface = () => {
         }
     }
 
-    window.addEventListener('click', (e) => {
-        const spotifyBlock = document.querySelector('.spotifyBlock')
-        if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-            if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
-                setShowSearchBar(false)
-                setInput('')
-                setShowSearchResults(false)
-                setSelectedSearchResult(0)
+    useEffect(() => {
+        const handleClickAwayFromSearchBar = (e) => {
+            const spotifyBlock = document.querySelector('.spotifyBlock')
+            if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+                if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
+                    setShowSearchBar(false)
+                    setInput('')
+                    setShowSearchResults(false)
+                    setSelectedSearchResult(0)
+                }
             }
         }
-    })
 
-    useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                e.preventDefault()
-                setPressedKeys(prevState => {
-                    setPreviousPressedKeys(prevState)
-                    return {
-                        ...prevState,
-                        [e.key]: true
-                    }
-                })
+            if (searchBarRef.current === document.activeElement) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault()
+                    setPressedKeys(prevState => {
+                        setPreviousPressedKeys(prevState)
+                        return {
+                            ...prevState,
+                            [e.key]: true
+                        }
+                    })
+                }
             }
         }
 
         const handleKeyUp = (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                e.preventDefault()
-                setPressedKeys(prevState => {
-                        setPreviousPressedKeys(prevState)
-                        return {
-                            ...prevState,
-                            [e.key]: false
-                        }
-                })
+            if (searchBarRef.current === document.activeElement) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault()
+                    setPressedKeys(prevState => {
+                            setPreviousPressedKeys(prevState)
+                            return {
+                                ...prevState,
+                                [e.key]: false
+                            }
+                    })
+                }
             }
         }
 
+        window.addEventListener('click', handleClickAwayFromSearchBar)
         window.addEventListener('keydown', handleKeyDown)
         window.addEventListener('keyup', handleKeyUp)
 
         return () => {
+            window.removeEventListener('click', handleClickAwayFromSearchBar)
             window.removeEventListener('keydown', handleKeyDown)
             window.removeEventListener('keyup', handleKeyUp)
         }
@@ -234,7 +240,8 @@ const SpotifyInterface = () => {
                             height: '2rem',
                             display: 'flex',
                             flexDirection: 'row',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            padding: '0.3em 0.3em'
                         }}>
                     <input
                         className='conversationInput'
