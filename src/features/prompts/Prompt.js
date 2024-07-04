@@ -373,7 +373,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                         }}
-                        ref={promptRef}>
+                        ref={promptRef}
+                        title={"Double-click to edit"}>
                         <div
                             className='userPrompt'
                             style={{
