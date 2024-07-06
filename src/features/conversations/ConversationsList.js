@@ -1,6 +1,7 @@
 import { useGetConversationsQuery } from "./conversationsApiSlice"
 import Conversation from "./Conversation"
 import { useSelector } from "react-redux"
+import { useEffect } from "react"
 
 const ConversationsList = ({setCurrentConversationId, setView}) => {
     const id = useSelector((state) => state.auth.id)

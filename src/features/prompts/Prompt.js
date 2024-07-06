@@ -94,13 +94,13 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     useEffect(() => {
         if (copiedArray.includes(true)) {
             setTimeout(() => {
-                setCopiedArray(Array(promptContent.length).fill(false))
+                setCopiedArray(Array(promptContent?.length).fill(false))
             }, 1000)
         }
     }, [copiedArray])
 
     useEffect(() => {
-        setCopiedArray(Array(promptContent.length).fill(false))
+        setCopiedArray(Array(promptContent?.length).fill(false))
     }, [promptContent])
 
     const [updateConversation, {

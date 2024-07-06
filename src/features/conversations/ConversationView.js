@@ -18,8 +18,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const textareaRef = useRef(null)
     const [editingPromptIndex, setEditingPromptIndex] = useState(null)
     const [showDownButton, setShowDownButton] = useState(false)
-    let time = 100
-    let failedScrolls = 0
     const [fullScreen, setFullScreen] = useState(false)
     const [showConversationsList, setShowConversationsList] = useState(false)
     const conversationListRef = useRef(null)
@@ -93,9 +91,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     }, [input])
 
     const handleSubmit = async (e) => {
-        if (input?.replace(/\s/g, "").length) {
-            const newContent = content ? [...content, ['User', input]] : ['User', input]
-            await updateConversation({id: conversationId, user: conversation.user, title: conversation.title, content: newContent})
+        if (input?.trim().length) {
+            const newContent = content ? [...content, ['User', input]] : [['User', input]]
+            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
         }
     }
 
@@ -107,41 +105,47 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
     const scrollDown = () => {
         if (conversationContentRef.current) {
-            if (conversationContentRef.current.scrollHeight - conversationContentRef.current.scrollTop < 70) {
-                conversationContentRef.current.scrollTop = conversationContentRef.current.scrollHeight
-            } else {
-                const previous = conversationContentRef.current.scrollTop
-                conversationContentRef.current.scrollTop += 70
-                if (conversationContentRef.current.scrollTop !== previous) {
-                    time /= 5
-                    const scrollTimeout = setTimeout(scrollDown, time)
-                    return () => clearTimeout(scrollTimeout)
-                } else if (failedScrolls < 10 && conversationContentRef.current.scrollTop === previous) {
-                    failedScrolls++
-                    time /= 5
-                    const scrollTimeout = setTimeout(scrollDown, time)
-                    return () => clearTimeout(scrollTimeout)
-                }
+            const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+    
+            if (scrollHeight - scrollTop <= clientHeight) {
+                // Already at the bottom
+                return
             }
+    
+            const targetScrollTop = scrollHeight - clientHeight
+            const distance = targetScrollTop - scrollTop
+            const duration = 500 // 0.5 seconds in milliseconds
+            const perTick = distance / duration * 10
+    
+            const scroll = () => {
+                const currentScrollTop = conversationContentRef.current.scrollTop
+                if (currentScrollTop >= targetScrollTop) {
+                    // Reached the bottom or exceeded
+                    conversationContentRef.current.scrollTop = targetScrollTop
+                    return
+                }
+    
+                conversationContentRef.current.scrollTop = currentScrollTop + perTick
+    
+                // Schedule next tick
+                setTimeout(scroll, 10)
+            }
+    
+            scroll()
         }
     }
-
+    
     const handleDownButton = () => {
-        time = 100
-        failedScrolls = 0
         scrollDown()
     }
 
     useEffect(() => {
-        time = 100
-        failedScrolls = 0
         scrollDown()
     }, [conversationId, isSuccess, conversation])
 
     conversationContentRef.current?.addEventListener('scroll', () => {
         if (conversationContentRef.current) {
             if (conversationContentRef.current.scrollHeight - conversationContentRef.current.scrollTop > 1000) {
-                time = 100
                 setShowDownButton(true)
             } else {
                 setShowDownButton(false)
