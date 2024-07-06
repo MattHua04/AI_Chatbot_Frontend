@@ -108,7 +108,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
     
             if (scrollHeight - scrollTop <= clientHeight) {
-                // Already at the bottom
                 return
             }
     
@@ -143,16 +142,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         scrollDown()
     }, [conversationId, isSuccess, conversation])
 
-    conversationContentRef.current?.addEventListener('scroll', () => {
-        if (conversationContentRef.current) {
-            if (conversationContentRef.current.scrollHeight - conversationContentRef.current.scrollTop > 1000) {
-                setShowDownButton(true)
-            } else {
-                setShowDownButton(false)
-            }
-        }
-    })
-
     useEffect(() => {
         const handleEscapeKey = (e) => {
             if (e.key === 'Escape' && fullScreen) {
@@ -170,14 +159,26 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             }
         }
 
+        const checkScrollHeight = () => {
+            if (conversationContentRef.current) {
+                if (conversationContentRef.current.scrollHeight - conversationContentRef.current.scrollTop > 1000) {
+                    setShowDownButton(true)
+                } else {
+                    setShowDownButton(false)
+                }
+            }
+        }
+
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromConversationTitle)
+        conversationContentRef.current?.addEventListener('scroll', checkScrollHeight)
 
         return () => {
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromConversationTitle)
+            conversationContentRef.current?.removeEventListener('scroll', checkScrollHeight)
         }
-    }, [])
+    })
 
     let fullScreenButton
     if (fullScreen) {
