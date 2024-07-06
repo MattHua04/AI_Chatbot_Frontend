@@ -164,7 +164,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         const checkScrollHeight = () => {
             if (conversationContentRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                if (scrollHeight - scrollTop > clientHeight) {
+                if (scrollHeight - scrollTop > clientHeight + 10) {
                     setShowDownButton(true)
                 } else {
                     setShowDownButton(false)
