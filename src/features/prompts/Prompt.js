@@ -373,8 +373,7 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                         }}
-                        ref={promptRef}
-                        title={"Double-click to edit"}>
+                        ref={promptRef}>
                         <div
                             className='userPrompt'
                             style={{
@@ -386,7 +385,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                                 alignItems: 'center',
                                 marginRight: '1em',
                                 maxWidth: '65vw',
-                            }}>
+                            }}
+                            title={"Double-click to edit"}>
                             <pre
                                 style={{
                                     fontFamily: 'inherit',
