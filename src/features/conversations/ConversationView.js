@@ -107,23 +107,25 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         if (conversationContentRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
     
-            if (scrollHeight - scrollTop <= clientHeight) {
-                return
-            }
-    
             const targetScrollTop = scrollHeight - clientHeight
             const distance = targetScrollTop - scrollTop
             const duration = 500 // 0.5 seconds in milliseconds
             const perTick = distance / duration * 10
+            var previousScrollTop = -1
+            
+            if (targetScrollTop == scrollTop) {
+                return
+            }
     
             const scroll = () => {
                 const currentScrollTop = conversationContentRef.current.scrollTop
-                if (currentScrollTop >= targetScrollTop) {
+                if (currentScrollTop <= previousScrollTop) {
                     // Reached the bottom or exceeded
-                    conversationContentRef.current.scrollTop = targetScrollTop
+                    // conversationContentRef.current.scrollTop = targetScrollTop
                     return
                 }
-    
+                
+                previousScrollTop = currentScrollTop
                 conversationContentRef.current.scrollTop = currentScrollTop + perTick
     
                 // Schedule next tick
@@ -140,7 +142,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
     useEffect(() => {
         scrollDown()
-    }, [conversationId, isSuccess, conversation])
+    }, [conversationId, isSuccess, conversation, content])
 
     useEffect(() => {
         const handleEscapeKey = (e) => {
@@ -161,7 +163,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
         const checkScrollHeight = () => {
             if (conversationContentRef.current) {
-                if (conversationContentRef.current.scrollHeight - conversationContentRef.current.scrollTop > 1000) {
+                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+                if (scrollHeight - scrollTop > clientHeight) {
                     setShowDownButton(true)
                 } else {
                     setShowDownButton(false)
