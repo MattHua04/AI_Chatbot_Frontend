@@ -344,8 +344,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 <button
                     className="conversationOptionsButton"
                     onClick={handleDownButton}
+                    active = {showDownButton}
                     style={{
-                        display: showDownButton ? 'flex' : 'none',
+                        display: 'flex',
                         justifyContent: 'center',
                         position: 'relative',
                         bottom: '1rem',
@@ -353,6 +354,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                         height: '2rem',
                         left: '50%',
                         transform: 'translateX(-50%)',
+                        opacity: showDownButton ? '1' : '0',
                     }}>
                     <FontAwesomeIcon icon={faArrowDown} />
                 </button>
