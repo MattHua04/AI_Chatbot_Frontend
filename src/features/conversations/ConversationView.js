@@ -103,13 +103,12 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         }
     }, [isSuccess])
 
-    const scrollDown = () => {
+    const scrollDown = (duration) => {
         if (conversationContentRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
     
             const targetScrollTop = scrollHeight - clientHeight
             const distance = targetScrollTop - scrollTop
-            const duration = 500 // 0.5 seconds in milliseconds
             const perTick = distance / duration * 10
             var previousScrollTop = -1
             
@@ -137,11 +136,11 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     }
     
     const handleDownButton = () => {
-        scrollDown()
+        scrollDown(500)
     }
 
     useEffect(() => {
-        scrollDown()
+        scrollDown(100)
     }, [conversationId, isSuccess, conversation, content])
 
     useEffect(() => {
