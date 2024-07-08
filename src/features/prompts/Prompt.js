@@ -396,6 +396,7 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                                     whiteSpace: 'pre-wrap',
                                     padding: '0.5em 0.5em',
                                     maxWidth: '59vw',
+                                    overflowX: 'clip',
                                 }}>
                                 {parsePromptContent(promptContent)}
                             </pre>
@@ -444,6 +445,8 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
                                 marginRight: '0.45em',
                                 wordWrap: 'break-word',
                                 whiteSpace: 'pre-wrap',
+                                maxWidth: '59vw',
+                                overflowX: 'clip',
                             }}>
                             {parsePromptContent(promptContent)}
                         </pre>
