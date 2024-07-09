@@ -91,9 +91,11 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     }, [input])
 
     const handleSubmit = async (e) => {
-        if (input?.trim().length) {
-            const newContent = content ? [...content, ['User', input]] : [['User', input]]
-            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
+        if ((content?.length && content[content?.length - 1][0] !== 'User' && content[content?.length - 1][0] === 'AI' && content[content?.length - 1][1] !== '...') || content?.length == 0) {
+            if (input?.trim().length) {
+                const newContent = content ? [...content, ['User', input]] : [['User', input]]
+                await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
+            }
         }
     }
 
