@@ -271,6 +271,12 @@ a:focus-visible {
   transform: scale(1.1)
 }
 
+.home_button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
 .userPrompt {
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;

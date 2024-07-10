@@ -23,6 +23,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const conversationListRef = useRef(null)
     const [showNewConversation, setShowNewConversation] = useState(false)
     const newConversationRef = useRef(null)
+    const [ableToSubmit, setAbleToSubmit] = useState(false)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -91,13 +92,24 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     }, [input])
 
     const handleSubmit = async (e) => {
-        if ((content?.length && content[content?.length - 1][0] !== 'User' && content[content?.length - 1][0] === 'AI' && content[content?.length - 1][1] !== '...') || content?.length == 0) {
-            if (input?.trim().length) {
-                const newContent = content ? [...content, ['User', input]] : [['User', input]]
-                await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
-            }
+        if (ableToSubmit) {
+            const newContent = content ? [...content, ['User', input]] : [['User', input]]
+            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
         }
     }
+
+    useEffect(() => {
+        setAbleToSubmit(
+            input?.trim().length > 0
+            && ((
+                content?.length
+                && content[content?.length - 1][0] !== 'User'
+                && content[content?.length - 1][0] === 'AI'
+                && content[content?.length - 1][1] !== '...'
+            ) || content?.length === 0)
+        )
+        console.log(ableToSubmit)
+    }, [input, content])
 
     useEffect(() => {
         if (isSuccess) {
@@ -399,6 +411,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                         }}/>
                     <button className='home_button'
                         onClick={handleSubmit}
+                        disabled={!ableToSubmit}
                         style={{
                             borderRadius: '10px',
                             padding: '0.5em 1em',
