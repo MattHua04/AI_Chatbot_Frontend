@@ -4,13 +4,14 @@ import { useUpdateConversationMutation } from '../conversations/conversationsApi
 import { useState, useEffect, useRef } from 'react'
 import Latex from 'react-latex'
 
-const Prompt = ({conversation, conversationId, conversationContent, promptId, editingPromptIndex, setEditingPromptIndex}) => {
+const Prompt = ({conversation, conversationId, conversationContent, conversationSize, promptId, editingPromptIndex, setEditingPromptIndex}) => {
     const [prompt, setPrompt] = useState(conversationContent[promptId])
     const [promptContent, setPromptContent] = useState(prompt[1])
     const [promptOwner, setPromptOwner] = useState(prompt[0])
     const [edit, setEdit] = useState(false)
     const textareaRef = useRef(null)
     const [input, setInput] = useState(promptContent)
+    const [cachedInput, setCachedInput] = useState(promptContent)
     const [copiedArray, setCopiedArray] = useState([])
     const promptRef = useRef()
     const [lastPromptClick, setLastPromptClick] = useState(null)
@@ -144,11 +145,20 @@ const Prompt = ({conversation, conversationId, conversationContent, promptId, ed
     }, [promptOwner, promptContent])
 
     useEffect(() => {
-        if (isSuccess) {
+        if (conversationSize > 16000) {
+            if (isLoading) {
+                setCachedInput(input)
+                setEdit(false)
+                setEditingPromptIndex(null)
+            } else if (isError) {
+                setEdit(true)
+                setEditingPromptIndex(promptId)
+            }
+        } else if (isSuccess) {
             setEdit(false)
             setEditingPromptIndex(null)
         }
-    }, [isSuccess])
+    }, [isSuccess, isError, isLoading])
 
     const handleInputChange = (e) => {
         setPromptContent(e.target.value)

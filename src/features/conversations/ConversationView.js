@@ -8,12 +8,14 @@ import Prompt from '../prompts/Prompt'
 import { Link } from 'react-router-dom'
 import ConversationsList from './ConversationsList'
 import NewConversation from './NewConversation'
+import { Buffer } from 'buffer'
 
 const ConversationView = ({conversationId, setCurrentConversationId, setView}) => {
     const id = useSelector((state) => state.auth.id)
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [content, setContent] = useState(conversation?.content)
     const [input, setInput] = useState('')
+    const [cachedInput, setCachedInput] = useState('')
     const conversationContentRef = useRef(null)
     const textareaRef = useRef(null)
     const [editingPromptIndex, setEditingPromptIndex] = useState(null)
@@ -24,6 +26,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [showNewConversation, setShowNewConversation] = useState(false)
     const newConversationRef = useRef(null)
     const [ableToSubmit, setAbleToSubmit] = useState(false)
+    const [contentSize, setContentSize] = useState(0)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -108,14 +111,24 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 && content[content?.length - 1][1] !== '...'
             ) || content?.length === 0)
         )
-        console.log(ableToSubmit)
     }, [input, content])
 
     useEffect(() => {
-        if (isSuccess) {
+        if (content) setContentSize(Buffer.byteLength(JSON.stringify(content), 'utf8'))
+    }, [content])
+
+    useEffect(() => {
+        if (contentSize > 16000) {
+            if (isLoading) {
+                setCachedInput(input)
+                setInput('')
+            } else if (isError) {
+                setInput(cachedInput)
+            }
+        } else if (isSuccess) {
             setInput('')
         }
-    }, [isSuccess])
+    }, [isSuccess, isLoading, isLoading])
 
     const scrollDown = (duration) => {
         if (conversationContentRef.current) {
@@ -317,6 +330,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 conversation={conversation}
                 conversationId={conversationId}
                 conversationContent={conversation.content}
+                conversationSize={contentSize}
                 promptId={promptId}
                 editingPromptIndex={editingPromptIndex}
                 setEditingPromptIndex={setEditingPromptIndex}/>
