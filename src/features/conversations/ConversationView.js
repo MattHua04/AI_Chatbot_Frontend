@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faArrowDown, faExpand, faCompress, faCircleXmark, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faPaperPlane, faArrowDown, faExpand, faCompress, faCircleXmark, faPlus, faGripLines } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux'
 import { selectConversationById, useGetConversationsQuery } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
@@ -27,6 +27,11 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const newConversationRef = useRef(null)
     const [ableToSubmit, setAbleToSubmit] = useState(false)
     const [contentSize, setContentSize] = useState(0)
+    const [textAreaHeight, setTextAreaHeight] = useState(7 * window.innerHeight / 100)
+    const [mouseDown, setMouseDown] = useState(false)
+    const [showAdjustTextAreaButton, setShowAdjustTextAreaButton] = useState(false)
+    const adjustTextAreaRef = useRef(null)
+    const [timeoutId, setTimeoutId] = useState(null)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -42,6 +47,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             textareaRef.current.focus()
         }
         setInput('')
+        setTextAreaHeight(7 * window.innerHeight / 100)
         setEditingPromptIndex(null)
     }, [conversationId])
 
@@ -122,11 +128,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             if (isLoading) {
                 setCachedInput(input)
                 setInput('')
+                setTextAreaHeight(7 * window.innerHeight / 100)
             } else if (isError) {
                 setInput(cachedInput)
             }
         } else if (isSuccess) {
             setInput('')
+            setTextAreaHeight(7 * window.innerHeight / 100)
         }
     }, [isSuccess, isLoading, isLoading])
 
@@ -166,9 +174,28 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         scrollDown(500)
     }
 
+    const handleMouseDown = (e) => {
+        document.body.style.cursor = "pointer"
+        setMouseDown(true)
+        e.preventDefault()
+    }
+
     useEffect(() => {
         scrollDown(100)
     }, [conversationId, isSuccess, conversation, content])
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = textAreaHeight + 'px'
+        }
+    }, [textAreaHeight])
+
+    const removeAdjustTextAreaTimeout = () => {
+        if (timeoutId) {
+            clearTimeout(timeoutId)
+        }
+        setTimeoutId(null)
+    }
 
     useEffect(() => {
         const handleEscapeKey = (e) => {
@@ -198,14 +225,52 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             }
         }
 
+        const handleMouseUp = (e) => {
+            document.body.style.cursor = "default"
+            setMouseDown(false)
+        }
+    
+        const handleMouseMove = (e) => {
+            if (mouseDown) {
+                const { _, scrollHeight, clientHeight } = conversationContentRef.current
+                if (!showDownButton) {
+                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
+                }
+                const newHeight = textAreaHeight - e.movementY
+                setTextAreaHeight(newHeight)
+            }
+        }
+
+        const mouseAtTopOfTextArea = (e) => {
+            const rect = adjustTextAreaRef.current.getBoundingClientRect()
+            const elementX = rect.x
+            const elementY = rect.y
+            if (Math.abs(e.clientY - elementY) < 30 && Math.abs(e.clientX - elementX) < 0.2 * window.innerWidth) {
+                removeAdjustTextAreaTimeout()
+                setShowAdjustTextAreaButton(true)
+            } else {
+                removeAdjustTextAreaTimeout()
+                const id = setTimeout(() => {
+                    setShowAdjustTextAreaButton(false)
+                }, 333)
+                setTimeoutId(id)
+            }
+        }
+
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromConversationTitle)
         conversationContentRef.current?.addEventListener('scroll', checkScrollHeight)
+        window.addEventListener('mouseup', handleMouseUp)
+        window.addEventListener('mousemove', handleMouseMove)
+        window.addEventListener('mousemove', mouseAtTopOfTextArea)
 
         return () => {
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromConversationTitle)
             conversationContentRef.current?.removeEventListener('scroll', checkScrollHeight)
+            window.removeEventListener('mouseup', handleMouseUp)
+            window.removeEventListener('mousemove', handleMouseMove)
+            window.removeEventListener('mousemove', mouseAtTopOfTextArea)
         }
     })
 
@@ -369,24 +434,73 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     }}>
                     {conversationContent}
                 </div>
-                <button
-                    className="conversationOptionsButton"
-                    onClick={handleDownButton}
-                    disabled={!showDownButton}
+                <div
                     style={{
                         display: 'flex',
+                        flexDirection: 'row',
+                        flexGrow: '1',
                         justifyContent: 'center',
-                        position: 'relative',
-                        bottom: '1rem',
-                        marginTop: '-40px',
-                        height: '2rem',
-                        left: '50%',
-                        opacity: showDownButton ? '1' : '0',
-                        scale: showDownButton ? '1' : '0',
+                        alignItems: 'center',
+                        width: '100%',
+                        marginTop: '-1rem',
                     }}>
-                    <FontAwesomeIcon icon={faArrowDown} />
-                </button>
-                <div style={{ display: 'flex', flexDirection: 'row', flexGrow: '1', width: '100%', justifyContent: 'flex-end' }}>
+                    <button
+                        className="conversationOptionsButton"
+                        onClick={handleDownButton}
+                        disabled={!showDownButton}
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'relative',
+                            bottom: '1rem',
+                            marginTop: '-40px',
+                            height: '2rem',
+                            opacity: showDownButton ? '1' : '0',
+                            transform: showDownButton ? 'scale(1)' : 'scale(0)',
+                        }}>
+                        <FontAwesomeIcon icon={faArrowDown} />
+                    </button>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexGrow: '1',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
+                        marginTop: '-0.2rem',
+                    }}>
+                    <button
+                        className={`conversationOptionsButton ${mouseDown ? 'hovered' : ''}`}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '5%',
+                            minWidth: '3rem',
+                            height: '0.75rem',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            opacity: showAdjustTextAreaButton ? '1' : '0',
+                            transform: showAdjustTextAreaButton ? 'scale(1)' : 'scale(0)',
+                        }}
+                        onMouseDown={handleMouseDown}
+                        ref={adjustTextAreaRef}
+                    >
+                        <FontAwesomeIcon icon={faGripLines}></FontAwesomeIcon>
+                    </button>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexGrow: '1',
+                        width: '100%',
+                        justifyContent: 'flex-end',
+                        marginTop: '-0.4rem',
+                    }}
+                >
                     <textarea
                         className={`conversationInput`}
                         ref={textareaRef}
@@ -406,13 +520,16 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                             display: 'flex',
                             flexDirection: 'column',
                             flexGrow: '1',
+                            flexShrink: '1',
                             backgroundColor: 'rgba(203, 214, 238, 0.718)',
                             color: '#5136d5',
                             wordWrap: 'break-word',
                             borderRadius: '10px',
                             resize: 'none',
                             overflow: 'auto',
-                            height: 'auto',
+                            height: textAreaHeight + 'px',
+                            maxHeight: '50vh',
+                            minHeight: '7vh',
                             width: '100%',
                             whiteSpace: 'pre-wrap',
                             textAlign: 'left',
@@ -422,6 +539,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                             marginLeft: '1em',
                             marginRight: '1em',
                             marginBottom: '1em',
+                            transition: 'none',
                         }}/>
                     <button className='home_button'
                         onClick={handleSubmit}

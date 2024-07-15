@@ -426,9 +426,19 @@ a:focus-visible {
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
+  transform-origin: center;
 }
 
 .conversationOptionsButton:hover {
+  cursor: pointer;
+  color: #ffffff;
+  transition: 0.3s ease;
+  animation: pulse 1.5s infinite alternate ease-in-out;
+  transform: scale(1.1)
+}
+
+/* Artificial hover effect */
+.conversationOptionsButton.hovered {
   cursor: pointer;
   color: #ffffff;
   transition: 0.3s ease;
