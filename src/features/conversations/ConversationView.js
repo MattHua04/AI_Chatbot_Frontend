@@ -465,11 +465,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 <div
                     style={{
                         display: 'flex',
-                        flexDirection: 'row',
-                        flexGrow: '1',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        width: '100%',
                         marginTop: '-0.2rem',
                     }}>
                     <button
