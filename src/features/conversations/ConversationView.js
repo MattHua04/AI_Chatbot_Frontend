@@ -32,6 +32,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [showAdjustTextAreaButton, setShowAdjustTextAreaButton] = useState(false)
     const adjustTextAreaRef = useRef(null)
     const [timeoutId, setTimeoutId] = useState(null)
+    const [lastTextAreaAdjustClick, setLastTextAreaAdjustClick] = useState(null)
+    const lastTextAreaAdjustClickRef = useRef(lastTextAreaAdjustClick)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -85,14 +87,15 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
     const handleInputChange = (e) => {
         setInput(e.target.value)
-        adjustTextareaHeight()
     }
 
     const adjustTextareaHeight = () => {
-        if (textareaRef.current) {
+        // Only adjust height if the textAreaHeight has not been manually resized
+        if (textareaRef.current && (textAreaHeight === 7 * window.innerHeight / 100 || input === '')) {
             textareaRef.current.style.height = 'auto'
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
         }
+        setTextAreaHeight(textareaRef.current.scrollHeight)
     }
 
     useEffect(() => {
@@ -147,7 +150,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             const perTick = distance / duration * 10
             var previousScrollTop = -1
             
-            if (targetScrollTop == scrollTop) {
+            if (targetScrollTop === scrollTop) {
                 return
             }
     
@@ -197,6 +200,14 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         setTimeoutId(null)
     }
 
+    const hideAdjustTextAreaButton = () => {
+        if (!mouseDown) setShowAdjustTextAreaButton(false)
+    }
+
+    useEffect(() => {
+        lastTextAreaAdjustClickRef.current = lastTextAreaAdjustClick
+    }, [lastTextAreaAdjustClick])
+
     useEffect(() => {
         const handleEscapeKey = (e) => {
             if (e.key === 'Escape' && fullScreen) {
@@ -232,11 +243,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     
         const handleMouseMove = (e) => {
             if (mouseDown) {
-                const { _, scrollHeight, clientHeight } = conversationContentRef.current
-                if (!showDownButton) {
-                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
+                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+                if (scrollTop === scrollHeight - clientHeight) {
+                    setTimeout(() => {
+                        scrollDown(1)
+                    }, 1)
                 }
-                const newHeight = textAreaHeight - e.movementY
+                const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
             }
         }
@@ -251,9 +264,29 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             } else {
                 removeAdjustTextAreaTimeout()
                 const id = setTimeout(() => {
-                    setShowAdjustTextAreaButton(false)
+                    hideAdjustTextAreaButton(false)
                 }, 333)
                 setTimeoutId(id)
+            }
+        }
+
+        const quickAdjustTextArea = (e) => {
+            if (adjustTextAreaRef.current && adjustTextAreaRef.current.contains(e.target)) {
+                if (lastTextAreaAdjustClickRef.current === null || e.timeStamp - lastTextAreaAdjustClickRef.current > 300) {
+                    setLastTextAreaAdjustClick(e.timeStamp)
+                } else if (lastTextAreaAdjustClickRef.current !== null && e.timeStamp - lastTextAreaAdjustClickRef.current <= 300) {
+                    const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+                    if (textAreaHeight !== 7 * window.innerHeight / 100) {
+                        setTextAreaHeight(7 * window.innerHeight / 100)
+                    } else {
+                        setTextAreaHeight(50 * window.innerHeight / 100)
+                    }
+                    if (scrollTop === scrollHeight - clientHeight) {
+                        setTimeout(() => {
+                            scrollDown(1)
+                        }, 1)
+                    }
+                }
             }
         }
 
@@ -263,6 +296,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         window.addEventListener('mouseup', handleMouseUp)
         window.addEventListener('mousemove', handleMouseMove)
         window.addEventListener('mousemove', mouseAtTopOfTextArea)
+        window.addEventListener('click', quickAdjustTextArea)
 
         return () => {
             window.removeEventListener('keydown', handleEscapeKey)
@@ -271,6 +305,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             window.removeEventListener('mouseup', handleMouseUp)
             window.removeEventListener('mousemove', handleMouseMove)
             window.removeEventListener('mousemove', mouseAtTopOfTextArea)
+            window.removeEventListener('click', quickAdjustTextArea)
         }
     })
 
