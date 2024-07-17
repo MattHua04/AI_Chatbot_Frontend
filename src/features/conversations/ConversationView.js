@@ -34,6 +34,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [timeoutId, setTimeoutId] = useState(null)
     const [lastTextAreaAdjustClick, setLastTextAreaAdjustClick] = useState(null)
     const lastTextAreaAdjustClickRef = useRef(lastTextAreaAdjustClick)
+    const [startedAdjustmentAtBottom, setStartedAdjustmentAtBottom] = useState(false)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -230,8 +231,10 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
                 if (scrollHeight - scrollTop > clientHeight + 10) {
                     setShowDownButton(true)
+                    setStartedAdjustmentAtBottom(false)
                 } else {
                     setShowDownButton(false)
+                    setStartedAdjustmentAtBottom(true)
                 }
             }
         }
@@ -244,10 +247,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         const handleMouseMove = (e) => {
             if (mouseDown) {
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                if (scrollTop === scrollHeight - clientHeight) {
-                    setTimeout(() => {
-                        scrollDown(1)
-                    }, 1)
+                if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
+                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
                 }
                 const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
@@ -281,7 +282,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     } else {
                         setTextAreaHeight(50 * window.innerHeight / 100)
                     }
-                    if (scrollTop === scrollHeight - clientHeight) {
+                    if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
                         setTimeout(() => {
                             scrollDown(1)
                         }, 1)
