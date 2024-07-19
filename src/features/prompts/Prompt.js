@@ -16,6 +16,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const promptRef = useRef()
     const [lastPromptClick, setLastPromptClick] = useState(null)
     const lastPromptClickRef = useRef(lastPromptClick)
+    const [doubleClickListener, setDoubleClickListener] = useState(false)
 
     const codeStyle = {
         fontFamily: 'monospace',
@@ -194,24 +195,32 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
         lastPromptClickRef.current = lastPromptClick
     }, [lastPromptClick])
 
-    useEffect(() => {
-        const handlePromptClick = (e) => {
-            if (promptRef.current && promptRef.current.contains(e.target)) {
-                if (lastPromptClickRef.current === null || e.timeStamp - lastPromptClickRef.current > 300) {
-                    setLastPromptClick(e.timeStamp)
-                } else if (lastPromptClickRef.current !== null && e.timeStamp - lastPromptClickRef.current <= 300 && !edit) {
-                    setEdit(true)
-                    setEditingPromptIndex(promptId)
-                }
+    const addDoubleClickListener = () => {
+        if (!doubleClickListener) {
+            console.log('add')
+            window.addEventListener('click', handlePromptClick)
+            setDoubleClickListener(true)
+        }
+    }
+
+    const removeDoubleClickListener = () => {
+        if (doubleClickListener) {
+            console.log('remove')
+            window.removeEventListener('click', handlePromptClick)
+            setDoubleClickListener(false)
+        }
+    }
+
+    const handlePromptClick = (e) => {
+        if (promptRef.current && promptRef.current.contains(e.target)) {
+            if (lastPromptClickRef.current === null || e.timeStamp - lastPromptClickRef.current > 300) {
+                setLastPromptClick(e.timeStamp)
+            } else if (lastPromptClickRef.current !== null && e.timeStamp - lastPromptClickRef.current <= 300 && !edit) {
+                setEdit(true)
+                setEditingPromptIndex(promptId)
             }
         }
-
-        window.addEventListener('click', handlePromptClick)
-
-        return () => {
-            window.removeEventListener('click', handlePromptClick)
-        }
-    }, [])
+    }
 
     if (prompt) {
         const handleEdit = () => {
@@ -383,7 +392,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                         }}
-                        ref={promptRef}>
+                        ref={promptRef}
+                        onMouseEnter={addDoubleClickListener}
+                        onMouseLeave={removeDoubleClickListener}>
                         <div
                             className='userPrompt'
                             style={{
