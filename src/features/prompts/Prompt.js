@@ -16,7 +16,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const promptRef = useRef()
     const [lastPromptClick, setLastPromptClick] = useState(null)
     const lastPromptClickRef = useRef(lastPromptClick)
-    const [doubleClickListener, setDoubleClickListener] = useState(false)
+    const doubleClickListeners = useRef([])
 
     const codeStyle = {
         fontFamily: 'monospace',
@@ -196,18 +196,18 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     }, [lastPromptClick])
 
     const addDoubleClickListener = () => {
-        if (!doubleClickListener) {
-            console.log('add')
-            window.addEventListener('click', handlePromptClick)
-            setDoubleClickListener(true)
+        if (promptRef.current && doubleClickListeners.current.length === 0) {
+            promptRef.current?.addEventListener('click', handlePromptClick)
+            doubleClickListeners.current.push({ type: 'click', handler: handlePromptClick })
         }
     }
 
     const removeDoubleClickListener = () => {
-        if (doubleClickListener) {
-            console.log('remove')
-            window.removeEventListener('click', handlePromptClick)
-            setDoubleClickListener(false)
+        if (promptRef.current) {
+            doubleClickListeners.current.forEach(({ type, handler }) => {
+                promptRef.current.removeEventListener(type, handler)
+            })
+            doubleClickListeners.current = []
         }
     }
 
