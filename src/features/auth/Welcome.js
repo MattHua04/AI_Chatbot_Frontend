@@ -196,12 +196,12 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                             display: 'flex',
                             flexDirection: 'column',
                             flexGrow: '1',
-                            maxHeight: '90vh',
+                            maxHeight: '90dvh',
                             justifyContent: 'flex-start',
                             overflowY: 'auto',
                             margin: '-3px -10px',
                             padding: '3px 10px',
-                            paddingBottom: '23vh',
+                            paddingBottom: '23dvh',
                             borderRadius: '10px',
                             scrollbarWidth: 'none',
                             }}>
@@ -215,7 +215,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                     justifyContent: 'center',
                     alignItems: 'flex-start',
                     borderRadius: '10px',
-                    maxHeight: '75vh',
+                    maxHeight: '75dvh',
                     }}>
                     {view === '' && defaultContent}
                     {view === 'usersList' && <UsersList />}

@@ -56,7 +56,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 }
 
                 return (
-                    <div key={index} style={{maxWidth: '60vw'}}>
+                    <div key={index} style={{
+                            // maxWidth: '60vw'
+                        }}>
                         <div style={{
                             borderRadius: '5px',
                             backgroundColor: 'rgba(137, 83, 223, 0.718)',
@@ -343,7 +345,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 alignItems: 'center',
                                 marginRight: '1em',
                                 marginLeft: '1em',
-                                // maxWidth: '65vw',
+                                // maxWidth: '65dvw',
                                 width: '100%',
                             }}>
                             <textarea
@@ -405,7 +407,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 display: 'flex',
                                 alignItems: 'center',
                                 marginRight: '1em',
-                                maxWidth: '65vw',
+                                maxWidth: '65dvw',
                             }}
                             title={"Double-click to edit"}>
                             <pre
@@ -416,7 +418,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap',
                                     padding: '0.5em 0.5em',
-                                    maxWidth: '59vw',
+                                    maxWidth: '59dvw',
                                     overflowX: 'clip',
                                 }}>
                                 {parsePromptContent(promptContent)}
@@ -454,7 +456,8 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             display: 'flex',
                             alignItems: 'center',
                             marginLeft: '1em',
-                            maxWidth: '65vw',
+                            marginRight: '1em',
+                            // maxWidth: '65dvw',
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
@@ -466,7 +469,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 marginRight: '0.45em',
                                 wordWrap: 'break-word',
                                 whiteSpace: 'pre-wrap',
-                                maxWidth: '59vw',
+                                // maxWidth: '59dvw',
                                 overflowX: 'clip',
                             }}>
                             {parsePromptContent(promptContent)}
@@ -510,7 +513,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             alignItems: 'flex-end',
                             marginLeft: '1em',
                             height: '3.1em',
-                            maxWidth: '60vw',
+                            maxWidth: '60dvw',
                         }}>
                         <div className="wave"></div>
                         <div className="wave"></div>

@@ -26,6 +26,15 @@ const SpotifyInterface = () => {
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
     const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
     const [timerId, setTimerId] = useState(null)
+    const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
+
+    useEffect(() => {
+        if (usingVolumeSlider) {
+            document.body.style.cursor = "pointer"
+        } else {
+            document.body.style.cursor = "default"
+        }
+    }, [usingVolumeSlider])
     
     const {
         data,
@@ -251,7 +260,12 @@ const SpotifyInterface = () => {
                         autoFocus
                         onChange={handleInputChange}
                         onKeyDown={handleEnter}
-                        style={{width: '100%', height: '100%', fontSize: '15px'}}/>
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            fontSize: '15px',
+                            backgroundColor: 'transparent',
+                        }}/>
                 </div>
                 <button
                     className='home_button'
@@ -393,6 +407,7 @@ const SpotifyInterface = () => {
                 <VolumeSlider
                     volume={volume}
                     setVolume={setVolume}
+                    setUsingVolumeSlider={setUsingVolumeSlider}
                     setIsVolumeSliderFocused={setIsVolumeSliderFocused}
                     resetVolumeSliderFocus={resetVolumeSliderFocus}
                     cancelVolumeSliderCooldown={cancelVolumeSliderCooldown} />

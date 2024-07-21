@@ -45,7 +45,7 @@ const UsersList = () => {
                 <table className="table table--users"
                     style={{
                         padding: '0px 10px',
-                        maxHeight: '75vh',
+                        maxHeight: '75dvh',
                         paddingBottom: '5px',
                     }}>
                     <thead className="table__thead">
@@ -60,7 +60,7 @@ const UsersList = () => {
                 <table className="table table--users"
                     style={{
                         padding: '0px 10px',
-                        maxHeight: '75vh',
+                        maxHeight: '75dvh',
                         paddingBottom: '5em',
                     }}>
                     <tbody className="table__body">

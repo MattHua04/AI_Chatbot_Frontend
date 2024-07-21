@@ -73,6 +73,9 @@ const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNew
                 {err}
                 <input
                     className={`conversationInput`}
+                    style={{
+                        backgroundColor: 'transparent',
+                    }}
                     id="title"
                     name="title"
                     type="text"

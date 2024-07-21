@@ -80,8 +80,6 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
         setConversationContent(conversation?.content)
     }, [conversation])
 
-    useEffect(() => {console.log(conversationContent)}, [conversationContent])
-
     useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.focus()

@@ -35,6 +35,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [lastTextAreaAdjustClick, setLastTextAreaAdjustClick] = useState(null)
     const lastTextAreaAdjustClickRef = useRef(lastTextAreaAdjustClick)
     const [startedAdjustmentAtBottom, setStartedAdjustmentAtBottom] = useState(false)
+    const inputRef = useRef(null)
+    const titleRef = useRef(null)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -386,7 +388,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     top: '6%',
                     transform: 'translateX(-50%)',
                     maxWidth: '13.6rem',
-                    maxHeight: '30vh',
+                    maxHeight: '30dvh',
                     padding: '5px 10px',
                     paddingTop: '10px',
                     margin: '10px',
@@ -440,9 +442,12 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
     const conversationInterface = (
         <>
-            <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`} style={{ height: fullScreen ? '100vh' : '75vh' }}>
+            <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`} style={{
+                height: fullScreen ? '100dvh' : '75dvh',
+                }}>
                 <div className='table__th'
-                    style={{ 
+                    ref={titleRef}
+                    style={{
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
@@ -451,6 +456,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                         padding: '0.2em',
                         fontSize: '20px',
                         borderRadius: fullScreen ? '0px 0px 10px 10px' : '10px',
+                        marginBottom: '-' + titleRef.current?.clientHeight + 'px',
                     }}
                 >
                     <div style={{ flex: '1' }}>{conversationTitle}</div>
@@ -467,131 +473,137 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                         height: '100%',
                         overflowY: 'auto',
                         scrollbarWidth: 'none',
+                        paddingBottom: inputRef.current?.clientHeight + 'px',
+                        paddingTop: titleRef.current?.clientHeight + parseFloat(getComputedStyle(document.documentElement).fontSize) + 'px',
                     }}>
                     {conversationContent}
                 </div>
                 <div
+                    ref={inputRef}
                     style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexGrow: '1',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                        marginTop: '-1rem',
+                        marginTop: '-' + inputRef.current?.clientHeight + 'px',
                     }}>
-                    <button
-                        className="conversationOptionsButton"
-                        onClick={handleDownButton}
-                        disabled={!showDownButton}
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'relative',
-                            bottom: '1rem',
-                            marginTop: '-40px',
-                            height: '2rem',
-                            opacity: showDownButton ? '1' : '0',
-                            transform: showDownButton ? 'scale(1)' : 'scale(0)',
-                        }}>
-                        <FontAwesomeIcon icon={faArrowDown} />
-                    </button>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '-0.2rem',
-                    }}>
-                    <button
-                        className={`conversationOptionsButton ${mouseDown ? 'hovered' : ''}`}
+                    <div
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
-                            width: '5%',
-                            minWidth: '3rem',
-                            height: '0.75rem',
+                            flexGrow: '1',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            opacity: showAdjustTextAreaButton ? '1' : '0',
-                            transform: showAdjustTextAreaButton ? 'scale(1)' : 'scale(0)',
-                        }}
-                        onMouseDown={handleMouseDown}
-                        ref={adjustTextAreaRef}
-                    >
-                        <FontAwesomeIcon icon={faGripLines}></FontAwesomeIcon>
-                    </button>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexGrow: '1',
-                        width: '100%',
-                        justifyContent: 'flex-end',
-                        marginTop: '-0.4rem',
-                    }}
-                >
-                    <textarea
-                        className={`conversationInput`}
-                        ref={textareaRef}
-                        value={input}
-                        onChange={handleInputChange}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                if (!(e.ctrlKey || e.shiftKey || e.altKey || e.metaKey)) {
-                                    e.preventDefault()
-                                    handleSubmit()
-                                }
-                            }
-                        }}
-                        autoFocus
-                        style={{
-                            fontSize: '15px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flexGrow: '1',
-                            flexShrink: '1',
-                            backgroundColor: 'rgba(203, 214, 238, 0.718)',
-                            color: '#5136d5',
-                            wordWrap: 'break-word',
-                            borderRadius: '10px',
-                            resize: 'none',
-                            overflow: 'auto',
-                            height: textAreaHeight + 'px',
-                            maxHeight: '50vh',
-                            minHeight: '7vh',
                             width: '100%',
-                            whiteSpace: 'pre-wrap',
-                            textAlign: 'left',
-                            padding: '0.5em 1em',
-                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                            marginTop: '1em',
-                            marginLeft: '1em',
-                            marginRight: '1em',
-                            marginBottom: '1em',
-                            transition: 'none',
-                        }}/>
-                    <button className='home_button'
-                        onClick={handleSubmit}
-                        disabled={!ableToSubmit}
-                        style={{
-                            borderRadius: '10px',
-                            padding: '0.5em 1em',
-                            textDecoration: 'none',
-                            fontSize: '15px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            border: 'none',
-                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                            marginTop: '1em',
-                            marginRight: '1em',
-                            marginBottom: '1em',
                         }}>
-                            <FontAwesomeIcon icon={faPaperPlane} />
-                    </button>
+                        <button
+                            className="conversationOptionsButton"
+                            onClick={handleDownButton}
+                            disabled={!showDownButton}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                position: 'relative',
+                                bottom: '1rem',
+                                marginTop: '-40px',
+                                height: '2rem',
+                                opacity: showDownButton ? '1' : '0',
+                                transform: showDownButton ? 'scale(1)' : 'scale(0)',
+                            }}>
+                            <FontAwesomeIcon icon={faArrowDown} />
+                        </button>
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: '-0.2rem',
+                        }}>
+                        <button
+                            className={`conversationOptionsButton ${mouseDown ? 'hovered' : ''}`}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                width: '5%',
+                                minWidth: '3rem',
+                                height: '0.75rem',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                opacity: showAdjustTextAreaButton ? '1' : '0',
+                                transform: showAdjustTextAreaButton ? 'scale(1)' : 'scale(0)',
+                            }}
+                            onMouseDown={handleMouseDown}
+                            ref={adjustTextAreaRef}
+                        >
+                            <FontAwesomeIcon icon={faGripLines}></FontAwesomeIcon>
+                        </button>
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: '1',
+                            width: '100%',
+                            justifyContent: 'flex-end',
+                            marginTop: '-0.4rem',
+                        }}
+                    >
+                        <textarea
+                            className='conversationInput'
+                            ref={textareaRef}
+                            value={input}
+                            onChange={handleInputChange}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    if (!(e.ctrlKey || e.shiftKey || e.altKey || e.metaKey)) {
+                                        e.preventDefault()
+                                        handleSubmit()
+                                    }
+                                }
+                            }}
+                            autoFocus
+                            style={{
+                                fontSize: '15px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                flexGrow: '1',
+                                flexShrink: '1',
+                                color: '#5136d5',
+                                wordWrap: 'break-word',
+                                borderRadius: '10px',
+                                resize: 'none',
+                                overflow: 'auto',
+                                height: textAreaHeight + 'px',
+                                maxHeight: '50dvh',
+                                minHeight: '7dvh',
+                                width: '100%',
+                                whiteSpace: 'pre-wrap',
+                                textAlign: 'left',
+                                padding: '0.5em 1em',
+                                boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                                marginTop: '1em',
+                                marginLeft: '1em',
+                                marginRight: '1em',
+                                marginBottom: '1em',
+                                transition: 'none',
+                            }}/>
+                        <button className='conversationSubmitButton'
+                            onClick={handleSubmit}
+                            disabled={!ableToSubmit}
+                            style={{
+                                borderRadius: '10px',
+                                padding: '0.5em 1em',
+                                textDecoration: 'none',
+                                fontSize: '15px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                border: 'none',
+                                boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                                marginTop: '1em',
+                                marginRight: '1em',
+                                marginBottom: '1em',
+                            }}>
+                                <FontAwesomeIcon icon={faPaperPlane} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </>

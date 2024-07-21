@@ -94,7 +94,7 @@ body::-webkit-scrollbar {
 
 body {
   font-family: 'Nunito', sans-serif;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: rgb(201, 217, 255);
   color: var(--COLOR);
   background-image: url('./img/main_background.jpeg');
@@ -114,7 +114,7 @@ select {
 
 #root {
   /* React root div */
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -138,7 +138,7 @@ a:focus-visible {
 }
 
 .public {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--BGCOLOR);
   color: var(--COLOR);
   background-image: url('../public/img/background.png');
@@ -253,7 +253,8 @@ a:focus-visible {
   height: 35%;
   width: 45%;
   justify-content: center;
-  animation: pulse-outside 1.5s infinite alternate ease-in-out;
+  animation: pulse-outside-big 1.5s infinite alternate ease-in-out;
+  border: 6px solid transparent;
 }
 
 .home_button {
@@ -276,8 +277,8 @@ a:focus-visible {
   pointer-events: none;
 }
 
-
 .userPrompt {
+  border: 3px solid transparent;
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
@@ -285,14 +286,14 @@ a:focus-visible {
 }
 
 .userPrompt:hover {
-  color: #ffffff;
-  transition: 0.3s ease;
-  animation: pulse 1.5s infinite alternate ease-in-out;
-  /* transform: scaleX(1.1) translateX(-4%); */
-  max-width: 60vw,
+  /* color: #ffffff; */
+  transition: 39s ease;
+  animation: pulse-outside-small 1.5s infinite alternate ease-in-out;
+  /* max-width: 60dvw; */
 }
 
 .aiPrompt {
+  border: 3px solid rgba(84, 71, 209, 0.718);
   background-color: rgba(203, 214, 238, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
@@ -300,11 +301,10 @@ a:focus-visible {
 }
 
 .aiPrompt:hover {
-  color: #ffffff;
+  /* color: #ffffff; */
   transition: 0.3s ease;
-  animation: pulse 1.5s infinite alternate ease-in-out;
-  /* transform: scaleX(1.1) translateX(4%); */
-  max-width: 60vw;
+  animation: pulse-outside-small 1.5s infinite alternate ease-in-out;
+  /* max-width: 60dvw; */
 }
 
 .wave {
@@ -401,7 +401,7 @@ a:focus-visible {
 
 .conversationInput {
   text-align: center;
-  background-color: transparent;
+  background-color: rgba(203, 214, 238, 1);
   color: #5136d5;
   transition: 0.3s ease;
   border: none;
@@ -409,11 +409,6 @@ a:focus-visible {
   text-decoration: none;
   width: 100%;
   height: 100%;
-}
-
-.conversationInput:hover {
-  color: #ffffff;
-  transition: 0.3s ease;
 }
 
 .conversationOptionsButton {
@@ -435,6 +430,26 @@ a:focus-visible {
   transition: 0.3s ease;
   animation: pulse 1.5s infinite alternate ease-in-out;
   transform: scale(1.1)
+}
+
+.conversationSubmitButton {
+  cursor: pointer;
+  color: #5136d5;
+  transition: 0.3s ease;
+  background-color: rgba(203, 214, 238, 1);
+}
+
+.conversationSubmitButton:hover {
+  cursor: pointer;
+  color: #ffffff;
+  transition: 0.3s ease;
+  animation: pulse 1.5s infinite alternate ease-in-out;
+  transform: scale(1.1)
+}
+
+.conversationSubmitButton:disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Artificial hover effect */
@@ -461,8 +476,8 @@ a:focus-visible {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
   z-index: 9999;
   border-radius: 0;
   background-color: rgb(231, 237, 255);
@@ -611,10 +626,10 @@ tr {
   position: sticky;
   top: 0;
   box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
-  background-color: rgba(137, 83, 223, 0.718);
+  background-color: rgba(157, 126, 224, 1);
   color: rgb(255, 255, 255);
   text-align: center;
-  border: 6px solid rgba(84, 71, 209, 0.718);
+  border: 6px solid rgba(103, 91, 209, 1);
   padding: 0.5em;
   border-radius: 10px;
   justify-content: center;
@@ -674,6 +689,7 @@ tr {
   transition: 0.3s ease;
   border-radius: 10px;
   margin-bottom: 10px;
+  border: 3.7px solid transparent;
 }
 
 .spotifyBlock:hover {
@@ -1143,21 +1159,21 @@ tr {
 
 @keyframes pulse-border {
   0% {
-    border-color: #5136d59a transparent transparent;
+    border-color: rgba(81, 54, 213, 0.6);
   }
   100% {
-    border-color: rgba(135, 75, 203, 0.718) transparent transparent;
+    border-color: rgba(135, 75, 203, 0.718);
   }
 }
 
 @keyframes pulseBlock {
   0% {
     background-color: #5136d59a;
-    border: 3px solid #5136d59a;
+    border-color: #5136d59a;
   }
   100% {
     background-color: rgba(135, 75, 203, 0.718);
-    border: 3px solid rgba(135, 75, 203, 0.718);
+    border-color: rgba(135, 75, 203, 0.718);
   }
 }
 
@@ -1170,13 +1186,24 @@ tr {
   }
 }
 
-@keyframes pulse-outside {
+@keyframes pulse-outside-big {
   0% {
     box-shadow: 0px 20px 100px #5136d5;
-    border: 6px solid #5136d59d;
+    border-color: #5136d59d;
   }
   100% {
     box-shadow: 0px 20px 100px rgb(135, 75, 203);
-    border: 6px solid rgba(135, 75, 203, 0.641);
+    border-color: rgba(135, 75, 203, 0.641);
+  }
+}
+
+@keyframes pulse-outside-small {
+  0% {
+    box-shadow: 0px 0px 50px #5136d5;
+    border-color: #5136d59d;
+  }
+  100% {
+    box-shadow: 0px 0px 50px rgb(135, 75, 203);
+    border-color: rgba(135, 75, 203, 0.641);
   }
 }
