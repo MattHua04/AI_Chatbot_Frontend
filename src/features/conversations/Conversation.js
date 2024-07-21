@@ -3,10 +3,10 @@ import { faPenToSquare, faSave, faTrash, faEllipsis, faXmarkCircle } from "@fort
 import { useSelector } from 'react-redux'
 import { selectConversationById } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
-import { useUpdateConversationMutation, useDeleteConversationMutation } from './conversationsApiSlice'
+import { useUpdateConversationMutation, useDeleteConversationMutation, useGetConversationsQuery } from './conversationsApiSlice'
 
 const Conversation = ({ conversationId, conversations, setCurrentConversationId, setView }) => {
-    const conversation = useSelector(state => selectConversationById(state, conversationId))
+    const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [conversationContent, setConversationContent] = useState(conversation ? conversation.content : '')
     const [edit, setEdit] = useState(false)
     const [showOptions, setShowOptions] = useState(false)
@@ -72,9 +72,15 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     }
 
     useEffect(() => {
+        setConversation(conversations.entities[conversationId])
+    }, [conversations])
+
+    useEffect(() => {
         setTitle(conversation?.title)
         setConversationContent(conversation?.content)
     }, [conversation])
+
+    useEffect(() => {console.log(conversationContent)}, [conversationContent])
 
     useEffect(() => {
         if (textareaRef.current) {
