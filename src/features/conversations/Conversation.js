@@ -7,6 +7,7 @@ import { useUpdateConversationMutation, useDeleteConversationMutation } from './
 
 const Conversation = ({ conversationId, conversations, setCurrentConversationId, setView }) => {
     const conversation = useSelector(state => selectConversationById(state, conversationId))
+    const [conversationContent, setConversationContent] = useState(conversation ? conversation.content : '')
     const [edit, setEdit] = useState(false)
     const [showOptions, setShowOptions] = useState(false)
     const [title, setTitle] = useState(conversation ? conversation.title : '')
@@ -38,7 +39,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
 
     const handleSave = async () => {
         if (title?.length) {
-            await updateConversation({id: conversationId, user: conversation.user, title: title, content: conversation.content})
+            await updateConversation({id: conversationId, user: conversation.user, title: title, content: conversationContent})
         }
     }
 
@@ -72,6 +73,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
 
     useEffect(() => {
         setTitle(conversation?.title)
+        setConversationContent(conversation?.content)
     }, [conversation])
 
     useEffect(() => {
