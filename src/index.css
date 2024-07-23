@@ -288,7 +288,7 @@ a:focus-visible {
 .userPrompt:hover {
   /* color: #ffffff; */
   transition: 39s ease;
-  animation: pulse-outside-small 1.5s infinite alternate ease-in-out;
+  animation: pulse-shadow 1.5s infinite alternate ease-in-out;
   /* max-width: 60dvw; */
 }
 
@@ -1163,6 +1163,15 @@ tr {
   }
   100% {
     border-color: rgba(135, 75, 203, 0.718);
+  }
+}
+
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0px 0px 50px #5136d5;
+  }
+  100% {
+    box-shadow: 0px 0px 50px rgb(135, 75, 203);
   }
 }
 
