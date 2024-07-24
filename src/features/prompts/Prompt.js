@@ -280,7 +280,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         className="conversationOptionsButton"
                         onClick={handleSave}
                         style={{
-                            backgroundColor: 'none',
+                            backgroundColor: 'transparent',
                             animation: 'none',
                             padding: '0',
                             height: '2rem',
@@ -292,7 +292,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         className="conversationOptionsButton"
                         onClick={handleCancel}
                         style={{
-                            backgroundColor: 'none',
+                            backgroundColor: 'transparent',
                             animation: 'none',
                             padding: '0',
                             height: '2rem',
@@ -309,7 +309,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                     onClick={handleEdit}
                     style={{
                         float: 'right',
-                        backgroundColor: 'none',
+                        backgroundColor: 'transparent',
                         animation: 'none',
                         padding: '0',
                         height: '2rem',
@@ -480,7 +480,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             title="Regenerate response"
                             onClick={regenerate}
                             style={{
-                                backgroundColor: 'none',
+                                backgroundColor: 'transparent',
                                 animation: 'none',
                                 padding: '0',
                                 height: '2rem',
