@@ -407,6 +407,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 display: 'flex',
                                 alignItems: 'center',
                                 marginRight: '1em',
+                                marginLeft: '1em',
                                 maxWidth: '65dvw',
                             }}
                             title={"Double-click to edit"}>

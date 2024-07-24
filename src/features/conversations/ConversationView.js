@@ -310,7 +310,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             window.removeEventListener('mousemove', mouseAtTopOfTextArea)
             window.removeEventListener('click', quickAdjustTextArea)
         }
-    })
+    })    
 
     let fullScreenButton
     if (fullScreen) {
