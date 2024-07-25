@@ -16,9 +16,32 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const {id} = useSelector(state => state.auth)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
     const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
-
     const [showNewConversation, setShowNewConversation] = useState(false)
     const newConversationRef = useRef(null)
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight)
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+    const sideBarRef = useRef(null)
+    const listRef = useRef(null)
+    const [listHeight, setListHeight] = useState(0)
+
+    const adjustListHeight = () => {
+        setTimeout(() => {
+            if (sideBarRef.current && listRef.current) {
+                const sideBarHeight = sideBarRef.current.getBoundingClientRect().height
+                const listHeight = listRef.current.getBoundingClientRect().height
+                const difference = sideBarHeight - listHeight
+                const newHeight = 80 * windowHeight / 100 - difference
+                setListHeight(newHeight)
+            } else {
+                adjustListHeight()
+            }
+        }, 1)
+    }
+
+    useEffect(() => {
+        adjustListHeight()
+    }, [sideBarRef, windowHeight])
+
 
     useEffect(() => {
         setView(localStorage.getItem('view') || '')
@@ -57,12 +80,19 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
             }
         }
 
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth)
+            setWindowHeight(window.innerHeight)
+        }
+
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromAddConversationButton)
+        window.addEventListener('resize', handleResize)
 
         return () => {
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromAddConversationButton)
+            window.removeEventListener('resize', handleResize)
         }
     }, [])
 
@@ -86,7 +116,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     let spotifyInterface
     if (isAdmin) {
         spotifyInterface = (
-            <SpotifyInterface />
+            <SpotifyInterface adjustListHeight={adjustListHeight} />
         )
     }
 
@@ -166,66 +196,102 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     if (!loggedInUser) {
         return <p>Loading...</p>
     }
-
-    const content = (
-        <section className="welcome" style={{display: 'flex', flexDirection: 'column', flexGrow: '1', height: '75vh'}}>
-            <div style={{display: 'flex'}}>
-                <div className='menu' style={{display: 'flex', flexDirection: 'column', flexGrow: '1', width: '12rem', maxWidth: '12rem', marginRight: '20px'}}>
-                    {spotifyInterface}
-                    <div style={{display: 'block', marginBottom: '5px'}}>
-                        {profileButtons}
-                    </div>
-                    <div style={{display: 'block', marginBottom: '5px'}}>
-                        <button
-                            className='home_button addConversationButton'
-                            title="Create a New Conversation"
-                            onClick={openNewConversationForm}
-                            style={{ width: '12rem',
-                                    border: 'none',
-                                    borderRadius: '10px',
-                                    padding: '0.3em 0.3em',
-                                    textDecoration: 'none',
-                                    fontSize: '15px',
-                                }}
-                        >
-                            {addConversation}
-                        </button>
-                        {newConversation}
-                    </div>
-                    <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flexGrow: '1',
-                            maxHeight: '90dvh',
-                            justifyContent: 'flex-start',
-                            overflowY: 'auto',
-                            margin: '-3px -10px',
-                            padding: '3px 10px',
-                            paddingBottom: '23dvh',
-                            borderRadius: '10px',
-                            scrollbarWidth: 'none',
-                            }}>
-                        <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
-                    </div>
-                </div>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexGrow: '1',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    borderRadius: '10px',
-                    maxHeight: '75dvh',
-                    }}>
-                    {view === '' && defaultContent}
-                    {view === 'usersList' && <UsersList />}
-                    {view === 'editUser' && <EditUser uid={id} />}
-                    {view === 'newUserForm' && <NewUserForm />}
-                    {view === 'conversationView' && <ConversationView conversationId={currentConversationId} setCurrentConversationId={setCurrentConversationId} setView={setView}/>}
-                </div>
+    
+    const sideBar = (
+        <div className='menu'
+            style={{display: 'flex', flexDirection: 'column', flexGrow: '1', width: '12rem', maxWidth: '12rem', marginRight: '20px'}}
+            ref={sideBarRef}>
+            {spotifyInterface}
+            <div style={{display: 'block', marginBottom: '5px'}}>
+                {profileButtons}
             </div>
-        </section>
+            <div style={{display: 'block', marginBottom: '5px'}}>
+                <button
+                    className='home_button addConversationButton'
+                    title="Create a New Conversation"
+                    onClick={openNewConversationForm}
+                    style={{ width: '12rem',
+                            border: 'none',
+                            borderRadius: '10px',
+                            padding: '0.3em 0.3em',
+                            textDecoration: 'none',
+                            fontSize: '15px',
+                        }}
+                >
+                    {addConversation}
+                </button>
+                {newConversation}
+            </div>
+            <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: '1',
+                    height: listHeight + 'px',
+                    // maxHeight: '50dvh',
+                    justifyContent: 'flex-start',
+                    overflowX: 'visible',
+                    overflowY: 'scroll',
+                    margin: '-3px -10px',
+                    padding: '3px 10px',
+                    borderRadius: '10px',
+                    scrollbarWidth: 'none',
+                    }}
+                ref={listRef}>
+                <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+            </div>
+        </div>
     )
+
+    const mainContent = (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexGrow: '1',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            borderRadius: '10px',
+            maxHeight: '75dvh',
+            }}>
+            {view === '' && defaultContent}
+            {view === 'usersList' && <UsersList />}
+            {view === 'editUser' && <EditUser uid={id} />}
+            {view === 'newUserForm' && <NewUserForm />}
+            {view === 'conversationView' && <ConversationView conversationId={currentConversationId} setCurrentConversationId={setCurrentConversationId} setView={setView}/>}
+        </div>
+    )
+
+    let content
+    if (windowWidth > 1000) {
+        content= (
+            <section className="welcome"
+                style={{display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: '1',
+                    height: '80dvh',
+                }}>
+                <div style={{display: 'flex'}}>
+                    {sideBar}
+                    {mainContent}
+                </div>
+            </section>
+        )
+    } else {
+        content= (
+            <section className="welcome"
+                style={{display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: '1',
+                    height: '80dvh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'none',
+                }}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    {sideBar}
+                    {mainContent}
+                </div>
+            </section>
+        )
+    }
 
     return content
 }

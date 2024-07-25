@@ -1,4 +1,8 @@
+import {useState, useEffect, useRef} from 'react'
+
 const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, searchResults, setShowSearchResults, selectedSearchResult, setSelectedSearchResult }) => {
+    const [hover, setHover] = useState(false)
+    
     const handleClick = () => {
         setSongRequest(result)
         setInput('')
@@ -75,7 +79,9 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
             searchResult = (
                 <button
                     className="playlistButton"
-                    onClick={handleClick}>
+                    onClick={handleClick}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}>
                     <div
                         style={{
                             display: 'flex',
@@ -97,7 +103,9 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             width: '2.5em',
                             zIndex: '999',
                         }}/>
-                        <div className="songTitle">{result[0]}</div>
+                        <div className={hover && result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
+                            {result[0]}
+                        </div>
                     </div>
                 </button>
             )
@@ -105,7 +113,9 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
             searchResult = (
                 <button
                     className="songButton"
-                    onClick={handleClick}>
+                    onClick={handleClick}
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}>
                     <div
                         style={{
                             display: 'flex',
@@ -127,7 +137,9 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             width: '2.5em',
                             zIndex: '999',
                         }}/>
-                        <div className="songTitle">{result[0]}</div>
+                        <div className={hover && result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
+                            {result[0]}
+                        </div>
                     </div>
                 </button>
             )

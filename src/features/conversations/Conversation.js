@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { selectConversationById } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
 import { useUpdateConversationMutation, useDeleteConversationMutation, useGetConversationsQuery } from './conversationsApiSlice'
+import useIntersectionObserver from './IntersectionObserver'
 
 const Conversation = ({ conversationId, conversations, setCurrentConversationId, setView }) => {
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
@@ -11,7 +12,17 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     const [edit, setEdit] = useState(false)
     const [showOptions, setShowOptions] = useState(false)
     const [title, setTitle] = useState(conversation ? conversation.title : '')
+    const selfRef = useRef(null)
     const textareaRef = useRef(null)
+    const entries = useIntersectionObserver({
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    })
+    const entry = entries.find(entry => entry.target === selfRef.current)
+    const visibilityRatio = entry ? entry.intersectionRatio : 0
+    const scale = 0.7 + 0.3 * visibilityRatio
+    const opacity = visibilityRatio
 
     const handleConversationClick = () => {
         localStorage.setItem('view', 'conversationView')
@@ -276,7 +287,18 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
         }
 
         return (
-            <div style={{display: 'flex', flexGrow: '1', flexDirection: 'row', fontSize: '15px', marginBottom: '5px'}}>
+            <div data-observe
+                style={{
+                    display: 'flex',
+                    flexGrow: '1',
+                    flexDirection: 'row',
+                    fontSize: '15px',
+                    marginBottom: '5px',
+                    transform: `scale(${scale})`,
+                    opacity: opacity,
+                    transition: 'transform 0.1s ease',
+                }}
+                ref={selfRef}>
                 {conversationTitle}
                 <div>
                     {optionsButton}

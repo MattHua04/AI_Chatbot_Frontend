@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
 
-const SpotifyInterface = () => {
+const SpotifyInterface = ({adjustListHeight}) => {
     const {id} = useSelector(state => state.auth)
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
@@ -27,6 +27,8 @@ const SpotifyInterface = () => {
     const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
     const [timerId, setTimerId] = useState(null)
     const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
+    const [mouseInSearchBar, setMouseInSearchBar] = useState(false)
+    const [mouseInCurrentSong, setMouseInCurrentSong] = useState(false)
 
     useEffect(() => {
         if (usingVolumeSlider) {
@@ -125,6 +127,7 @@ const SpotifyInterface = () => {
             setShowSearchBar(false)
             setShowSearchResults(false)
             setSelectedSearchResult(0)
+            adjustListHeight()
         }
     }
 
@@ -144,6 +147,7 @@ const SpotifyInterface = () => {
                     setInput('')
                     setShowSearchResults(false)
                     setSelectedSearchResult(0)
+                    adjustListHeight()
                 }
             }
         }
@@ -239,6 +243,7 @@ const SpotifyInterface = () => {
 
     let searchBar
     if (showSearchBar) {
+        adjustListHeight()
         searchBar = (
             <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: '-5px' }}>
                 <div
@@ -251,9 +256,12 @@ const SpotifyInterface = () => {
                             flexDirection: 'row',
                             justifyContent: 'center',
                             padding: '0.3em 0.3em'
-                        }}>
+                        }}
+                    onMouseEnter={() => setMouseInSearchBar(true)}
+                    onMouseLeave={() => setMouseInSearchBar(false)}
+                    >
                     <input
-                        className='conversationInput'
+                        className={mouseInSearchBar ? 'conversationInputHover' : 'conversationInput'}
                         ref={searchBarRef}
                         type="text"
                         value={input}
@@ -282,6 +290,8 @@ const SpotifyInterface = () => {
                 </button>
             </div>
         )
+    } else {
+        adjustListHeight()
     }
 
     let searchResultsContent
@@ -339,6 +349,8 @@ const SpotifyInterface = () => {
                     setInput('')
                     setShowSearchResults(false)
                 }}
+                onMouseEnter={() => setMouseInCurrentSong(true)}
+                onMouseLeave={() => setMouseInCurrentSong(false)}
                 style={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -354,7 +366,7 @@ const SpotifyInterface = () => {
                         cursor: 'pointer'
                     }}>
                 {musicBars}
-                <div className={currentSong[0]?.length > 15 && playState === 1 ? 'scrollingSongTitle' : 'songTitle'}
+                <div className={currentSong[0]?.length > 15 && playState === 1 || mouseInCurrentSong ? 'scrollingSongTitle' : 'songTitle'}
                     style={{cursor: 'pointer'}}>
                     {currentSong[0]}
                 </div>

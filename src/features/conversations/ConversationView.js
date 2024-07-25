@@ -443,7 +443,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const conversationInterface = (
         <>
             <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`} style={{
-                height: fullScreen ? '100dvh' : '75dvh',
+                height: fullScreen ? '100dvh' : '80dvh',
                 }}>
                 <div className='table__th'
                     ref={titleRef}

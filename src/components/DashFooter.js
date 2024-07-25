@@ -4,10 +4,6 @@ import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
 
-const DASH_REGEX = /^\/dash(\/)?$/
-const NOTES_REGEX = /^\/dash\/notes(\/)?$/
-const USERS_REGEX = /^\/dash\/users(\/)?$/
-
 const DashFooter = () => {
     const navigate = useNavigate()
     const { pathname } = useLocation()
@@ -45,12 +41,7 @@ const DashFooter = () => {
 
     if (isError) return <p>Error: {error.data?.message}</p>
 
-    let dashClass = null
-    if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
-        dashClass = "dash-header__container--small"
-    }
-
-    let logoutButton  = null
+    let logoutButton
     if (pathname !== '/dash') {
         logoutButton = (
             <button

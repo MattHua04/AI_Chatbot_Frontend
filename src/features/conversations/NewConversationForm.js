@@ -7,6 +7,7 @@ import { selectUserById } from "../../features/users/usersApiSlice"
 
 const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNewConversation}) => {
     const user = useSelector(state => selectUserById(state, uid))
+    const [mouseInInput, setMouseInInput] = useState(false)
 
     const [addNewConversation, {
         data,
@@ -69,10 +70,12 @@ const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNew
                 marginTop: '5px'
                 }}>
             <div className={`conversationButton`}
-                style={{width: '9.75rem', height: '100%', padding: '0.3em 0.3em'}}>
+                style={{width: '9.75rem', height: '100%', padding: '0.3em 0.3em'}}
+                onMouseEnter={() => setMouseInInput(true)}
+                onMouseLeave={() => setMouseInInput(false)}>
                 {err}
                 <input
-                    className={`conversationInput`}
+                    className={mouseInInput ? `conversationInputHover` : `conversationInput`}
                     style={{
                         backgroundColor: 'transparent',
                     }}
