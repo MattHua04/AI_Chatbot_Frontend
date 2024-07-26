@@ -80,6 +80,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 style={{
                                     width: 'auto',
                                     padding: '0.3em 0.7em',
+                                    boxShadow: 'none',
                                 }}>
                                     {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faCopy} />}
                             </button>
@@ -284,6 +285,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             animation: 'none',
                             padding: '0',
                             height: '2rem',
+                            boxShadow: 'none',
                         }}
                     >
                         <FontAwesomeIcon icon={faSave} />
@@ -296,6 +298,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             animation: 'none',
                             padding: '0',
                             height: '2rem',
+                            boxShadow: 'none',
                         }}
                     >
                         <FontAwesomeIcon icon={faXmarkCircle} />
@@ -313,6 +316,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         animation: 'none',
                         padding: '0',
                         height: '2rem',
+                        boxShadow: 'none',
                     }}
                     >
                     <FontAwesomeIcon icon={faPenToSquare} />
@@ -484,6 +488,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 animation: 'none',
                                 padding: '0',
                                 height: '2rem',
+                                boxShadow: 'none',
                             }}>
                             <FontAwesomeIcon icon={faRotate} />
                         </button>

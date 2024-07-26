@@ -102,6 +102,7 @@ body {
   background-position: center;
   background-blend-mode: multiply;
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 input,
@@ -259,6 +260,7 @@ a:focus-visible {
 .home_button {
   cursor: pointer;
   background-color: rgba(203, 214, 238, 0.718);
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
 }
@@ -352,6 +354,7 @@ a:focus-visible {
 .conversationButton {
   cursor: pointer;
   background-color: rgba(203, 214, 238, 0.718);
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
   width: 30rem;
@@ -391,6 +394,7 @@ a:focus-visible {
   word-break: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
 }
 
 .selectedConversationButton:hover {
@@ -430,7 +434,9 @@ a:focus-visible {
   padding: 0.3em 0.3em;
   text-decoration: none;
   width: 2rem;
+  min-width: 2rem;
   background-color: rgba(203, 214, 238, 0.718);
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
   color: #5136d5;
   transition: 0.3s ease;
   transform-origin: center;
@@ -700,8 +706,12 @@ tr {
   color: #5136d5;
   transition: 0.3s ease;
   border-radius: 10px;
-  margin-bottom: 10px;
-  border: 3.7px solid transparent;
+  /* margin-bottom: 10px; */
+  border: 6px solid transparent;
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
+  margin-left: -6px;
+  margin-right: -6px;
+  margin-top: -6px
 }
 
 .spotifyBlock:hover {
@@ -1189,12 +1199,10 @@ tr {
 
 @keyframes pulseBlock {
   0% {
-    background-color: #5136d59a;
-    border-color: #5136d59a;
+    background-color: rgba(81, 54, 213, 0.75);
   }
   100% {
-    background-color: rgba(135, 75, 203, 0.718);
-    border-color: rgba(135, 75, 203, 0.718);
+    background-color: rgba(135, 75, 203, 0.8);
   }
 }
 

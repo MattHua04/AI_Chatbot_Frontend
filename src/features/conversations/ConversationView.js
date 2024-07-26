@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faArrowDown, faExpand, faCompress, faCircleXmark, faPlus, faGripLines } from "@fortawesome/free-solid-svg-icons"
+import { faPaperPlane, faArrowDown, faExpand, faCompress, faCircleXmark, faPlus, faGripLines, faMusic } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux'
 import { selectConversationById, useGetConversationsQuery } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import ConversationsList from './ConversationsList'
 import NewConversation from './NewConversation'
 import { Buffer } from 'buffer'
+import SpotifyInterface from '../spotify/SpotifyInterface'
 
 const ConversationView = ({conversationId, setCurrentConversationId, setView}) => {
     const id = useSelector((state) => state.auth.id)
@@ -37,6 +38,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [startedAdjustmentAtBottom, setStartedAdjustmentAtBottom] = useState(false)
     const inputRef = useRef(null)
     const titleRef = useRef(null)
+    const [showMusicControls, setShowMusicControls] = useState(false)
+    const musicRef = useRef(null)
+    const toggleMusicControlsRef = useRef(null)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -228,6 +232,15 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             }
         }
 
+        const handleClickAwayFromMusic = (e) => {
+            const musicButton = toggleMusicControlsRef.current
+            if (musicRef.current && !musicRef.current.contains(e.target)) {
+                if (!musicButton || !musicButton.contains(e.target)) {
+                    setShowMusicControls(false)
+                }
+            }
+        }
+
         const checkScrollHeight = () => {
             if (conversationContentRef.current) {
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
@@ -295,6 +308,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromConversationTitle)
+        window.addEventListener('click', handleClickAwayFromMusic)
         conversationContentRef.current?.addEventListener('scroll', checkScrollHeight)
         window.addEventListener('mouseup', handleMouseUp)
         window.addEventListener('mousemove', handleMouseMove)
@@ -304,13 +318,56 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         return () => {
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromConversationTitle)
+            window.removeEventListener('click', handleClickAwayFromMusic)
             conversationContentRef.current?.removeEventListener('scroll', checkScrollHeight)
             window.removeEventListener('mouseup', handleMouseUp)
             window.removeEventListener('mousemove', handleMouseMove)
             window.removeEventListener('mousemove', mouseAtTopOfTextArea)
             window.removeEventListener('click', quickAdjustTextArea)
         }
-    })    
+    })
+
+    let musicButton
+    if (fullScreen) {
+        musicButton = (
+            <button
+                ref={toggleMusicControlsRef}
+                className="conversationOptionsButton"
+                onClick={() => setShowMusicControls(!showMusicControls)}
+                style={{
+                    animation: 'none',
+                    padding: '0',
+                    height: '2rem',
+                    backgroundColor: 'transparent',
+                    boxShadow: 'none',
+                }}>
+                <FontAwesomeIcon icon={faMusic} />
+            </button>
+        )
+    }
+
+    let musicControls
+    if (showMusicControls) {
+        musicControls = (
+            <div
+                ref={musicRef}
+                style={{
+                    flexGrow: '1',
+                    zIndex: '9999',
+                    position: 'fixed',
+                    maxWidth: '13rem',
+                    padding: '6px',
+                    paddingBottom: '0px',
+                    marginLeft: '0.5rem',
+                    marginTop: '3rem',
+                    borderRadius: '10px',
+                    boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                    backgroundColor: 'rgba(231, 237, 255, 1)',
+                }}>
+                <SpotifyInterface adjustListHeight={null} />
+            </div>
+        )
+    }
 
     let fullScreenButton
     if (fullScreen) {
@@ -323,6 +380,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     padding: '0',
                     height: '2rem',
                     backgroundColor: 'transparent',
+                    boxShadow: 'none',
                 }}>
                 <FontAwesomeIcon icon={faCompress} />
             </button>
@@ -337,6 +395,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     padding: '0',
                     height: '2rem',
                     backgroundColor: 'transparent',
+                    boxShadow: 'none',
                 }}>
                 <FontAwesomeIcon icon={faExpand} />
             </button>
@@ -384,14 +443,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                 style={{
                     zIndex: '9999',
                     position: 'fixed',
-                    left: '48.5%',
-                    top: '6%',
+                    left: '50%',
                     transform: 'translateX(-50%)',
                     maxWidth: '13.6rem',
                     maxHeight: '30dvh',
                     padding: '5px 10px',
                     paddingTop: '10px',
-                    margin: '10px',
+                    marginTop: '3rem',
                     overflowY: 'auto',
                     borderRadius: '10px',
                     border: '3px solid rgba(84, 71, 209, 0.5)',
@@ -442,8 +500,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
 
     const conversationInterface = (
         <>
-            <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`} style={{
-                height: fullScreen ? '100dvh' : '80dvh',
+            <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`}
+                style={{
+                    height: fullScreen ? '100dvh' : '80dvh',
                 }}>
                 <div className='table__th'
                     ref={titleRef}
@@ -459,10 +518,20 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                         marginBottom: '-' + titleRef.current?.clientHeight + 'px',
                     }}
                 >
+                    <div>{musicButton}</div>
                     <div style={{ flex: '1' }}>{conversationTitle}</div>
                     <div>{fullScreenButton}</div>
                 </div>
-                {coversationsList}
+                <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexGrow: '1',
+                        width: '100%',
+                        height: '0px'
+                    }}>
+                    {musicControls}
+                    {coversationsList}
+                </div>
                 <div
                     ref={conversationContentRef}
                     style={{

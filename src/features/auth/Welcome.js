@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser, faUserPlus, faPlus, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faUserPlus, faPlus, faCircleXmark, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux'
 import { selectUserById } from '../users/usersApiSlice'
 import { ROLES } from '../../config/roles'
@@ -21,27 +21,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const [windowHeight, setWindowHeight] = useState(window.innerHeight)
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const sideBarRef = useRef(null)
-    const listRef = useRef(null)
-    const [listHeight, setListHeight] = useState(0)
-
-    const adjustListHeight = () => {
-        setTimeout(() => {
-            if (sideBarRef.current && listRef.current) {
-                const sideBarHeight = sideBarRef.current.getBoundingClientRect().height
-                const listHeight = listRef.current.getBoundingClientRect().height
-                const difference = sideBarHeight - listHeight
-                const newHeight = 80 * windowHeight / 100 - difference
-                setListHeight(newHeight)
-            } else {
-                adjustListHeight()
-            }
-        }, 1)
-    }
-
-    useEffect(() => {
-        adjustListHeight()
-    }, [sideBarRef, windowHeight])
-
+    const [showSideBar, setShowSideBar] = useState(true)
 
     useEffect(() => {
         setView(localStorage.getItem('view') || '')
@@ -116,18 +96,24 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     let spotifyInterface
     if (isAdmin) {
         spotifyInterface = (
-            <SpotifyInterface adjustListHeight={adjustListHeight} />
+            <div style={{marginBottom: '10px'}}>
+                <SpotifyInterface />
+            </div>
         )
     }
 
     let profileButtons
     if (isAdmin) {
         profileButtons = (
-            <>
+            <div style={{
+                display: 'flex',
+                gap: '1px',
+            }}>
                 <button
                     className='home_button'
                     title="View User Profile"
-                    style={{ width: '5.75rem',
+                    style={{
+                        width: '100%',
                         border: 'none',
                         borderRadius: '10px',
                         padding: '0.3em 0.3em',
@@ -142,7 +128,8 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                 <button
                     className='home_button'
                     title="Register New User"
-                    style={{ width: '5.75rem',
+                    style={{
+                        width: '100%',
                         border: 'none',
                         borderRadius: '10px',
                         padding: '0.3em 0.3em',
@@ -153,7 +140,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                 >
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
-            </>
+            </div>
         )
     } else {
         profileButtons = (
@@ -197,50 +184,107 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
         return <p>Loading...</p>
     }
     
-    const sideBar = (
-        <div className='menu'
-            style={{display: 'flex', flexDirection: 'column', flexGrow: '1', width: '12rem', maxWidth: '12rem', marginRight: '20px'}}
-            ref={sideBarRef}>
-            {spotifyInterface}
-            <div style={{display: 'block', marginBottom: '5px'}}>
-                {profileButtons}
-            </div>
-            <div style={{display: 'block', marginBottom: '5px'}}>
-                <button
-                    className='home_button addConversationButton'
-                    title="Create a New Conversation"
-                    onClick={openNewConversationForm}
-                    style={{ width: '12rem',
-                            border: 'none',
-                            borderRadius: '10px',
-                            padding: '0.3em 0.3em',
-                            textDecoration: 'none',
-                            fontSize: '15px',
-                        }}
-                >
-                    {addConversation}
-                </button>
-                {newConversation}
-            </div>
+    let sideBar
+    if (showSideBar) {
+        sideBar = (
             <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                height: '80dvh',
+                maxHeight: '80dvh',
+            }}>
+                <div className='menu'
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexGrow: '1',
+                        width: '13rem',
+                        maxWidth: '13rem',
+                        marginRight: '5px',
+                        backgroundColor: 'rgba(203, 214, 238, 0.718)',
+                        borderRadius: '10px',
+                        padding: '6px',
+                    }}
+                    ref={sideBarRef}>
+                    {spotifyInterface}
+                    <div style={{display: 'block', marginBottom: '5px'}}>
+                        {profileButtons}
+                    </div>
+                    <div style={{display: 'block', marginBottom: '5px'}}>
+                        <button
+                            className='home_button addConversationButton'
+                            title="Create a New Conversation"
+                            onClick={openNewConversationForm}
+                            style={{
+                                    width: '100%',
+                                    border: 'none',
+                                    borderRadius: '10px',
+                                    padding: '0.3em 0.3em',
+                                    textDecoration: 'none',
+                                    fontSize: '15px',
+                                }}
+                        >
+                            {addConversation}
+                        </button>
+                        {newConversation}
+                    </div>
+                    <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            flexGrow: '1',
+                            // maxHeight: '50dvh',
+                            justifyContent: 'flex-start',
+                            overflowX: 'visible',
+                            overflowY: 'scroll',
+                            margin: '-3px -10px',
+                            padding: '3px 10px',
+                            borderRadius: '10px',
+                            scrollbarWidth: 'none',
+                            }}>
+                        <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+                    </div>
+                </div>
+                <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    flexGrow: '1',
-                    height: listHeight + 'px',
-                    // maxHeight: '50dvh',
-                    justifyContent: 'flex-start',
-                    overflowX: 'visible',
-                    overflowY: 'scroll',
-                    margin: '-3px -10px',
-                    padding: '3px 10px',
-                    borderRadius: '10px',
-                    scrollbarWidth: 'none',
-                    }}
-                ref={listRef}>
-                <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+                    justifyContent: 'center',
+                }}>
+                    <button className='conversationButton'
+                        style={{
+                            marginRight: '5px',
+                            width: '1rem',
+                            height: '15%',
+                            padding: '0px'
+                        }}
+                        onClick={() => setShowSideBar(false)}
+                        >
+                        <FontAwesomeIcon icon={faCaretLeft}/>
+                    </button>
+                </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        sideBar = (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                height: '80dvh',
+            }}>
+                <button className='conversationButton'
+                    style={{
+                        marginRight: '5px',
+                        width: '1rem',
+                        height: '15%',
+                        padding: '0px'
+                    }}
+                    onClick={() => setShowSideBar(true)}
+                    >
+                    <FontAwesomeIcon icon={faCaretRight}/>
+                </button>
+            </div>
+        )
+    }
 
     const mainContent = (
         <div style={{
@@ -250,7 +294,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
             justifyContent: 'center',
             alignItems: 'flex-start',
             borderRadius: '10px',
-            maxHeight: '75dvh',
+            // maxHeight: '80dvh',
             }}>
             {view === '' && defaultContent}
             {view === 'usersList' && <UsersList />}
@@ -260,38 +304,19 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
         </div>
     )
 
-    let content
-    if (windowWidth > 1000) {
-        content= (
-            <section className="welcome"
-                style={{display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: '1',
-                    height: '80dvh',
-                }}>
-                <div style={{display: 'flex'}}>
-                    {sideBar}
-                    {mainContent}
-                </div>
-            </section>
-        )
-    } else {
-        content= (
-            <section className="welcome"
-                style={{display: 'flex',
-                    flexDirection: 'column',
-                    flexGrow: '1',
-                    height: '80dvh',
-                    overflowY: 'auto',
-                    scrollbarWidth: 'none',
-                }}>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                    {sideBar}
-                    {mainContent}
-                </div>
-            </section>
-        )
-    }
+    const content = (
+        <section className="welcome"
+            style={{display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '1',
+                height: '80dvh',
+            }}>
+            <div style={{display: 'flex'}}>
+                {sideBar}
+                {mainContent}
+            </div>
+        </section>
+    )
 
     return content
 }

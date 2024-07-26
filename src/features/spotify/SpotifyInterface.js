@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
 
-const SpotifyInterface = ({adjustListHeight}) => {
+const SpotifyInterface = () => {
     const {id} = useSelector(state => state.auth)
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
@@ -127,7 +127,6 @@ const SpotifyInterface = ({adjustListHeight}) => {
             setShowSearchBar(false)
             setShowSearchResults(false)
             setSelectedSearchResult(0)
-            adjustListHeight()
         }
     }
 
@@ -147,7 +146,6 @@ const SpotifyInterface = ({adjustListHeight}) => {
                     setInput('')
                     setShowSearchResults(false)
                     setSelectedSearchResult(0)
-                    adjustListHeight()
                 }
             }
         }
@@ -243,7 +241,6 @@ const SpotifyInterface = ({adjustListHeight}) => {
 
     let searchBar
     if (showSearchBar) {
-        adjustListHeight()
         searchBar = (
             <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: '-5px' }}>
                 <div
@@ -285,13 +282,12 @@ const SpotifyInterface = ({adjustListHeight}) => {
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
                             fontSize: '15px',
+                            boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </button>
             </div>
         )
-    } else {
-        adjustListHeight()
     }
 
     let searchResultsContent
@@ -363,7 +359,7 @@ const SpotifyInterface = ({adjustListHeight}) => {
                         justifyContent: 'flex-start',
                         alignItems: 'center',
                         gap: '5px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}>
                 {musicBars}
                 <div className={currentSong[0]?.length > 15 && playState === 1 || mouseInCurrentSong ? 'scrollingSongTitle' : 'songTitle'}
@@ -383,6 +379,7 @@ const SpotifyInterface = ({adjustListHeight}) => {
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
                             fontSize: '15px',
+                            boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faBackwardStep} />
                 </button>
@@ -395,6 +392,7 @@ const SpotifyInterface = ({adjustListHeight}) => {
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
                             fontSize: '15px',
+                            boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={playState === 1 ? faPause : faPlay} />
                 </button>
@@ -407,6 +405,7 @@ const SpotifyInterface = ({adjustListHeight}) => {
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
                             fontSize: '15px',
+                            boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faForwardStep} />
                 </button>
