@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import { selectConversationById, useGetConversationsQuery } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
 import { useUpdateConversationMutation } from './conversationsApiSlice'
+import { selectUserById } from '../users/usersApiSlice'
+import { ROLES } from '../../config/roles'
 import Prompt from '../prompts/Prompt'
 import { Link } from 'react-router-dom'
 import ConversationsList from './ConversationsList'
@@ -13,6 +15,8 @@ import SpotifyInterface from '../spotify/SpotifyInterface'
 
 const ConversationView = ({conversationId, setCurrentConversationId, setView}) => {
     const id = useSelector((state) => state.auth.id)
+    const loggedInUser = useSelector((state) => selectUserById(state, id))
+    const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [content, setContent] = useState(conversation?.content)
     const [input, setInput] = useState('')
@@ -328,7 +332,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     })
 
     let musicButton
-    if (fullScreen) {
+    if (isAdmin && fullScreen) {
         musicButton = (
             <button
                 ref={toggleMusicControlsRef}
@@ -347,7 +351,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     }
 
     let musicControls
-    if (showMusicControls) {
+    if (isAdmin && showMusicControls) {
         musicControls = (
             <div
                 ref={musicRef}

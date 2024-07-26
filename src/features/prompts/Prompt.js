@@ -29,7 +29,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
         color: '#5136d5',
         paddingLeft: '2rem',
         textOverflow: 'clip',
-        overflowX: 'auto',
+        overflowX: 'auto'
     }
 
     const parsePromptContent = (content) => {
@@ -57,7 +57,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
 
                 return (
                     <div key={index} style={{
-                            // maxWidth: '60vw'
+                            // maxWidth: '60dvw'
                         }}>
                         <div style={{
                             borderRadius: '5px',
@@ -72,7 +72,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             justifyContent: 'space-between',
                             alignItems: 'center',
                         }}>
-                            <p>{language ? language : 'command'}</p>
+                            <p>{language ? language : 'cmd'}</p>
                             <button className="conversationButton"
                                 onClick={() => {
                                     copyToClipboard(code, index)
@@ -85,9 +85,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faCopy} />}
                             </button>
                         </div>
-                        <pre key={index} style={codeStyle}>
+                        <p key={index} style={codeStyle}>
                             {code}
-                        </pre>
+                        </p>
                     </div>
                 )
             }

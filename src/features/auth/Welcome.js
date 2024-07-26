@@ -13,7 +13,7 @@ import { useState, useEffect, useRef } from 'react'
 import SpotifyInterface from '../spotify/SpotifyInterface'
 
 const Welcome = ({view, currentConversationId, setView, setCurrentConversationId}) => {
-    const {id} = useSelector(state => state.auth)
+    const id = useSelector(state => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
     const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
     const [showNewConversation, setShowNewConversation] = useState(false)
@@ -307,11 +307,15 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const content = (
         <section className="welcome"
             style={{display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 flexGrow: '1',
                 height: '80dvh',
             }}>
-            <div style={{display: 'flex'}}>
+            <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexGrow: '1'
+                }}>
                 {sideBar}
                 {mainContent}
             </div>

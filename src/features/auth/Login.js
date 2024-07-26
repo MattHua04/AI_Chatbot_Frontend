@@ -193,7 +193,8 @@ const Login = ({setView, setCurrentConversationId}) => {
                         <button className="form__submit-button"
                             style={{fontSize: '1em',
                                 padding: '0.2em 0.5em',
-                                flexGrow: '1'
+                                flexGrow: '1',
+                                boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)'
                             }}>
                             Login
                         </button>
