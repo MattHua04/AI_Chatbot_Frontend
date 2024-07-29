@@ -23,6 +23,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     const visibilityRatio = entry ? entry.intersectionRatio : 0
     const scale = 0.7 + 0.3 * visibilityRatio
     const opacity = visibilityRatio
+    const [mouseInInput, setMouseInInput] = useState(false)
 
     const handleConversationClick = () => {
         localStorage.setItem('view', 'conversationView')
@@ -153,7 +154,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
             conversationTitle = (
                 <button
                     title={`${title}`}
-                    className={`conversationButton`}
+                    className={localStorage.getItem('view') === `conversationView` && localStorage.getItem('currentConversationId') === conversationId ? `selectedConversationButton` : `conversationButton`}
                     onClick={handleConversationClick}
                     >
                     <div style={{
@@ -172,12 +173,14 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
             conversationTitle = (
                 <div
                     title={`${title}`}
-                    className={`conversationButton`}
+                    className={localStorage.getItem('view') === `conversationView` && localStorage.getItem('currentConversationId') === conversationId ? `selectedConversationButton` : `conversationButton`}
                     style={{padding: '0.3em 0.3em'}}
+                    onMouseEnter={() => setMouseInInput(true)}
+                    onMouseLeave={() => setMouseInInput(false)}
                 >
                     {message}
                     <textarea
-                        className={`conversationInput`}
+                        className={mouseInInput || localStorage.getItem('currentConversationId') === conversationId ? `conversationInputHover` : `conversationInput`}
                         ref={textareaRef}
                         onChange={(e) => setTitle(e.target.value)}
                         onKeyDown={handleEnter}
@@ -192,6 +195,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                             whiteSpace: 'pre-wrap',
                             height: 'auto',
                             padding: '0em 0.5em',
+                            backgroundColor: 'transparent'
                         }}
                     />
                 </div>

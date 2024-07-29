@@ -362,7 +362,7 @@ const SpotifyInterface = () => {
                         cursor: 'pointer',
                     }}>
                 {musicBars}
-                <div className={currentSong[0]?.length > 15 && playState === 1 || mouseInCurrentSong ? 'scrollingSongTitle' : 'songTitle'}
+                <div className={currentSong[0]?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
                     style={{cursor: 'pointer'}}>
                     {currentSong[0]}
                 </div>
