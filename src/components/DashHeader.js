@@ -27,17 +27,17 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
     }
 
     let info
-    if (windowWidth <= 750) {
+    if (windowWidth <= 1000) {
         info = (
             <div className="dash-header__container"
                 style={{
                     flexDirection: 'column',
                 }}>
-                <div>
+                {/* <div>
                     <Link to="/dash" onClick={resetPage}>
                         <h1 className="dash-header__page-name">AI Chatbot</h1>
                     </Link>
-                </div>
+                </div> */}
                 <h1 className='dash-header__title'>
                         Hello <Link to={`/dash/users/${id}`} className='dash-header__title' >{username}</Link> !
                 </h1>

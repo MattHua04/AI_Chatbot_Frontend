@@ -25,7 +25,7 @@ function App() {
         <Route index element={<Public />} />
         <Route path="login">
           <Route index element={<Login setView={setView} setCurrentConversationId={setCurrentConversationId}/>} />
-          <Route path="new" element={<NewUser />} />
+          <Route path="new" element={<NewUser lightmode={true} />} />
         </Route>
 
         <Route element={<PersistLogin />}>

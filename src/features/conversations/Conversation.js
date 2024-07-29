@@ -26,10 +26,17 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     const [mouseInInput, setMouseInInput] = useState(false)
 
     const handleConversationClick = () => {
-        localStorage.setItem('view', 'conversationView')
-        localStorage.setItem('currentConversationId', conversationId)
-        setView('conversationView')
-        setCurrentConversationId(conversationId)
+        if (localStorage.getItem('view') !== 'conversationView' || localStorage.getItem('currentConversationId') !== conversationId) {
+            localStorage.setItem('view', 'conversationView')
+            localStorage.setItem('currentConversationId', conversationId)
+            setView('conversationView')
+            setCurrentConversationId(conversationId)
+        } else if (localStorage.getItem('view') === 'conversationView' && localStorage.getItem('currentConversationId') === conversationId) {
+            localStorage.setItem('view', '')
+            localStorage.setItem('currentConversationId', '')
+            setView('')
+            setCurrentConversationId('')
+        }
     }
 
     const handleEdit = () => {

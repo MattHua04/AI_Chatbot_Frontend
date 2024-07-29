@@ -114,7 +114,7 @@ const Login = ({setView, setCurrentConversationId}) => {
     const onGoHomeClicked = () => navigate(`/`)
 
     let content
-    if (windowWidth <= 750) {
+    if (windowWidth <= 1000) {
         content = (
             <section>
                 <header className='dash-header'>

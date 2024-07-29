@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom"
 import NewUserForm from "./NewUserForm"
 
-const NewUser = () => {
-    const content = <NewUserForm />
+const NewUser = ({lightmode}) => {
+    const content = <NewUserForm lightmode={lightmode} />
 
     return content
 }

@@ -231,19 +231,15 @@ a:focus-visible {
 }
 
 .welcome__default_box {
-  z-index: -9999;
   background-color: rgba(203, 214, 238, 0.917);
-  position: fixed;
-  left: 30%;
-  top: 20%;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   align-items: center;
   text-align: center;
   border-radius: 4em;
-  height: 35%;
-  width: 45%;
+  padding: 2em 1em;
+  width: 50%;
   justify-content: center;
   animation: pulse-outside-big 1.5s infinite alternate ease-in-out;
   border: 6px solid transparent;
@@ -708,7 +704,7 @@ tr {
 .spotifyBlock:hover {
   color: #ffffff;
   transition: 0.3s ease;
-  animation: pulseBlock 1.5s infinite alternate ease-in-out;
+  /* animation: pulseBlock 1.5s infinite alternate ease-in-out; */
   transform: scale(1.02)
 }
 
