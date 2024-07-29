@@ -207,6 +207,7 @@ a:focus-visible {
   background-clip: text;
   color: transparent;
   transition: 1s ease;
+  overflow: visible;
 }
 
 .login__button:hover {
@@ -511,13 +512,12 @@ a:focus-visible {
 }
 
 .dash-header__title-link:hover {
-  padding-top: 0.5em;
+  padding-top: 1rem;
   color: #ffffff;
   transition: 0.3s ease;
 }
 
 .dash-header__title-link {
-  padding-top: 0.5em;
   background-image: linear-gradient(180deg, #12009a, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
   -webkit-background-clip: text;
   background-clip: text;
@@ -531,10 +531,11 @@ a:focus-visible {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  transition: 0.5s ease;
 }
 
 .dash-header__page-name {
-  padding-top: 0.5em;
+  padding-top: 1rem;
   background-image: linear-gradient(180deg, #12009a, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
   -webkit-background-clip: text;
   background-clip: text;
@@ -543,7 +544,6 @@ a:focus-visible {
 }
 
 .dash-header__page-name:hover {
-  padding-top: 0.5em;
   color: #ffffff;
   transition: 0.3s ease;
 }
