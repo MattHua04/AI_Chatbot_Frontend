@@ -45,6 +45,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const [showMusicControls, setShowMusicControls] = useState(false)
     const musicRef = useRef(null)
     const toggleMusicControlsRef = useRef(null)
+    const lastTouchY = useRef(null)
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -191,7 +192,37 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
     const handleMouseDown = (e) => {
         document.body.style.cursor = "pointer"
         setMouseDown(true)
-        e.preventDefault()
+        if (e.type === "mousedown") e.preventDefault()
+    }
+
+    const handleMouseUp = (e) => {
+        if (mouseDown) {
+            document.body.style.cursor = "default"
+            setMouseDown(false)
+        }
+    }
+
+    const handleMouseMove = (e) => {
+        if (mouseDown) {
+            if (e.type === "mousemove") {
+                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+                if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
+                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
+                }
+                const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
+                setTextAreaHeight(newHeight)
+            } else if (e.type === "touchmove") {
+                const touch = e.touches[0]
+                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+                if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
+                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
+                }
+                const movementY = touch.clientY - lastTouchY.current
+                lastTouchY.current = touch.clientY
+                const newHeight = Math.min(Math.max(textAreaHeight - movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
+                setTextAreaHeight(newHeight)
+            }
+        }
     }
 
     useEffect(() => {
@@ -246,31 +277,15 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         }
 
         const checkScrollHeight = () => {
-            if (conversationContentRef.current) {
+            if (conversationContentRef.current && !mouseDown) {
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                if (scrollHeight - scrollTop > clientHeight + 10) {
+                if (scrollHeight - scrollTop > clientHeight + 20) {
                     setShowDownButton(true)
                     setStartedAdjustmentAtBottom(false)
                 } else {
                     setShowDownButton(false)
                     setStartedAdjustmentAtBottom(true)
                 }
-            }
-        }
-
-        const handleMouseUp = (e) => {
-            document.body.style.cursor = "default"
-            setMouseDown(false)
-        }
-    
-        const handleMouseMove = (e) => {
-            if (mouseDown) {
-                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
-                    conversationContentRef.current.scrollTop = scrollHeight - clientHeight
-                }
-                const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
-                setTextAreaHeight(newHeight)
             }
         }
 
@@ -315,7 +330,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
         window.addEventListener('click', handleClickAwayFromMusic)
         conversationContentRef.current?.addEventListener('scroll', checkScrollHeight)
         window.addEventListener('mouseup', handleMouseUp)
+        window.addEventListener('touchend', handleMouseUp)
         window.addEventListener('mousemove', handleMouseMove)
+        window.addEventListener('touchmove', handleMouseMove)
         window.addEventListener('mousemove', mouseAtTopOfTextArea)
         window.addEventListener('click', quickAdjustTextArea)
 
@@ -325,7 +342,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
             window.removeEventListener('click', handleClickAwayFromMusic)
             conversationContentRef.current?.removeEventListener('scroll', checkScrollHeight)
             window.removeEventListener('mouseup', handleMouseUp)
+            window.removeEventListener('touchend', handleMouseUp)
             window.removeEventListener('mousemove', handleMouseMove)
+            window.removeEventListener('touchmove', handleMouseMove)
             window.removeEventListener('mousemove', mouseAtTopOfTextArea)
             window.removeEventListener('click', quickAdjustTextArea)
         }
@@ -604,6 +623,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                                 transform: showAdjustTextAreaButton ? 'scale(1)' : 'scale(0)',
                             }}
                             onMouseDown={handleMouseDown}
+                            onTouchStart={handleMouseDown}
                             ref={adjustTextAreaRef}
                         >
                             <FontAwesomeIcon icon={faGripLines}></FontAwesomeIcon>
@@ -657,6 +677,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                                 marginRight: '1em',
                                 marginBottom: '1em',
                                 transition: 'none',
+                                zIndex: '9999',
                             }}/>
                         <button className='conversationSubmitButton'
                             onClick={handleSubmit}

@@ -540,6 +540,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                             padding: '0.3em 0.3em',
                                             textDecoration: 'none',
                                             flexGrow: '1',
+                                            minWidth: '2.5rem',
                                             maxWidth: '4rem',
                                             fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                                         }}

@@ -256,10 +256,12 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
 
     const handleSwipedLeft = () => {
         setCurrentPanelIndex((prevIndex) => (prevIndex + 1) % panels.length)
+        setShowNewConversation(false)
     }
     
     const handleSwipedRight = () => {
         setCurrentPanelIndex((prevIndex) => (prevIndex - 1 + panels.length) % panels.length)
+        setShowNewConversation(false)
     }
     
     const panelHandlers = useSwipeable({
@@ -425,7 +427,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                             height: '1rem',
                             padding: '0px'
                         }}
-                        onClick={() => setShowSideBar(true)}
+                        onClick={(e) => setShowSideBar(true)}
                         >
                         <FontAwesomeIcon icon={faCaretDown}/>
                     </button>
