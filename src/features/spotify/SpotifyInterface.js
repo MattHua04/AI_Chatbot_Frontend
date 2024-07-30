@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
 
-const SpotifyInterface = () => {
+const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const {id} = useSelector(state => state.auth)
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
@@ -26,7 +26,7 @@ const SpotifyInterface = () => {
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
     const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
     const [timerId, setTimerId] = useState(null)
-    const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
+    // const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
     const [mouseInSearchBar, setMouseInSearchBar] = useState(false)
     const [mouseInCurrentSong, setMouseInCurrentSong] = useState(false)
 

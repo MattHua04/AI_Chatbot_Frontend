@@ -983,12 +983,39 @@ tr {
   background: rgba(203, 214, 238, 1);
 }
 
+.customSlider-jumbotrack {
+  margin-top: -3.6px;
+  height: 8px;
+  border-radius: 5px;
+}
+
+.customSlider-jumbotrack.customSlider-jumbotrack-0 {
+  /* color of the track before the thumb */
+  width: 100%;
+  background: linear-gradient(90deg, #12009a, #3d19a7, #9143d6, #b07cdb, #e2d6ed);
+}
+
+.customSlider-jumbotrack.customSlider-jumbotrack-1 {
+  /* color of the track after the thumb */
+  background: rgba(203, 214, 238, 1);
+}
+
 .customSlider-thumb {
   margin-top: -4px;
   cursor: pointer;
   background: #5136d5;
   width: 10px;
   height: 10px;
+  border-radius: 100%;
+  outline: none;
+}
+
+.customSlider-jumbothumb {
+  margin-top: -7px;
+  cursor: pointer;
+  background: #5136d5;
+  width: 15px;
+  height: 15px;
   border-radius: 100%;
   outline: none;
 }

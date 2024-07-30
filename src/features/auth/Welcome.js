@@ -23,6 +23,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const [showSideBar, setShowSideBar] = useState(true)
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const [currentPanelIndex, setCurrentPanelIndex] = useState(0)
+    const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
 
     useEffect(() => {
         function handleResize() {
@@ -114,7 +115,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     if (isAdmin) {
         spotifyInterface = (
             <div style={{maxWidth: '13rem'}}>
-                <SpotifyInterface />
+                <SpotifyInterface usingVolumeSlider={usingVolumeSlider} setUsingVolumeSlider={setUsingVolumeSlider}/>
             </div>
         )
     }
@@ -255,13 +256,17 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const panels = [musicControls, generalControls, conversations]
 
     const handleSwipedLeft = () => {
-        setCurrentPanelIndex((prevIndex) => (prevIndex + 1) % panels.length)
-        setShowNewConversation(false)
+        if (!usingVolumeSlider) {
+            setCurrentPanelIndex((prevIndex) => (prevIndex + 1) % panels.length)
+            setShowNewConversation(false)
+        }
     }
     
     const handleSwipedRight = () => {
-        setCurrentPanelIndex((prevIndex) => (prevIndex - 1 + panels.length) % panels.length)
-        setShowNewConversation(false)
+        if (!usingVolumeSlider) {
+            setCurrentPanelIndex((prevIndex) => (prevIndex - 1 + panels.length) % panels.length)
+            setShowNewConversation(false)
+        }
     }
     
     const panelHandlers = useSwipeable({
