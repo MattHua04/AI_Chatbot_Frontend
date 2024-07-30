@@ -136,7 +136,8 @@ const Login = ({setView, setCurrentConversationId}) => {
                             <label htmlFor="username" style={{marginRight: '1rem'}}>Username:</label>
                             <input
                                 className={`form__input ${validUserClass}`}
-                                style={{fontSize: '0.75em',
+                                style={{
+                                    fontSize: '0.75em',
                                     textAlign: 'left',
                                     flexGrow: '1',
                                     width: '100%',

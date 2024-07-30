@@ -1022,7 +1022,13 @@ tr {
   align-items: center;
 }
 
+.form__label {
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+}
+
 .form__input{
+  font-size: 1.5rem;
   background-color: rgba(233, 240, 253);
   padding: 0.5em 0.5em;
   border-radius: 15px;
@@ -1030,6 +1036,7 @@ tr {
   border: 1px solid rgb(0, 0, 0);
   outline: 1px solid rgb(0, 0, 0);
 }
+
 .form__submit-button {
   cursor: pointer;
   background-color: rgba(203, 214, 238, 0.718);
@@ -1074,12 +1081,14 @@ tr {
 }
 
 .form__select {
+  font-size: 1.5rem;
   background-color: rgba(233, 240, 253);
   width: 100%;
   padding: 0.5em 2em;
   border-radius: 15px;
   border: 2px solid var(--TABLE-COLOR);
   text-align: center;
+  user-select: none;
 }
 
 .form__action-buttons {

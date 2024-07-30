@@ -11,6 +11,7 @@ import NewConversation from '../conversations/NewConversation'
 import ConversationView from '../conversations/ConversationView'
 import { useState, useEffect, useRef } from 'react'
 import SpotifyInterface from '../spotify/SpotifyInterface'
+import { useSwipeable } from 'react-swipeable'
 
 const Welcome = ({view, currentConversationId, setView, setCurrentConversationId}) => {
     const id = useSelector(state => state.auth.id)
@@ -21,6 +22,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     const sideBarRef = useRef(null)
     const [showSideBar, setShowSideBar] = useState(true)
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+    const [currentPanelIndex, setCurrentPanelIndex] = useState(0)
 
     useEffect(() => {
         function handleResize() {
@@ -80,19 +82,32 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
 
     let defaultContent
     if (view === "") {
-        defaultContent = (
-            <div className='welcome__default_box'>
-                <p className='welcome__default'>
-                    Welcome to AI Chatbot!
-                </p>
-                <p className='welcome__default'>
-                    Your personal assistant for
-                </p>
-                <p className='welcome__default'>
-                    EVERYTHING
-                </p>
-            </div>
-        )
+        if (windowWidth <= 1000) {
+            defaultContent = (
+                <div className='welcome__default_box'>
+                    <p className='welcome__default'>
+                        Welcome to
+                    </p>
+                    <p className='welcome__default'>
+                        AI Chatbot!
+                    </p>
+                </div>
+            )
+        } else {
+            defaultContent = (
+                <div className='welcome__default_box'>
+                    <p className='welcome__default'>
+                        Welcome to AI Chatbot!
+                    </p>
+                    <p className='welcome__default'>
+                        Your personal assistant for
+                    </p>
+                    <p className='welcome__default'>
+                        EVERYTHING
+                    </p>
+                </div>
+            )
+        }
     }
 
     let spotifyInterface
@@ -181,10 +196,78 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
         )
     }
 
+    // Mobile swipeable side bar components
+    const musicControls = (
+        <div style={{marginRight: '15px'}}>
+            {spotifyInterface}
+        </div>
+    )
 
-    if (!loggedInUser) {
-        return <p>Loading...</p>
+    const generalControls = (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            // marginRight: '9px',
+        }}>
+            <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
+                {profileButtons}
+            </div>
+            <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
+                <button
+                    className='home_button addConversationButton'
+                    title="Create a New Conversation"
+                    onClick={openNewConversationForm}
+                    style={{
+                            width: '100%',
+                            border: 'none',
+                            borderRadius: '10px',
+                            padding: '0.3em 0.3em',
+                            textDecoration: 'none',
+                            fontSize: '15px',
+                        }}
+                >
+                    {addConversation}
+                </button>
+                {newConversation}
+            </div>
+        </div>
+    )
+
+    const conversations = (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: '1',
+            // maxHeight: '50dvh',
+            justifyContent: 'flex-start',
+            overflowX: 'visible',
+            overflowY: 'scroll',
+            // margin: '-3px -10px',
+            padding: '3px 10px',
+            borderRadius: '10px',
+            scrollbarWidth: 'none',
+            maxWidth: '13rem',
+            }}>
+            <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+        </div>
+    )
+
+    const panels = [musicControls, generalControls, conversations]
+
+    const handleSwipedLeft = () => {
+        setCurrentPanelIndex((prevIndex) => (prevIndex + 1) % panels.length)
     }
+    
+    const handleSwipedRight = () => {
+        setCurrentPanelIndex((prevIndex) => (prevIndex - 1 + panels.length) % panels.length)
+    }
+    
+    const panelHandlers = useSwipeable({
+        onSwipedLeft: handleSwipedLeft,
+        onSwipedRight: handleSwipedRight,
+        preventDefaultTouchmoveEvent: true,
+        trackMouse: true,
+    })
     
     let sideBar
     if (showSideBar) {
@@ -204,59 +287,15 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                                 borderRadius: '10px',
                                 padding: '6px',
                                 marginBottom: '5px',
-                                justifyContent: 'space-between',
+                                justifyContent: 'center',
                                 maxHeight: '6.7rem',
-                                overflowX: 'auto',
-                                overflowY: 'visible',
-                                scrollBarWidth: 'none',
+                                height: '6.7rem',
+                                paddingBottom: '0px',
+                                overflow: 'visible',
                             }}
-                            ref={sideBarRef}>
-                            <div style={{marginRight: '15px'}}>
-                                {spotifyInterface}
-                            </div>
-                            <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    // marginRight: '9px',
-                                }}>
-                                <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
-                                    {profileButtons}
-                                </div>
-                                <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
-                                    <button
-                                        className='home_button addConversationButton'
-                                        title="Create a New Conversation"
-                                        onClick={openNewConversationForm}
-                                        style={{
-                                                width: '100%',
-                                                border: 'none',
-                                                borderRadius: '10px',
-                                                padding: '0.3em 0.3em',
-                                                textDecoration: 'none',
-                                                fontSize: '15px',
-                                            }}
-                                    >
-                                        {addConversation}
-                                    </button>
-                                    {newConversation}
-                                </div>
-                            </div>
-                            <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    flexGrow: '1',
-                                    // maxHeight: '50dvh',
-                                    justifyContent: 'flex-start',
-                                    overflowX: 'visible',
-                                    overflowY: 'scroll',
-                                    // margin: '-3px -10px',
-                                    padding: '3px 10px',
-                                    borderRadius: '10px',
-                                    scrollbarWidth: 'none',
-                                    maxWidth: '13rem',
-                                    }}>
-                                <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
-                            </div>
+                            ref={sideBarRef}
+                            {...panelHandlers}>
+                            {panels[currentPanelIndex]}
                         </div>
                     </div>
                     <div style={{
@@ -477,28 +516,32 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
     let content
     if (windowWidth <= 1000) {
         content = (
-            <section className="welcome"
-                style={{display: 'flex',
-                    flexDirection: 'row',
-                    flexGrow: '1',
-                    height: '80dvh',
-                }}>
-                <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flexGrow: '1',
-                    }}>
-                    {sideBar}
-                    <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flexGrow: '1',
-                            // marginBottom: '1rem',
-                        }}>
-                        {mainContent}
-                    </div>
-                </div>
-            </section>
+            <div>
+            {sideBar}
+            {mainContent}
+            </div>
+            // <section className="welcome"
+            //     style={{display: 'flex',
+            //         flexDirection: 'row',
+            //         flexGrow: '1',
+            //         height: '80dvh',
+            //         maxHeight: '80dvh',
+            //     }}>
+            //     <div style={{
+            //             display: 'flex',
+            //             flexDirection: 'column',
+            //             flexGrow: '1',
+            //         }}>
+            //         {sideBar}
+            //         <div style={{
+            //                 display: 'flex',
+            //                 flexDirection: 'row',
+            //                 flexGrow: '1',
+            //             }}>
+            //             {mainContent}
+            //         </div>
+            //     </div>
+            // </section>
         )
     } else {
         content = (
@@ -518,6 +561,10 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                 </div>
             </section>
         )
+    }
+
+    if (!loggedInUser) {
+        return <p>Loading...</p>
     }
 
     return content
