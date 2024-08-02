@@ -515,7 +515,9 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                 <ConversationView
                     conversationId={currentConversationId}
                     setCurrentConversationId={setCurrentConversationId}
-                    setView={setView}/>
+                    setView={setView}
+                    usingVolumeSlider={usingVolumeSlider}
+                    setUsingVolumeSlider={setUsingVolumeSlider} />
             }
         </div>
     )

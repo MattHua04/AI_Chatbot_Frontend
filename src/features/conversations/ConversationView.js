@@ -13,7 +13,7 @@ import NewConversation from './NewConversation'
 import { Buffer } from 'buffer'
 import SpotifyInterface from '../spotify/SpotifyInterface'
 
-const ConversationView = ({conversationId, setCurrentConversationId, setView}) => {
+const ConversationView = ({conversationId, setCurrentConversationId, setView, usingVolumeSlider, setUsingVolumeSlider}) => {
     const id = useSelector((state) => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
     const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
@@ -387,7 +387,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView}) =
                     boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
                     backgroundColor: 'rgba(231, 237, 255, 1)',
                 }}>
-                <SpotifyInterface adjustListHeight={null} />
+                <SpotifyInterface usingVolumeSlider={usingVolumeSlider} setUsingVolumeSlider={setUsingVolumeSlider} />
             </div>
         )
     }

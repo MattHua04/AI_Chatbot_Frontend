@@ -1,7 +1,7 @@
 import ReactSlider from "react-slider"
 import {useEffect, useState} from "react"
 
-const VolumeSlider = ({volume, setVolume, setUsingVolumeSlider, setIsVolumeSliderFocused, resetVolumeSliderFocus, cancelVolumeSliderCooldown}) => {
+const VolumeSlider = ({volume, setVolume, setUsingVolumeSlider}) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
     useEffect(() => {
@@ -21,22 +21,9 @@ const VolumeSlider = ({volume, setVolume, setUsingVolumeSlider, setIsVolumeSlide
             className="customSlider"
             trackClassName={windowWidth <= 1000 ? "customSlider-jumbotrack" : "customSlider-track"}
             thumbClassName={windowWidth <= 1000 ? "customSlider-jumbothumb" : "customSlider-thumb"}
-            // renderThumb={(props, state) => (
-            //     <div style={{
-            //             position: 'absolute',
-            //             touchAction: 'none',
-            //             zIndex: '1',
-            //             left: `${state.valueNow}%`,
-            //         }}>
-            //         <div className="customSlider-thumb" />
-            //     </div>
-            // )}
             value={volume}
             onChange={(newValue) => {
-                cancelVolumeSliderCooldown()
-                setIsVolumeSliderFocused(true)
                 setVolume(newValue)
-                resetVolumeSliderFocus()
             }}
             onBeforeChange={() => {
                 setUsingVolumeSlider(true)

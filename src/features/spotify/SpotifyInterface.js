@@ -24,7 +24,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const [pressedKeys, setPressedKeys] = useState({})
     const [previousPressedKeys, setPreviousPressedKeys] = useState({})
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
-    const [isVolumeSliderFocused, setIsVolumeSliderFocused] = useState(false)
     const [timerId, setTimerId] = useState(null)
     // const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
     const [mouseInSearchBar, setMouseInSearchBar] = useState(false)
@@ -83,17 +82,17 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
             setCurrentSong(spotifyState.currentSong)
             setSearchResults(spotifyState.searchResults)
             setSongRequest(spotifyState.songRequest)
-            if (!isVolumeSliderFocused) {
+            if (!usingVolumeSlider) {
                 setVolume(spotifyState.volume)
             }
         }
     }, [spotifyState])
 
     useEffect(() => {
-        if (hasBeenSuccess && !isVolumeSliderFocused) {
+        if (hasBeenSuccess && !usingVolumeSlider) {
             updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
         }
-    }, [playState, controlPlayState, songRequest, input, volume, isVolumeSliderFocused])
+    }, [playState, controlPlayState, songRequest, input, volume, usingVolumeSlider])
 
     useEffect(() => {
         if (input.length) {
@@ -202,19 +201,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
             }
         }
     }, [pressedKeys])
-
-    const resetVolumeSliderFocus = () => {
-        const id = setTimeout(() => {
-            setIsVolumeSliderFocused(false)
-        }, 1000)
-        setTimerId(id)
-    }
-
-    const cancelVolumeSliderCooldown = () => {
-        if (timerId) {
-            clearTimeout(timerId)
-        }
-    }
 
     let musicBars
     if (playState === 1) {
@@ -418,10 +404,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                 <VolumeSlider
                     volume={volume}
                     setVolume={setVolume}
-                    setUsingVolumeSlider={setUsingVolumeSlider}
-                    setIsVolumeSliderFocused={setIsVolumeSliderFocused}
-                    resetVolumeSliderFocus={resetVolumeSliderFocus}
-                    cancelVolumeSliderCooldown={cancelVolumeSliderCooldown} />
+                    setUsingVolumeSlider={setUsingVolumeSlider} />
             </div>
         </div>
     )
