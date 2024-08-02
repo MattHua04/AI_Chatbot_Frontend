@@ -139,12 +139,14 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     useEffect(() => {
         const handleClickAwayFromSearchBar = (e) => {
             const spotifyBlock = document.querySelector('.spotifyBlock')
-            if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-                if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
-                    setShowSearchBar(false)
-                    setInput('')
-                    setShowSearchResults(false)
-                    setSelectedSearchResult(0)
+            if (!usingVolumeSlider) {
+                if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+                    if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
+                        setShowSearchBar(false)
+                        setInput('')
+                        setShowSearchResults(false)
+                        setSelectedSearchResult(0)
+                    }
                 }
             }
         }
