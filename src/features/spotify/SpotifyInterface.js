@@ -24,8 +24,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const [pressedKeys, setPressedKeys] = useState({})
     const [previousPressedKeys, setPreviousPressedKeys] = useState({})
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
-    const [timerId, setTimerId] = useState(null)
-    // const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
     const [mouseInSearchBar, setMouseInSearchBar] = useState(false)
     const [mouseInCurrentSong, setMouseInCurrentSong] = useState(false)
 
@@ -139,14 +137,12 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     useEffect(() => {
         const handleClickAwayFromSearchBar = (e) => {
             const spotifyBlock = document.querySelector('.spotifyBlock')
-            if (!usingVolumeSlider) {
-                if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-                    if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
-                        setShowSearchBar(false)
-                        setInput('')
-                        setShowSearchResults(false)
-                        setSelectedSearchResult(0)
-                    }
+            if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+                if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
+                    setShowSearchBar(false)
+                    setInput('')
+                    setShowSearchResults(false)
+                    setSelectedSearchResult(0)
                 }
             }
         }
