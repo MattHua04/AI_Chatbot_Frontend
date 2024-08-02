@@ -13,27 +13,32 @@ const Public = () => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100%'
+                    height: '100%',
+                    width: '100%',
                 }}>
                 <div style={{display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        height: '100%',
+                        width: '100%',
                     }}>
-                    <div style={{display: 'flex',
+                    <div style={{
+                        display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        height: '10rem'
                     }}>
                         <Link className = "login__button" to="/login">Login</Link>
-                    </div>
-                    <svg width="500" height="300" className='public__decription-path'>
-                        <path id="curve" d="M 0 90 Q 225 450 450 50" fill="none"/>
+                    <svg width="450" height="300" viewBox="0 0 450 300">
+                        <path id="curve" d="M 0 50 Q 225 400 450 50" fill="none" />
                         <text fontSize="35" fill="#ddefff">
-                            <textPath href="#curve">A virtual assistant for all your needs</textPath>
+                            <textPath href="#curve" startOffset="50%" text-anchor="middle">
+                                A virtual assistant for all your needs
+                            </textPath>
                         </text>
                     </svg>
+                    </div>
                 </div>
             </main>
             <footer>

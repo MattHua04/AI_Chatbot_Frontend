@@ -46,6 +46,22 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const musicRef = useRef(null)
     const toggleMusicControlsRef = useRef(null)
     const lastTouchY = useRef(null)
+    const [recentlyUsingVolumeSlider, setRecentlyUsingVolumeSlider] = useState(false)
+    const [recentlyUsingVolumeSliderTimeoutId, setRecentlyUsingVolumeSliderTimeoutId] = useState(null)
+
+    useEffect(() => {
+        if (!usingVolumeSlider) {
+            if (recentlyUsingVolumeSliderTimeoutId) {
+                clearTimeout(recentlyUsingVolumeSliderTimeoutId)
+            }
+            const id = setTimeout(() => {
+                setRecentlyUsingVolumeSlider(false)
+            }, 1)
+            setRecentlyUsingVolumeSliderTimeoutId(id)
+        } else {
+            setRecentlyUsingVolumeSlider(true)
+        }
+    }, [usingVolumeSlider])
 
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
@@ -269,9 +285,11 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
 
         const handleClickAwayFromMusic = (e) => {
             const musicButton = toggleMusicControlsRef.current
-            if (musicRef.current && !musicRef.current.contains(e.target)) {
-                if (!musicButton || !musicButton.contains(e.target)) {
-                    setShowMusicControls(false)
+            if (!recentlyUsingVolumeSlider) {
+                if (musicRef.current && !musicRef.current.contains(e.target)) {
+                    if (!musicButton || !musicButton.contains(e.target)) {
+                        setShowMusicControls(false)
+                    }
                 }
             }
         }
