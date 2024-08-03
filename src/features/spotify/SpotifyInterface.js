@@ -6,14 +6,15 @@ import SearchResult from './SearchResult'
 import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
+import { current } from '@reduxjs/toolkit'
 
 const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const {id} = useSelector(state => state.auth)
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
     const [controlPlayState, setControlPlayState] = useState(0) // -1 for prev, 0 for nothing, 1 for next
-    const [currentSong, setCurrentSong] = useState(['', '']) // The currently playing song
-    const [songRequest, setSongRequest] = useState(['', '']) // The requested song
+    const [currentSong, setCurrentSong] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The currently playing song
+    const [songRequest, setSongRequest] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The requested song
     const [input, setInput] = useState('') // The text in song search box
     const [searchResults, setSearchResults] = useState([]) // The search results for the song search box
     const [volume, setVolume] = useState(50) // Playback volume
@@ -26,6 +27,16 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const [hasBeenSuccess, setHasBeenSuccess] = useState(false)
     const [mouseInSearchBar, setMouseInSearchBar] = useState(false)
     const [mouseInCurrentSong, setMouseInCurrentSong] = useState(false)
+    const blockRef = useRef()
+    const titleRef = useRef()
+
+    const formatArtists = (names) => {
+        if (names.length === 0) return ''
+        if (names.length === 1) return names[0]
+        const lastArtist = names[names.length - 1]
+        const artistString = names.slice(0, names.length - 1).join(', ')
+        return `${artistString}, and ${lastArtist}`
+    }
 
     useEffect(() => {
         if (usingVolumeSlider) {
@@ -68,10 +79,10 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }] = useUpdateStateMutation()
 
     // useEffect(() => {
-    //     if (isError) {
+    //     if (updateStateIsError) {
     //         createState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
     //     }
-    // }, [isError])
+    // }, [updateStateIsError, createStateIsError])
 
     useEffect(() => {
         if (spotifyState) {
@@ -135,15 +146,12 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }
 
     useEffect(() => {
-        const handleClickAwayFromSearchBar = (e) => {
-            const spotifyBlock = document.querySelector('.spotifyBlock')
-            if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
-                if (!spotifyBlock || !spotifyBlock.contains(e.target)) {
-                    setShowSearchBar(false)
-                    setInput('')
-                    setShowSearchResults(false)
-                    setSelectedSearchResult(0)
-                }
+        const handleClickAwayFromInterface = (e) => {
+            if (blockRef.current && !blockRef.current.contains(e.target)) {
+                setShowSearchBar(false)
+                setInput('')
+                setShowSearchResults(false)
+                setSelectedSearchResult(0)
             }
         }
 
@@ -177,14 +185,24 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
             }
         }
 
-        window.addEventListener('click', handleClickAwayFromSearchBar)
+        const checkIfMouseInCurrentSong = (e) => {
+            if (titleRef.current && titleRef.current.contains(e.target)) {
+                setMouseInCurrentSong(true)
+            } else {
+                setMouseInCurrentSong(false)
+            }
+        }
+
+        window.addEventListener('click', handleClickAwayFromInterface)
         window.addEventListener('keydown', handleKeyDown)
         window.addEventListener('keyup', handleKeyUp)
+        window.addEventListener('mousemove', checkIfMouseInCurrentSong)
 
         return () => {
-            window.removeEventListener('click', handleClickAwayFromSearchBar)
+            window.removeEventListener('click', handleClickAwayFromInterface)
             window.removeEventListener('keydown', handleKeyDown)
             window.removeEventListener('keyup', handleKeyUp)
+            window.removeEventListener('mousemove', checkIfMouseInCurrentSong)
         }
     }, [])
 
@@ -219,6 +237,111 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                 <div className="still-music-bar"></div>
                 <div className="still-music-bar"></div>
                 <div className="still-music-bar"></div>
+            </div>
+        )
+    }
+
+    let songTitle
+    if (showSearchBar) {
+        songTitle = (
+            <div className='songTitleButton'
+                title={`${currentSong.title} by ${formatArtists(currentSong.artistsOrOwner)}`}
+                onClick={() => {
+                    setShowSearchBar(!showSearchBar)
+                    setInput('')
+                    setShowSearchResults(false)
+                }}
+                ref={titleRef}
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto minmax(0, 1fr)',
+                    gridTemplateRows: 'auto auto',
+                    gridTemplateAreas: `
+                        "musicBars title"
+                        "image image"
+                        "artist artist"
+                    `,
+                    // rowGap: '10px',
+                    columnGap: '0px',
+                    width: '100%',
+                    height: '100%',
+                    marginBottom: '5px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '15px',
+                    fontWeight: 'bolder',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    cursor: 'pointer',
+                }}>
+                    {musicBars}
+                    <div className={currentSong.title?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
+                        style={{cursor: 'pointer'}}>
+                        {currentSong.title}
+                    </div>
+                    <div style={{
+                        gridArea: 'image',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: '10px',
+                        marginBottom: '5px',
+                    }}>
+                        <img src={currentSong.image} alt=""
+                            style={{
+                                height: '100%',
+                                borderRadius: '10px',
+                                width: '100%',
+                                zIndex: '999',
+                            }} />
+                    </div>
+                    <div style={{
+                        gridArea: 'artist',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    }}>
+                        {formatArtists(currentSong.artistsOrOwner)}
+                    </div>
+            </div>
+        )
+    } else {
+        songTitle = (
+            <div className='songTitleButton'
+                title={`${currentSong.title} by ${formatArtists(currentSong.artistsOrOwner)}`}
+                onClick={() => {
+                    setShowSearchBar(!showSearchBar)
+                    setInput('')
+                    setShowSearchResults(false)
+                }}
+                ref={titleRef}
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto minmax(0, 1fr)',
+                    gridTemplateRows: 'auto auto',
+                    gridTemplateAreas: `
+                        "musicBars title"
+                    `,
+                    rowGap: '0px',
+                    columnGap: '5px',
+                    columnGap: '0px',
+                    width: '100%',
+                    height: '2em',
+                    marginBottom: '5px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '15px',
+                    fontWeight: 'bolder',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    cursor: 'pointer',
+                }}>
+                {musicBars}
+                <div className={currentSong.title?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
+                    style={{cursor: 'pointer'}}>
+                    {currentSong.title}
+                </div>
             </div>
         )
     }
@@ -289,6 +412,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         setShowSearchResults={setShowSearchResults}
                         selectedSearchResult={selectedSearchResult}
                         setSelectedSearchResult={setSelectedSearchResult}
+                        formatArtists={formatArtists}
                         />)}
             </div>
         )
@@ -321,36 +445,9 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }
 
     const content = (
-        <div className='spotifyBlock'>
-            <div className='songTitleButton'
-                title={`${currentSong[0]}`}
-                onClick={() => {
-                    setShowSearchBar(!showSearchBar)
-                    setInput('')
-                    setShowSearchResults(false)
-                }}
-                onMouseEnter={() => setMouseInCurrentSong(true)}
-                onMouseLeave={() => setMouseInCurrentSong(false)}
-                style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100%',
-                        marginBottom: '5px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        fontSize: '15px',
-                        fontWeight: 'bolder',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        gap: '5px',
-                        cursor: 'pointer',
-                    }}>
-                {musicBars}
-                <div className={currentSong[0]?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
-                    style={{cursor: 'pointer'}}>
-                    {currentSong[0]}
-                </div>
-            </div>
+        <div className='spotifyBlock'
+            ref={blockRef}>
+            {songTitle}
             {searchBar}
             {searchResultsContent}
             <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between', gap: '5px' }}>

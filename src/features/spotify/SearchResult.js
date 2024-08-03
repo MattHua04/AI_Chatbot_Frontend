@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
 
-const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, searchResults, setShowSearchResults, selectedSearchResult, setSelectedSearchResult }) => {
+const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, searchResults, setShowSearchResults, selectedSearchResult, setSelectedSearchResult, formatArtists }) => {
     const [hover, setHover] = useState(false)
     
     const handleClick = () => {
@@ -13,10 +13,11 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
 
     let searchResult
     if (selectedSearchResult === searchResults.indexOf(result)) {
-        if (result[1].includes("playlist")) {
+        if (result.uri.includes("playlist")) {
             searchResult = (
                 <button
                     className="selectedPlaylistButton"
+                    title={`${result.title} by ${formatArtists(result.artistsOrOwner)}`}
                     onClick={handleClick}>
                     <div
                         style={{
@@ -32,14 +33,14 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             gap: '5px',
                             cursor: 'pointer'
                         }}>
-                        <img src={result[2]} alt="" style={{
+                        <img src={result.image} alt="" style={{
                             height: '2.5em',
                             borderRadius: '10px',
                             marginRight: '5px',
                             width: '2.5em',
                             zIndex: '999',
                         }}/>
-                        <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result[0]}</div>
+                        <div className={result.title.length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result.title}</div>
                     </div>
                 </button>
             )
@@ -47,6 +48,7 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
             searchResult = (
                 <button
                     className="selectedSongButton"
+                    title={`${result.title} by ${formatArtists(result.artistsOrOwner)}`}
                     onClick={handleClick}>
                     <div
                         style={{
@@ -62,23 +64,25 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             gap: '5px',
                             cursor: 'pointer'
                         }}>
-                        <img src={result[2]} alt="" style={{
-                            height: '2.5em',
-                            borderRadius: '10px',
-                            marginRight: '5px',
-                            width: '2.5em',
-                            zIndex: '999',
-                        }}/>
-                        <div className={result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result[0]}</div>
+                        <img src={result.image} alt=""
+                            style={{
+                                height: '2.5em',
+                                borderRadius: '10px',
+                                marginRight: '5px',
+                                width: '2.5em',
+                                zIndex: '999',
+                            }}/>
+                        <div className={result.title.length > 15 ? 'scrollingSongTitle' : 'songTitle'}>{result.title}</div>
                     </div>
                 </button>
             )
         }
     } else {
-        if (result[1].includes("playlist")) {
+        if (result.uri.includes("playlist")) {
             searchResult = (
                 <button
                     className="playlistButton"
+                    title={`${result.title} by ${formatArtists(result.artistsOrOwner)}`}
                     onClick={handleClick}
                     onMouseEnter={() => setHover(true)}
                     onMouseLeave={() => setHover(false)}>
@@ -96,15 +100,15 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             gap: '5px',
                             cursor: 'pointer'
                         }}>
-                        <img src={result[2]} alt="" style={{
+                        <img src={result.image} alt="" style={{
                             height: '2.5em',
                             borderRadius: '10px',
                             marginRight: '5px',
                             width: '2.5em',
                             zIndex: '999',
                         }}/>
-                        <div className={hover && result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
-                            {result[0]}
+                        <div className={hover && result.title.length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
+                            {result.title}
                         </div>
                     </div>
                 </button>
@@ -113,6 +117,7 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
             searchResult = (
                 <button
                     className="songButton"
+                    title={`${result.title} by ${formatArtists(result.artistsOrOwner)}`}
                     onClick={handleClick}
                     onMouseEnter={() => setHover(true)}
                     onMouseLeave={() => setHover(false)}>
@@ -130,15 +135,15 @@ const SearchResult = ({ result, setSongRequest, setInput, setShowSearchBar, sear
                             gap: '5px',
                             cursor: 'pointer',
                         }}>
-                        <img src={result[2]} alt="" style={{
+                        <img src={result.image} alt="" style={{
                             height: '2.5em',
                             borderRadius: '10px',
                             marginRight: '5px',
                             width: '2.5em',
                             zIndex: '999',
                         }}/>
-                        <div className={hover && result[0].length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
-                            {result[0]}
+                        <div className={hover && result.title.length > 15 ? 'scrollingSongTitle' : 'songTitle'}>
+                            {result.title}
                         </div>
                     </div>
                 </button>

@@ -216,9 +216,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
 
     const handlePromptClick = (e) => {
         if (promptRef.current && promptRef.current.contains(e.target)) {
-            if (lastPromptClickRef.current === null || e.timeStamp - lastPromptClickRef.current > 300) {
+            if (lastPromptClickRef.current === null || e.timeStamp - lastPromptClickRef.current > 500) {
                 setLastPromptClick(e.timeStamp)
-            } else if (lastPromptClickRef.current !== null && e.timeStamp - lastPromptClickRef.current <= 300 && !edit) {
+            } else if (lastPromptClickRef.current !== null && e.timeStamp - lastPromptClickRef.current <= 500 && !edit) {
                 setEdit(true)
                 setEditingPromptIndex(promptId)
             }
