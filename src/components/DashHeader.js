@@ -38,7 +38,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                         <h1 className="dash-header__page-name">AI Chatbot</h1>
                     </Link>
                 </div> */}
-                <h1 className='dash-header__title'>
+                <h1 className='dash-header__title' style={{margin: '0'}}>
                         Hello <Link to={`/dash/users/${id}`} className='dash-header__title' >{username}</Link> !
                 </h1>
             </div>
@@ -51,11 +51,11 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                 }}>
                 <div>
                     <Link to="/dash" onClick={resetPage}>
-                        <h1 className="dash-header__page-name">AI Chatbot</h1>
+                        <h1 className="dash-header__page-name" style={{margin: '0'}}>AI Chatbot</h1>
                     </Link>
                     <p className='welcome__p'>{today}</p>
                 </div>
-                <h1 className='dash-header__title'>
+                <h1 className='dash-header__title' style={{margin: '0'}}>
                         Hello <Link to={`/dash/users/${id}`} className='dash-header__title' >{username}</Link> !
                 </h1>
             </div>

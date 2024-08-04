@@ -32,7 +32,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const newConversationRef = useRef(null)
     const [ableToSubmit, setAbleToSubmit] = useState(false)
     const [contentSize, setContentSize] = useState(0)
-    const [textAreaHeight, setTextAreaHeight] = useState(7 * window.innerHeight / 100)
+    const minTextAreaHeight = 7 * window.innerHeight / 100
+    const [textAreaHeight, setTextAreaHeight] = useState(minTextAreaHeight)
     const [mouseDown, setMouseDown] = useState(false)
     const [showAdjustTextAreaButton, setShowAdjustTextAreaButton] = useState(false)
     const adjustTextAreaRef = useRef(null)
@@ -66,6 +67,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
         setShowConversationsList(false)
+        textareaRef.current?.focus()
     }
 
     const openNewConversationForm = () => {
@@ -76,8 +78,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         if (textareaRef.current) {
             textareaRef.current.focus()
         }
-        setInput('')
-        setTextAreaHeight(7 * window.innerHeight / 100)
+        setTextAreaHeight(minTextAreaHeight)
         setEditingPromptIndex(null)
     }, [conversationId])
 
@@ -119,8 +120,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
 
     const adjustTextareaHeight = () => {
         // Only adjust height if the textAreaHeight has not been manually resized
-        if (textareaRef.current && (textAreaHeight === 7 * window.innerHeight / 100 || input === '')) {
-            textareaRef.current.style.height = 'auto'
+        if (textareaRef.current && (textAreaHeight === minTextAreaHeight || input === '')) {
+            textareaRef.current.style.height = '0px'
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
         }
         setTextAreaHeight(textareaRef.current.scrollHeight)
@@ -159,13 +160,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             if (isLoading) {
                 setCachedInput(input)
                 setInput('')
-                setTextAreaHeight(7 * window.innerHeight / 100)
+                setTextAreaHeight(minTextAreaHeight)
             } else if (isError) {
                 setInput(cachedInput)
             }
         } else if (isSuccess) {
             setInput('')
-            setTextAreaHeight(7 * window.innerHeight / 100)
+            setTextAreaHeight(minTextAreaHeight)
         }
     }, [isSuccess, isLoading, isLoading])
 
@@ -183,7 +184,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             }
     
             const scroll = () => {
-                const currentScrollTop = conversationContentRef.current.scrollTop
+                const currentScrollTop = conversationContentRef.current?.scrollTop
                 if (currentScrollTop <= previousScrollTop) {
                     // Reached the bottom or exceeded
                     // conversationContentRef.current.scrollTop = targetScrollTop
@@ -191,7 +192,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 }
                 
                 previousScrollTop = currentScrollTop
-                conversationContentRef.current.scrollTop = currentScrollTop + perTick
+                if (conversationContentRef.current) conversationContentRef.current.scrollTop = currentScrollTop + perTick
     
                 // Schedule next tick
                 setTimeout(scroll, 10)
@@ -225,7 +226,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
                     conversationContentRef.current.scrollTop = scrollHeight - clientHeight
                 }
-                const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
+                const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, minTextAreaHeight), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
             } else if (e.type === "touchmove") {
                 const touch = e.touches[0]
@@ -235,7 +236,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 }
                 const movementY = touch.clientY - lastTouchY.current
                 lastTouchY.current = touch.clientY
-                const newHeight = Math.min(Math.max(textAreaHeight - movementY, 7 * window.innerHeight / 100), 50 * window.innerHeight / 100)
+                const newHeight = Math.min(Math.max(textAreaHeight - movementY, minTextAreaHeight), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
             }
         }
@@ -329,8 +330,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                     setLastTextAreaAdjustClick(e.timeStamp)
                 } else if (lastTextAreaAdjustClickRef.current !== null && e.timeStamp - lastTextAreaAdjustClickRef.current <= 300) {
                     const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                    if (textAreaHeight !== 7 * window.innerHeight / 100) {
-                        setTextAreaHeight(7 * window.innerHeight / 100)
+                    if (textAreaHeight !== minTextAreaHeight) {
+                        setTextAreaHeight(minTextAreaHeight)
                     } else {
                         setTextAreaHeight(50 * window.innerHeight / 100)
                     }
@@ -557,6 +558,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                         fontSize: '20px',
                         borderRadius: fullScreen ? '0px 0px 10px 10px' : '10px',
                         marginBottom: '-' + titleRef.current?.clientHeight + 'px',
+                        zIndex: '9999',
                     }}
                 >
                     <div>{musicButton}</div>
@@ -670,6 +672,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                     }
                                 }
                             }}
+                            placeholder="Ask Me Anything!"
                             autoFocus
                             style={{
                                 fontSize: '15px',
@@ -684,11 +687,12 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 overflow: 'auto',
                                 height: textAreaHeight + 'px',
                                 maxHeight: '50dvh',
-                                minHeight: '7dvh',
+                                minHeight: '3dvh',
                                 width: '100%',
                                 whiteSpace: 'pre-wrap',
                                 textAlign: 'left',
-                                padding: '0.5em 1em',
+                                padding: '1.1em 1em',
+                                lineHeight: '1.5em',
                                 boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
                                 marginTop: '1em',
                                 marginLeft: '1em',

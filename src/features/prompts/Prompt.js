@@ -2,11 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faSave, faXmarkCircle, faCopy, faCheck, faRotate } from "@fortawesome/free-solid-svg-icons"
 import { useUpdateConversationMutation } from '../conversations/conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
-import Latex from 'react-latex'
+import Markdown from 'react-markdown'
+import { MathJax, MathJaxContext } from 'better-react-mathjax'
 
 const Prompt = ({conversation, conversationId, conversationContent, conversationSize, promptId, editingPromptIndex, setEditingPromptIndex}) => {
     const [prompt, setPrompt] = useState(conversationContent[promptId])
     const [promptContent, setPromptContent] = useState(prompt[1])
+    const [parsedPromptContent, setParsedPromptContent] = useState(null)
     const [promptOwner, setPromptOwner] = useState(prompt[0])
     const [edit, setEdit] = useState(false)
     const textareaRef = useRef(null)
@@ -17,6 +19,10 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const [lastPromptClick, setLastPromptClick] = useState(null)
     const lastPromptClickRef = useRef(lastPromptClick)
     const doubleClickListeners = useRef([])
+
+    useEffect(() => {
+        setParsedPromptContent(parsePromptContent(promptContent))
+    }, [promptContent])
 
     const codeStyle = {
         fontFamily: 'monospace',
@@ -32,12 +38,81 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
         overflowX: 'auto'
     }
 
+    function containsMarkdown(line) {
+        // Define regex patterns for various markdown elements
+        const markdownPatterns = [
+            /(#+)(.*)/,                           // headers
+            /\[([^\[]+)\]\(([^\)]+)\)/,  // links
+            /(\*\*|__)(.*?)\x01/,            // bold
+            /(\*|_)(.*?)\x01/,                       // emphasis
+            /\~\~(.*?)\~\~/,                     // del
+            /\:\"(.*?)\"\:/,                         // quote
+            /`(.*?)`/,                         // inline code
+            /\n\*(.*)/,                          // ul lists
+            /\n[0-9]+\.(.*)/,                    // ol lists
+            /\n(&gt|\>)(.*)/,               // blockquotes
+            /\n-{5,}/,                                // horizontal rule
+            /\n([^\n]+)\n/,                         // add paragraphs
+            /<\/ul>\s?<ul>/,                                  // fix extra ul
+            /<\/ol>\s?<ol>/,                                  // fix extra ol
+            /<\/blockquote><blockquote>/                   // fix extra blockquote
+        ]
+    
+        // Check if the line matches any markdown pattern
+        return markdownPatterns.some(pattern => pattern.test(line))
+    }
+
     const parsePromptContent = (content) => {
         const parts = content.split("```")
     
         const parsedContent = parts.map((part, index) => {
             if (index % 2 === 0) {
-                return <Latex key={index}>{part}</Latex>
+                // Segment display math mode blocks
+                const mathModeRegex = /(\\\[)([^\[\]]*?)(\\\])/g
+                const segments = []
+                let match
+                let lastIndex = 0
+                while ((match = mathModeRegex.exec(part)) !== null) {
+                    // Push text that comes before the current match
+                    if (lastIndex < match.index) {
+                        segments.push({
+                            latex: false,
+                            content: part.slice(lastIndex, match.index).trim(),
+                        })
+                    }
+                    // Push the match
+                    segments.push({
+                        latex: true,
+                        content: match[1] + match[2] + match[3],
+                    })
+                    // Update the lastIndex to the end of the current match
+                    lastIndex = mathModeRegex.lastIndex
+                }
+                // Push any remaining text after the last match
+                if (lastIndex < part.length) {
+                    segments.push({
+                        latex: false,
+                        content: part.slice(lastIndex).trim(),
+                    })
+                }
+
+                // Format the segments as MathJax or Markdown
+                const formatted = []
+                segments.forEach((segment, index) => {
+                    if (!segment.latex) {
+                        let lines = segment.content.split("\n")
+                        lines.forEach((line, i) => {
+                            if (containsMarkdown(line)) {
+                                formatted.push(<Markdown key={`${index}-${i}`}>{line}</Markdown>)
+                            } else {
+                                formatted.push(<MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>{line}</MathJax>)
+                            }
+                        })
+                    } else {
+                        formatted.push(<MathJax dynamic hideUntilTypeset="every" key={index}>{segment.content}</MathJax>)
+                    }
+                })
+                return formatted
             } else {
                 const language = part.substring(0, part.indexOf("\n"))
                 const code = part.substring(part.indexOf("\n") + 1)
@@ -58,6 +133,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 return (
                     <div key={index} style={{
                             // maxWidth: '60dvw'
+                            marginBottom: '1rem',
                         }}>
                         <div style={{
                             borderRadius: '5px',
@@ -93,7 +169,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
             }
         })
     
-        return parsedContent
+        return <MathJaxContext>{parsedContent}</MathJaxContext>
     }
 
     useEffect(() => {
@@ -367,14 +443,14 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 value={input}
                                 autoFocus
                                 style={{
-                                    backgroundColor: 'rgba(203, 214, 238, 0.718)',
+                                    backgroundColor: 'transparent',
                                     color: '#5136d5',
                                     resize: 'none',
                                     borderRadius: '10px',
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap',
                                     textAlign: 'left',
-                                    padding: '0.5em 1em',
+                                    padding: '0.5em 0em',
                                 }}/>
                             <div
                                 style={{
@@ -418,15 +494,15 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             <pre
                                 style={{
                                     fontFamily: 'inherit',
-                                    marginLeft: '0.45em',
+                                    marginLeft: '0.5em',
                                     marginRight: '1.2em',
                                     wordWrap: 'break-word',
                                     whiteSpace: 'pre-wrap',
-                                    padding: '0.5em 0.5em',
+                                    padding: '0.5em 0em',
                                     maxWidth: '59dvw',
-                                    overflowX: 'clip',
+                                    // overflowX: 'clip',
                                 }}>
-                                {parsePromptContent(promptContent)}
+                                {parsedPromptContent}
                             </pre>
                             <div
                                 style={{
@@ -466,7 +542,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
-                        <pre
+                        <pre ref={promptRef}
                             style={{
                                 padding: '0.5em 0.5em',
                                 fontFamily: 'inherit',
@@ -475,9 +551,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 wordWrap: 'break-word',
                                 whiteSpace: 'pre-wrap',
                                 // maxWidth: '59dvw',
-                                overflowX: 'clip',
+                                // overflowX: 'clip',
                             }}>
-                            {parsePromptContent(promptContent)}
+                            {parsedPromptContent}
                         </pre>
                         <button
                             className="conversationOptionsButton"
