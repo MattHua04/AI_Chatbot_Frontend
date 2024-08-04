@@ -5,7 +5,7 @@ const Public = () => {
         <section className="public">
             <header className='public__header'>
                 <div className = 'public__welcome'>
-                    <h1><span className="nowrap">AI Chatbot</span></h1>
+                    <h1 style={{margin: '0'}}><span className="nowrap">AI Chatbot</span></h1>
                 </div>
             </header>
             <main className="public__main"

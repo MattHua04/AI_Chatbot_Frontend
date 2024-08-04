@@ -43,8 +43,8 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
         const markdownPatterns = [
             /(#+)(.*)/,                           // headers
             /\[([^\[]+)\]\(([^\)]+)\)/,  // links
-            /(\*\*|__)(.*?)\x01/,            // bold
-            /(\*|_)(.*?)\x01/,                       // emphasis
+            /(\*\*(.*?)\*\*)|(\_\_(.*?)\_\_)/g,            // bold
+            /(\*(.*?)\*)|(\_(.*?)\_)/g,                       // italics
             /\~\~(.*?)\~\~/,                     // del
             /\:\"(.*?)\"\:/,                         // quote
             /`(.*?)`/,                         // inline code
@@ -101,13 +101,22 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 segments.forEach((segment, index) => {
                     if (!segment.latex) {
                         let lines = segment.content.split("\n")
+                        let temp = []
                         lines.forEach((line, i) => {
                             if (containsMarkdown(line)) {
-                                formatted.push(<Markdown key={`${index}-${i}`}>{line}</Markdown>)
+                                // formatted.push(<Markdown key={`${index}-${i}`}>{line}</Markdown>)
+                                temp.push(line)
                             } else {
+                                if (temp.length) {
+                                    formatted.push(<Markdown key={`${index}/${i}`}>{temp.join("\n")}</Markdown>)
+                                    temp = []
+                                }
                                 formatted.push(<MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>{line}</MathJax>)
                             }
                         })
+                        if (temp.length) {
+                            formatted.push(<Markdown key={`-1`}>{temp.join("\n")}</Markdown>)
+                        }
                     } else {
                         formatted.push(<MathJax dynamic hideUntilTypeset="every" key={index}>{segment.content}</MathJax>)
                     }
@@ -134,6 +143,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                     <div key={index} style={{
                             // maxWidth: '60dvw'
                             marginBottom: '1rem',
+                            marginTop: '0.5rem',
                         }}>
                         <div style={{
                             borderRadius: '5px',

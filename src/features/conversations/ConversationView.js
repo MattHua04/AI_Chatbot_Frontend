@@ -175,7 +175,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
     
             const targetScrollTop = scrollHeight - clientHeight
-            const distance = targetScrollTop - scrollTop
+            const distance = 10000//targetScrollTop - scrollTop
             const perTick = distance / duration * 10
             var previousScrollTop = -1
             
