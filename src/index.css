@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 * {
   margin: 0;
@@ -113,7 +113,7 @@ select {
 }
 
 textarea:focus,
-input:focus,
+/* input:focus, */
 button:focus {
   outline: none;
 }
@@ -126,7 +126,7 @@ button:focus {
 }
 
 a {
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 a:hover,
@@ -251,7 +251,7 @@ li {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-weight: bolder;
+  /* font-weight: bolder; */
   font-size: 2em;
 }
 
@@ -435,6 +435,10 @@ li {
   color: #5136d5a0;
 }
 
+.conversationInput:focus {
+  outline: none;
+}
+
 .conversationInputHover {
   text-align: center;
   background-color: rgba(203, 214, 238, 1);
@@ -446,6 +450,7 @@ li {
   cursor: pointer;
   color: #ffffff;
   transition: 0.3s ease;
+  outline: none;
 }
 
 .conversationOptionsButton {
@@ -552,6 +557,7 @@ li {
   background-clip: text;
   color: transparent;
   transition: 0.5s ease;
+  font-weight: 600;
 }
 
 .dash-header__page-name {
@@ -561,6 +567,7 @@ li {
   background-clip: text;
   color: transparent;
   transition: 0.5s ease;
+  font-weight: 600;
 }
 
 .dash-header__page-name:hover {
@@ -948,6 +955,7 @@ tr {
 }
 
 .songTitle {
+  font-weight: 600;
   text-align: left;
   width: 100%;
   min-height: 1.5em;
@@ -959,6 +967,7 @@ tr {
 }
 
 .scrollingSongTitle {
+  font-weight: 600;
   text-align: left;
   width: fit-content;
   white-space: nowrap;
@@ -1110,6 +1119,7 @@ tr {
 .form__submit-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .form__submit-button:hover {

@@ -104,18 +104,17 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         let temp = []
                         lines.forEach((line, i) => {
                             if (containsMarkdown(line)) {
-                                // formatted.push(<Markdown key={`${index}-${i}`}>{line}</Markdown>)
                                 temp.push(line)
                             } else {
                                 if (temp.length) {
-                                    formatted.push(<Markdown key={`${index}/${i}`}>{temp.join("\n")}</Markdown>)
+                                    formatted.push(<Markdown key={`${index}-${i}-${i}`}>{temp.join("\n")}</Markdown>)
                                     temp = []
                                 }
                                 formatted.push(<MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>{line}</MathJax>)
                             }
                         })
                         if (temp.length) {
-                            formatted.push(<Markdown key={`-1`}>{temp.join("\n")}</Markdown>)
+                            formatted.push(<Markdown key={index}>{temp.join("\n")}</Markdown>)
                         }
                     } else {
                         formatted.push(<MathJax dynamic hideUntilTypeset="every" key={index}>{segment.content}</MathJax>)

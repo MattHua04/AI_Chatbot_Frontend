@@ -60,7 +60,7 @@ const PersistLogin = () => {
         console.log('error')
         content = (
             <p className='errmsg'>
-                <Link to="/login" style={{color: 'white'}}>Please login again</Link>
+                <Link to="/login" style={{color: 'white', textDecoration: 'none'}}>Please login again</Link>
             </p>
         )
     } else if (isSuccess && trueSuccess) {

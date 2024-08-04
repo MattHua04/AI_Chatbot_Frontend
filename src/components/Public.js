@@ -5,7 +5,7 @@ const Public = () => {
         <section className="public">
             <header className='public__header'>
                 <div className = 'public__welcome'>
-                    <h1 style={{margin: '0'}}><span className="nowrap">AI Chatbot</span></h1>
+                    <h1 style={{margin: '0', fontWeight: '600'}}><span className="nowrap">AI Chatbot</span></h1>
                 </div>
             </header>
             <main className="public__main"
@@ -29,7 +29,7 @@ const Public = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                        <Link className = "login__button" to="/login">Login</Link>
+                        <Link className = "login__button" to="/login" style={{textDecoration: 'none'}}>Login</Link>
                     <svg width="450" height="300" viewBox="0 0 450 300">
                         <path id="curve" d="M 0 50 Q 225 400 450 50" fill="none" />
                         <text fontSize="35" fill="#ddefff">

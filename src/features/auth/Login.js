@@ -119,7 +119,7 @@ const Login = ({setView, setCurrentConversationId}) => {
             <section>
                 <header className='dash-header'>
                     <div className = 'public__welcome' style={{ display: 'flex', flexShrink: '0'}}>
-                        <h1><Link to="/" className="public__title nowrap">AI Chatbot</Link></h1>
+                        <h1><Link to="/" className="public__title nowrap" style={{textDecoration: 'none', fontWeight: '600'}}>AI Chatbot</Link></h1>
                     </div>
                 </header>
                 <main className='public__main'
@@ -262,7 +262,7 @@ const Login = ({setView, setCurrentConversationId}) => {
             <section>
                 <header className='dash-header'>
                     <div className = 'public__welcome' style={{ display: 'flex', flexShrink: '0'}}>
-                        <h1><Link to="/" className="public__title nowrap">AI Chatbot</Link></h1>
+                        <h1><Link to="/" className="public__title nowrap" style={{textDecoration: 'none', fontWeight: '600'}}>AI Chatbot</Link></h1>
                     </div>
                 </header>
                 <main className='public__main'

@@ -175,7 +175,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
     
             const targetScrollTop = scrollHeight - clientHeight
-            const distance = 10000//targetScrollTop - scrollTop
+            const distance = targetScrollTop - scrollTop
             const perTick = distance / duration * 10
             var previousScrollTop = -1
             
@@ -203,7 +203,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }
     
     const handleDownButton = () => {
-        scrollDown(500)
+        scrollDown(300)
     }
 
     const handleMouseDown = (e) => {
@@ -243,7 +243,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }
 
     useEffect(() => {
-        scrollDown(100)
+        setTimeout(() => {
+            scrollDown(100)
+        }, 100)
     }, [conversationId, isSuccess, conversation, content])
 
     useEffect(() => {
@@ -267,6 +269,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         lastTextAreaAdjustClickRef.current = lastTextAreaAdjustClick
     }, [lastTextAreaAdjustClick])
 
+    // console.log(musicRef.current?.getBoundingClientRect())
+
     useEffect(() => {
         const handleEscapeKey = (e) => {
             if (e.key === 'Escape' && fullScreen) {
@@ -286,8 +290,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
 
         const handleClickAwayFromMusic = (e) => {
             const musicButton = toggleMusicControlsRef.current
+            const targetClassName = e.target.className
             if (!recentlyUsingVolumeSlider) {
-                if (musicRef.current && !musicRef.current.contains(e.target)) {
+                if (musicRef.current && !musicRef.current.contains(e.target) && !targetClassName?.includes('songTitle')) {
                     if (!musicButton || !musicButton.contains(e.target)) {
                         setShowMusicControls(false)
                     }
@@ -391,8 +396,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     let musicControls
     if (isAdmin && showMusicControls) {
         musicControls = (
-            <div
-                ref={musicRef}
+            <div ref={musicRef}
                 style={{
                     flexGrow: '1',
                     zIndex: '9999',
@@ -448,8 +452,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     if (fullScreen) {
         conversationTitle = (
             <Link className="conversationTitle"
-                onClick={() => setShowConversationsList(!showConversationsList)}
-                >
+                style={{textDecoration: 'none'}}
+                onClick={() => setShowConversationsList(!showConversationsList)}>
                 {conversation?.title}
             </Link>
         )

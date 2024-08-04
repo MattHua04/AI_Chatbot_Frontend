@@ -6,7 +6,6 @@ import SearchResult from './SearchResult'
 import { useSelector } from 'react-redux'
 import VolumeSlider from './VolumeSlider'
 import { IoVolumeHigh, IoVolumeLow, IoVolumeMedium, IoVolumeMute } from "react-icons/io5"
-import { current } from '@reduxjs/toolkit'
 
 const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const {id} = useSelector(state => state.auth)
@@ -148,10 +147,12 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     useEffect(() => {
         const handleClickAwayFromInterface = (e) => {
             if (blockRef.current && !blockRef.current.contains(e.target)) {
-                setShowSearchBar(false)
-                setInput('')
-                setShowSearchResults(false)
-                setSelectedSearchResult(0)
+                if (titleRef.current && !titleRef.current.contains(e.target) && !mouseInCurrentSong) {
+                    setShowSearchBar(false)
+                    setInput('')
+                    setShowSearchResults(false)
+                    setSelectedSearchResult(0)
+                }
             }
         }
 
@@ -188,7 +189,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
         const checkIfMouseInCurrentSong = (e) => {
             if (titleRef.current && titleRef.current.contains(e.target)) {
                 setMouseInCurrentSong(true)
-            } else {
+            } else if (titleRef.current && !titleRef.current.contains(e.target)) {
                 setMouseInCurrentSong(false)
             }
         }
@@ -261,8 +262,8 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         "image image"
                         "artist artist"
                     `,
-                    // rowGap: '10px',
-                    columnGap: '0px',
+                    rowGap: '0px',
+                    columnGap: '5px',
                     width: '100%',
                     height: '100%',
                     marginBottom: '5px',
@@ -279,15 +280,18 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         style={{cursor: 'pointer'}}>
                         {currentSong.title}
                     </div>
-                    <div style={{
-                        gridArea: 'image',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '10px',
-                        marginBottom: '5px',
-                    }}>
-                        <img src={currentSong.image} alt=""
+                    <div className="songTitleImage"
+                        style={{
+                            gridArea: 'image',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: '10px',
+                            marginBottom: '5px',
+                        }}>
+                        <img src={currentSong.image}
+                            className="songTitleImage"
+                            alt=""
                             style={{
                                 height: '100%',
                                 borderRadius: '10px',
@@ -295,13 +299,15 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                                 zIndex: '999',
                             }} />
                     </div>
-                    <div style={{
-                        gridArea: 'artist',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    }}>
+                    <div className='songTitleArtists'
+                        style={{
+                            fontWeight: '600',
+                            gridArea: 'artist',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                        }}>
                         {formatArtists(currentSong.artistsOrOwner)}
                     </div>
             </div>
@@ -325,7 +331,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                     `,
                     rowGap: '0px',
                     columnGap: '5px',
-                    columnGap: '0px',
                     width: '100%',
                     height: '2em',
                     marginBottom: '5px',

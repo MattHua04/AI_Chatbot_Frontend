@@ -132,7 +132,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
         header = (
             <header className='dash-header' style={{paddingBottom: '1.5rem'}}>
                 <div className = 'public__welcome'>
-                    <h1><Link to="/" className="public__title nowrap">AI Chatbot</Link></h1>
+                    <h1><Link to="/" className="public__title nowrap" style={{textDecoration: 'none', fontWeight: '600'}}>AI Chatbot</Link></h1>
                 </div>
             </header>
         )
