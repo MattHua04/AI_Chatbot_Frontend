@@ -511,7 +511,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     maxWidth: '59dvw',
                                     // overflowX: 'clip',
                                 }}>
-                                {parsedPromptContent}
+                                {promptContent}
                             </pre>
                             <div
                                 style={{
