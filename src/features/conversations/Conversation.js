@@ -168,16 +168,18 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     className={localStorage.getItem('view') === `conversationView` && localStorage.getItem('currentConversationId') === conversationId ? `selectedConversationButton` : `conversationButton`}
                     onClick={handleConversationClick}
                     >
-                    <div style={{
-                        marginBottom: '10px',
-                        whiteSpace: 'normal',
-                        wordBreak: 'break-word',
-                        overflowWrap: 'break-word',
-                        hyphens: 'auto',
-                    }}>
-                        {title}
+                    <div style={{height: '100%', display: 'flex', flexGrow: '1', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                        <div style={{
+                            marginBottom: '10px',
+                            whiteSpace: 'normal',
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word',
+                            hyphens: 'auto',
+                        }}>
+                            {title}
+                        </div>
+                        <div>{created}</div>
                     </div>
-                    <div>{created}</div>
                 </button>
             )
         } else if (edit) {
