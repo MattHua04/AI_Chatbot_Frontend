@@ -335,6 +335,10 @@ span {
   /* max-width: 60dvw; */
 }
 
+.songButton:hover .wave {
+  background-color: white;
+}
+
 .wave {
   width: 7px;
   height: 7px;
