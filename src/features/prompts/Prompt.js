@@ -14,7 +14,8 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const textareaRef = useRef(null)
     const [input, setInput] = useState(promptContent)
     const [cachedInput, setCachedInput] = useState(promptContent)
-    const [copiedArray, setCopiedArray] = useState([])
+    const [copiedDict, setCopiedDict] = useState({})
+    const [copiedTimeoutDict, setCopiedTimeoutDict] = useState({})
     const promptRef = useRef()
     const [lastPromptClick, setLastPromptClick] = useState(null)
     const lastPromptClickRef = useRef(lastPromptClick)
@@ -22,7 +23,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
 
     useEffect(() => {
         setParsedPromptContent(parsePromptContent(promptContent))
-    }, [promptContent])
+    }, [promptContent, copiedDict])
 
     const codeStyle = {
         fontFamily: 'monospace',
@@ -65,18 +66,38 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const copyToClipboard = (text, index) => {
         navigator.clipboard.writeText(text)
             .then(() => {
-                const newCopiedArray = [...copiedArray]
-                newCopiedArray[index] = true
-                setCopiedArray(newCopiedArray)
+                setCopiedDict(prevDict => ({ ...prevDict, [index]: true }))
+                if (copiedTimeoutDict[index]) {
+                    clearTimeout(copiedTimeoutDict[index])
+                }
+                const timeoutId = setTimeout(() => {
+                    setCopiedDict(prevDict => {
+                        const { [index]: _, ...rest } = prevDict
+                        return rest
+                    })
+                    setCopiedTimeoutDict(prevDict => {
+                        const { [index]: _, ...rest } = prevDict
+                        return rest
+                    })
+                }, 1000)
+                setCopiedTimeoutDict(prevDict => ({ ...prevDict, [index]: timeoutId }))
             })
             .catch(err => {
                 console.error('Failed to copy text: ', err)
             })
     }
 
+    useEffect(() => {
+        return () => {
+            Object.values(copiedTimeoutDict).forEach((timeoutId) => {
+                clearTimeout(timeoutId)
+            })
+        }
+    }, [])
+
     const parsePromptContent = (content) => {
         const parts = content.split("```")
-    
+
         const parsedContent = parts.map((part, index) => {
             if (index % 2 === 0) {
                 // Segment display math mode blocks
@@ -122,14 +143,20 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     formatted.push(<Markdown key={`${index}-${i}-${i}`}>{temp.join("\n")}</Markdown>)
                                     temp = []
                                 }
-                                formatted.push(<MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>{line}</MathJax>)
+                                formatted.push(
+                                        <MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>
+                                            {line}
+                                        </MathJax>)
                             }
                         })
                         if (temp.length) {
                             formatted.push(<Markdown key={index}>{temp.join("\n")}</Markdown>)
                         }
                     } else {
-                        formatted.push(<MathJax dynamic hideUntilTypeset="every" key={index}>{segment.content}</MathJax>)
+                        formatted.push(
+                                <MathJax dynamic hideUntilTypeset="every" key={index}>
+                                    {segment.content}
+                                </MathJax>)
                     }
                 })
                 return formatted
@@ -167,7 +194,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     padding: '0.3em 0.7em',
                                     boxShadow: 'none',
                                 }}>
-                                    {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faSolidCopy} />}
+                                    {copiedDict[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faSolidCopy} />}
                             </button>
                         </div>
                         <p key={index} style={codeStyle}>
@@ -177,21 +204,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 )
             }
         })
-    
+        
         return <MathJaxContext>{parsedContent}</MathJaxContext>
     }
-
-    useEffect(() => {
-        if (copiedArray.includes(true)) {
-            setTimeout(() => {
-                setCopiedArray(Array(promptContent?.length).fill(false))
-            }, 1000)
-        }
-    }, [copiedArray])
-
-    useEffect(() => {
-        setCopiedArray(Array(promptContent?.length).fill(false))
-    }, [promptContent])
 
     const [updateConversation, {
         isLoading,
@@ -578,7 +593,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             <button
                                 className="conversationOptionsButton"
                                 title="Copy response"
-                                onClick={() => copyToClipboard(promptContent, 0)}
+                                onClick={() => {
+                                    copyToClipboard(promptContent, -1)
+                                }}
                                 style={{
                                     backgroundColor: 'transparent',
                                     animation: 'none',
@@ -586,7 +603,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     height: '2rem',
                                     boxShadow: 'none',
                                 }}>
-                                <FontAwesomeIcon icon={faSolidCopy} />
+                                {copiedDict[-1] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faSolidCopy} />}
                             </button>
                             <button
                                 className="conversationOptionsButton"
