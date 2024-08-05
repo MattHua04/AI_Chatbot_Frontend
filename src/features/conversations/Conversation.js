@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faSave, faTrash, faEllipsis, faXmarkCircle } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faSave, faTrash, faEllipsis, faXmarkCircle, faEraser } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux'
 import { selectConversationById } from './conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
@@ -75,6 +75,10 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     }
 
     const handleOptions = () => setShowOptions(!showOptions)
+
+    const handleClear = async () => {
+        await updateConversation({id: conversationId, user: conversation.user, title: title, content: []})
+    }
 
     const handleDelete = async () => {
         if (conversations.ids?.length === 1 && localStorage.getItem('currentConversationId') === conversationId) {
@@ -225,6 +229,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                 <>
                     <button
                         className="conversationOptionsButton"
+                        title="Save"
                         onClick={(e) => {
                             handleSave()
                             e.stopPropagation()
@@ -234,6 +239,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     </button>
                     <button
                         className="conversationOptionsButton"
+                        title="Cancel"
                         onClick={(e) => {
                             handleCancel()
                             e.stopPropagation()
@@ -247,6 +253,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
             optionsButton = (
                 <button
                     className="conversationOptionsButton"
+                    title="Hide Options"
                     onClick={(e) => {
                         handleOptions()
                         e.stopPropagation()
@@ -260,6 +267,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
             optionsButton = (
                 <button
                     className="conversationOptionsButton"
+                    title="Show Options"
                     style={{height: '100%'}}
                     onClick={(e) => {
                         handleOptions()
@@ -275,9 +283,10 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
         let options
         if (showOptions) {
             options = (
-                <>
+                <div>
                     <button
                         className="conversationOptionsButton"
+                        title="Edit"
                         onClick={(e) => {
                             handleEdit()
                             e.stopPropagation()
@@ -287,13 +296,23 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     </button>
                     <button
                         className="conversationOptionsButton"
+                        title="Clear"
+                        onClick={(e) => {
+                            handleClear()
+                        }}
+                        >
+                        <FontAwesomeIcon icon={faEraser} />
+                    </button>
+                    <button
+                        className="conversationOptionsButton"
+                        title="Delete"
                         onClick={(e) => {
                             handleDelete()
                         }}
                         >
                         <FontAwesomeIcon icon={faTrash} />
                     </button>
-                </>
+                </div>
             )
         }
 
