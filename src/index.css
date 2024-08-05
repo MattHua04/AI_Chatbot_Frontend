@@ -139,20 +139,30 @@ h2,
 h3,
 h4,
 h5 {
-  margin-top: 1rem;
+  padding-top: 1rem;
   /* margin-bottom: 1rem; */
 }
 
 ul {
   padding-left: 2.5rem;
+  line-height: 0rem;
 }
 
 ol {
-  padding-left: 2.5rem;
+  padding-left: 1.5rem;
+  line-height: 0rem;
 }
 
 li {
-  line-height: 1rem;
+  line-height: 1.5rem;
+}
+
+span {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  display: inline-block;
+  line-height: 1.5rem;
+  padding-bottom: 0.75rem;
 }
 
 /* || PAGES */

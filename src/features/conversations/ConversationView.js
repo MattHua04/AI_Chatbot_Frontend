@@ -135,7 +135,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const handleSubmit = async (e) => {
         if (ableToSubmit) {
             const newContent = content ? [...content, ['User', input]] : [['User', input]]
-            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent })
+            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent, respond: true })
         }
     }
 

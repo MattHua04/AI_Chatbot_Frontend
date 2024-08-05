@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faSave, faXmarkCircle, faCopy, faCheck, faRotate } from "@fortawesome/free-solid-svg-icons"
+import { faPenToSquare, faSave, faXmarkCircle, faCopy as faSolidCopy, faCheck, faRotate, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { useUpdateConversationMutation } from '../conversations/conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
 import Markdown from 'react-markdown'
@@ -60,6 +60,18 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     
         // Check if the line matches any markdown pattern
         return markdownPatterns.some(pattern => pattern.test(line))
+    }
+
+    const copyToClipboard = (text, index) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                const newCopiedArray = [...copiedArray]
+                newCopiedArray[index] = true
+                setCopiedArray(newCopiedArray)
+            })
+            .catch(err => {
+                console.error('Failed to copy text: ', err)
+            })
     }
 
     const parsePromptContent = (content) => {
@@ -126,18 +138,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 const code = part.substring(part.indexOf("\n") + 1)
                 const key = language.trim()
 
-                const copyToClipboard = (text, index) => {
-                    navigator.clipboard.writeText(text)
-                        .then(() => {
-                            const newCopiedArray = [...copiedArray]
-                            newCopiedArray[index] = true
-                            setCopiedArray(newCopiedArray)
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy text: ', err)
-                        })
-                }
-
                 return (
                     <div key={index} style={{
                             // maxWidth: '60dvw'
@@ -167,7 +167,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     padding: '0.3em 0.7em',
                                     boxShadow: 'none',
                                 }}>
-                                    {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faCopy} />}
+                                    {copiedArray[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faSolidCopy} />}
                             </button>
                         </div>
                         <p key={index} style={codeStyle}>
@@ -325,6 +325,20 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 user: conversation.user,
                 title: conversation.title,
                 content: updatedContent,
+                respond: true,
+            })
+        }
+
+        const continueGeneration = async () => {
+            const updatedContent = [
+                ...conversationContent.slice(0, promptId + 1),
+            ]
+            await updateConversation({
+                id: conversationId,
+                user: conversation.user,
+                title: conversation.title,
+                content: updatedContent,
+                respond: true,
             })
         }
 
@@ -339,14 +353,10 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                     user: conversation.user,
                     title: conversation.title,
                     content: updatedContent,
+                    respond: true,
                 })
-            } else if (promptContent?.replace(/\s/g, "").length) {
-                await updateConversation({
-                    id: conversationId,
-                    user: conversation.user,
-                    title: conversation.title,
-                    content: conversationContent
-                })
+            } else if (promptContent?.replace(/\s/g, "").length && promptContent === conversation.content[promptId][1]) {
+                setEdit(false)
             }
         }
 
@@ -564,19 +574,47 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             }}>
                             {parsedPromptContent}
                         </pre>
-                        <button
-                            className="conversationOptionsButton"
-                            title="Regenerate response"
-                            onClick={regenerate}
-                            style={{
-                                backgroundColor: 'transparent',
-                                animation: 'none',
-                                padding: '0',
-                                height: '2rem',
-                                boxShadow: 'none',
-                            }}>
-                            <FontAwesomeIcon icon={faRotate} />
-                        </button>
+                        <div style={{display: 'flex', flexDirection: 'row', gap: '0.5rem'}}>
+                            <button
+                                className="conversationOptionsButton"
+                                title="Copy response"
+                                onClick={() => copyToClipboard(promptContent, 0)}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    animation: 'none',
+                                    padding: '0',
+                                    height: '2rem',
+                                    boxShadow: 'none',
+                                }}>
+                                <FontAwesomeIcon icon={faSolidCopy} />
+                            </button>
+                            <button
+                                className="conversationOptionsButton"
+                                title="Regenerate response"
+                                onClick={regenerate}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    animation: 'none',
+                                    padding: '0',
+                                    height: '2rem',
+                                    boxShadow: 'none',
+                                }}>
+                                <FontAwesomeIcon icon={faRotate} />
+                            </button>
+                            <button
+                                className="conversationOptionsButton"
+                                title="Continue response"
+                                onClick={continueGeneration}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    animation: 'none',
+                                    padding: '0',
+                                    height: '2rem',
+                                    boxShadow: 'none',
+                                }}>
+                                <FontAwesomeIcon icon={faArrowRight} />
+                            </button>
+                        </div>
                     </div>
                 </div>
             )
