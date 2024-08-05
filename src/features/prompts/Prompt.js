@@ -21,6 +21,14 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const lastPromptClickRef = useRef(lastPromptClick)
     const doubleClickListeners = useRef([])
 
+    const CustomLink = ({ href, children }) => {
+        return (
+            <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
+                {children}
+            </a>
+        )
+    }
+
     useEffect(() => {
         setParsedPromptContent(parsePromptContent(promptContent))
     }, [promptContent, copiedDict])
@@ -140,7 +148,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 temp.push(line)
                             } else {
                                 if (temp.length) {
-                                    formatted.push(<Markdown key={`${index}-${i}-${i}`}>{temp.join("\n")}</Markdown>)
+                                    formatted.push(<Markdown key={`${index}-${i}-${i}`} components={{ a: CustomLink }}>{temp.join("\n")}</Markdown>)
                                     temp = []
                                 }
                                 formatted.push(
@@ -150,7 +158,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             }
                         })
                         if (temp.length) {
-                            formatted.push(<Markdown key={index}>{temp.join("\n")}</Markdown>)
+                            formatted.push(<Markdown key={index} components={{ a: CustomLink }}>{temp.join("\n")}</Markdown>)
                         }
                     } else {
                         formatted.push(
