@@ -129,7 +129,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
             }}>
                 <button
                     className='home_button'
-                    title="View User Profile"
+                    title="View All Users"
                     style={{
                         width: '100%',
                         border: 'none',
