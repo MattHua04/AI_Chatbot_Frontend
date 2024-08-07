@@ -121,10 +121,11 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const adjustTextareaHeight = () => {
         // Only adjust height if the textAreaHeight has not been manually resized
         if (textareaRef.current && (textAreaHeight === minTextAreaHeight || input === '')) {
-            textareaRef.current.style.height = '0px'
+            setTextAreaHeight(minTextAreaHeight)
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+        } else {
+            setTextAreaHeight(textareaRef.current.scrollHeight)
         }
-        setTextAreaHeight(textareaRef.current.scrollHeight)
     }
 
     useEffect(() => {
