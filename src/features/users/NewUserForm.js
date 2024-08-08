@@ -240,26 +240,29 @@ const NewUserForm = ({lightmode, fullSize}) => {
             )
         } else {
             chooseActive = (
-                <button
-                    className='home_button'
-                    name="status"
-                    type='button'
-                    onClick={onActiveChange}
-                    style={{
-                        fontSize: '1.5rem',
-                        flexGrow: '1',
-                        border: 'none',
-                        borderRadius: '15px',
-                        padding: '0.3em 0.3em',
-                        textDecoration: 'none',
-                        maxWidth: '18rem',
-                    }}>
-                    {active ? 'Active' : 'Inactive'}
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                    <label className={fullSize ? "" : "form__label"} htmlFor="status" style={{marginRight: '1rem'}}>
+                        Status:
+                    </label>
+                    <button
+                        className='home_button'
+                        name="status"
+                        type='button'
+                        onClick={onActiveChange}
+                        style={{
+                            fontSize: '1.5rem',
+                            flexGrow: '1',
+                            border: 'none',
+                            borderRadius: '15px',
+                            padding: '0.3em 0.3em',
+                            textDecoration: 'none',
+                            maxWidth: '18rem',
+                        }}>
+                        {active ? 'Active' : 'Inactive'}
+                    </button>
+                </div>
             )
         }
-    } else {
-        chooseActive = null
     }
 
     let message
@@ -283,6 +286,15 @@ const NewUserForm = ({lightmode, fullSize}) => {
         )
     }
 
+    let title
+    if (!path.includes('login/new')) {
+        title = (
+            <div className="form__title-row">
+                <h2 style={{fontSize: '2.5rem'}}>New User</h2>
+            </div>
+        )
+    }
+
     let form
     if (showForm) {
         if (lightmode) {
@@ -290,9 +302,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                 form = (
                     <form className="form" onSubmit={e => e.preventDefault()}>
                         {message}
-                        <div className="form__title-row">
-                            <h2 style={{fontSize: '2.5rem'}}>New User</h2>
-                        </div>
+                        {title}
                         {chooseActive}
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
                             <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
@@ -388,15 +398,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                 form = (
                     <form className="form" onSubmit={e => e.preventDefault()}>
                         {message}
-                        <div className="form__title-row">
-                            <h2 style={{fontSize: '2.5rem'}}>New User</h2>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                            <label className={fullSize ? "" : "form__label"} htmlFor="status" style={{marginRight: '1rem'}}>
-                                Status:
-                            </label>
-                            {chooseActive}
-                        </div>
+                        {title}
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                             <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
                                 Username:
@@ -456,30 +458,26 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             </div>
                         </div>
                         {chooseRoles}
-                        <div style={{ display: 'flex', flexDirection: 'row'}}>
-                            <button
-                                className="form__submit-button"
-                                type='submit'
-                                disabled={!canSave}
-                                onClick={onSaveUserClicked}
-                                style={{
-                                    fontSize: '1.5rem',
-                                    padding: '0.2em 0.5em',
-                                    flexGrow: '1',
-                                    boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                                }}>
-                                Register
-                            </button>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                            {/* Hidden input to prevent autofill */}
-                            <input type="password"
-                                autoComplete="new-password"
-                                aria-autocomplete="none"
-                                data-custom-attribute="random-string"
-                                style={{ display: 'none' }}
-                            />
-                        </div>
+                        <button
+                            className="form__submit-button"
+                            type='submit'
+                            disabled={!canSave}
+                            onClick={onSaveUserClicked}
+                            style={{
+                                fontSize: fullSize ? '1em': '1.5rem',
+                                padding: '0.2em 0.5em',
+                                flexGrow: '1',
+                                boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                            }}>
+                            Register
+                        </button>
+                        {/* Hidden input to prevent autofill */}
+                        <input type="password"
+                            autoComplete="new-password"
+                            aria-autocomplete="none"
+                            data-custom-attribute="random-string"
+                            style={{ display: 'none' }}
+                        />
                     </form>
                 )
             }
@@ -749,15 +747,32 @@ const NewUserForm = ({lightmode, fullSize}) => {
         }
     }
 
-    const content = (
-        <section>
-            {header}
-            <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
-                {form}
-            </div>
-            {footer}
-        </section>
-    )
+    let content
+    if (fullSize) {
+        content = (
+            <section>
+                {header}
+                <div className='public__main'
+                    style={{display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                        }}>
+                    {form}
+                </div>
+                {footer}
+            </section>
+        )
+    } else {
+        content = (
+            <section>
+                {header}
+                <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
+                    {form}
+                </div>
+                {footer}
+            </section>
+        )
+    }
 
     return content
 }

@@ -184,6 +184,7 @@ const Login = ({setView, setCurrentConversationId}) => {
                                         textDecoration: 'none',
                                         flexGrow: '1',
                                         maxWidth: '4rem',
+                                        width: '100%',
                                     }}
                                 >
                                     <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
@@ -305,7 +306,7 @@ const Login = ({setView, setCurrentConversationId}) => {
                                 width: '100%',
                                 justifyContent: 'space-between',
                                 minWidth: '15rem',
-                                maxWidth: '30rem'
+                                maxWidth: '30rem',
                             }}>
                             <label htmlFor="password" style={{marginRight: '1rem'}}>Password:</label>
                             <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
@@ -337,6 +338,7 @@ const Login = ({setView, setCurrentConversationId}) => {
                                         textDecoration: 'none',
                                         flexGrow: '1',
                                         maxWidth: '4rem',
+                                        width: '100%',
                                     }}
                                 >
                                     <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
