@@ -115,7 +115,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
     let spotifyInterface
     if (isAdmin) {
         spotifyInterface = (
-            <div style={{maxWidth: '13rem'}}>
+            <div style={{maxWidth: '13rem', marginBottom: '10px'}}>
                 <SpotifyInterface usingVolumeSlider={usingVolumeSlider} setUsingVolumeSlider={setUsingVolumeSlider}/>
             </div>
         )
@@ -350,9 +350,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                             padding: '6px',
                         }}
                         ref={sideBarRef}>
-                        <div style={{marginBottom: '10px'}}>
-                            {spotifyInterface}
-                        </div>
+                        {spotifyInterface}
                         <div style={{display: 'block', marginBottom: '5px'}}>
                             {profileButtons}
                         </div>
