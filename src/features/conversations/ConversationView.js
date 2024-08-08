@@ -49,6 +49,20 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const lastTouchY = useRef(null)
     const [recentlyUsingVolumeSlider, setRecentlyUsingVolumeSlider] = useState(false)
     const [recentlyUsingVolumeSliderTimeoutId, setRecentlyUsingVolumeSliderTimeoutId] = useState(null)
+    const [paddingTop, setPaddingTop] = useState('0px')
+    const [paddingBottom, setPaddingBottom] = useState('0px')
+    const [marginTop, setMarginTop] = useState('0px')
+
+    useEffect(() => {
+        // Calculate padding and margin based on referenced elements
+        const titleHeight = titleRef.current ? titleRef.current.clientHeight : 0
+        const inputHeight = inputRef.current ? inputRef.current.clientHeight : 0
+        
+        // Set the calculated padding and margin
+        setPaddingTop(`${titleHeight + parseFloat(getComputedStyle(document.documentElement).fontSize)}px`)
+        setPaddingBottom(`${inputHeight}px`)
+        setMarginTop(`-${titleHeight}px`)
+    }, [titleRef.current, inputRef.current, textAreaHeight])
 
     useEffect(() => {
         if (!usingVolumeSlider) {
@@ -120,8 +134,12 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
 
     const adjustTextareaHeight = () => {
         // Only adjust height if the textAreaHeight has not been manually resized
-        if (textareaRef.current && (textAreaHeight === minTextAreaHeight || input === '')) {
+        if (textareaRef.current && input === '') {
+            console.log('no input')
             setTextAreaHeight(minTextAreaHeight)
+            textareaRef.current.style.height = minTextAreaHeight + 'px'
+        } else if (textareaRef.current && textAreaHeight === minTextAreaHeight) {
+            console.log('min height')
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
         } else {
             setTextAreaHeight(textareaRef.current.scrollHeight)
@@ -167,7 +185,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             }
         } else if (isSuccess) {
             setInput('')
-            setTextAreaHeight(minTextAreaHeight)
+            adjustTextareaHeight()
         }
     }, [isSuccess, isLoading, isLoading])
 
@@ -562,7 +580,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                         padding: '0.2em',
                         fontSize: '20px',
                         borderRadius: fullScreen ? '0px 0px 10px 10px' : '10px',
-                        marginBottom: '-' + titleRef.current?.clientHeight + 'px',
+                        marginBottom: marginTop,
                         zIndex: '9999',
                     }}
                 >
@@ -590,8 +608,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                         height: '100%',
                         overflowY: 'auto',
                         scrollbarWidth: 'none',
-                        paddingBottom: inputRef.current?.clientHeight + 'px',
-                        paddingTop: titleRef.current?.clientHeight + parseFloat(getComputedStyle(document.documentElement).fontSize) + 'px',
+                        paddingBottom: paddingBottom,
+                        paddingTop: paddingTop,
                     }}>
                     {conversationContent}
                 </div>

@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
+import { faUserPen, faSun, faMoon } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectUserById } from './usersApiSlice'
 import { useUpdateUserMutation } from './usersApiSlice'
 import { selectCurrentId } from '../auth/authSlice'
 
-const User = ({ userId }) => {
+const User = ({ userId, setView, setEditingUserId }) => {
     const user = useSelector(state => selectUserById(state, userId))
     const sourceId = useSelector(selectCurrentId)
 
@@ -25,7 +25,12 @@ const User = ({ userId }) => {
     }
 
     if (user) {
-        const handleEdit = () => navigate(`/dash/users/${userId}`)
+        const handleEdit = () => {
+            // navigate(`/dash/users/${userId}`)
+            setView('editUser')
+            localStorage.setItem('view', 'editUser')
+            setEditingUserId(userId)
+        }
 
         const userRolesString = user.roles.toString().replaceAll(',', ', ')
 
@@ -51,8 +56,9 @@ const User = ({ userId }) => {
                     <button
                         className="icon-button table__button"
                         onClick={handleEdit}
+                        title='Edit User'
                     >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <FontAwesomeIcon icon={faUserPen} />
                     </button>
                 </td>
             </tr>

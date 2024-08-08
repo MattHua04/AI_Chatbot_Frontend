@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUser, faUserPlus, faPlus, faCircleXmark, faCaretLeft, faCaretRight, faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faUsers, faUserPlus, faPlus, faCircleXmark, faCaretLeft, faCaretRight, faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { useSelector } from 'react-redux'
 import { selectUserById } from '../users/usersApiSlice'
 import { ROLES } from '../../config/roles'
@@ -13,7 +13,7 @@ import { useState, useEffect, useRef } from 'react'
 import SpotifyInterface from '../spotify/SpotifyInterface'
 import { useSwipeable } from 'react-swipeable'
 
-const Welcome = ({view, currentConversationId, setView, setCurrentConversationId}) => {
+const Welcome = ({view, currentConversationId, editingUserId, setView, setCurrentConversationId, setEditingUserId}) => {
     const id = useSelector(state => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
     const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
@@ -46,6 +46,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
 
     const openUserProfile = () => {
         setView(isAdmin ? 'usersList' : 'editUser')
+        setEditingUserId(isAdmin ? id: '')
     }
 
     const openNewUserForm = () => {
@@ -141,7 +142,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                     }}
                     onClick={openUserProfile}
                 >
-                    <FontAwesomeIcon icon={faUser} />
+                    <FontAwesomeIcon icon={faUsers} />
                 </button>
                 <button
                     className='home_button'
@@ -490,7 +491,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
                     }}>
-                    <UsersList />
+                    <UsersList setView={setView} setEditingUserId={setEditingUserId} />
                 </div>
             }
             {view === 'editUser' &&
@@ -499,7 +500,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
                     }}>
-                    <EditUser uid={id} />
+                    <EditUser uid={editingUserId} />
                 </div>
             }
             {view === 'newUserForm' &&
@@ -508,7 +509,7 @@ const Welcome = ({view, currentConversationId, setView, setCurrentConversationId
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
                     }}>
-                    <NewUserForm lightmode={false} />
+                    <NewUserForm lightmode={true} fullSize={false} />
                 </div>
             }
             {view === 'conversationView' &&

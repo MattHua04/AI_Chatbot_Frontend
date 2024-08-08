@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { selectUserById } from './usersApiSlice'
 import { ROLES } from '../../config/roles'
 
-const UsersList = () => {
+const UsersList = ({setView, setEditingUserId}) => {
     const {id} = useSelector(state => state.auth)
     const user = useSelector(state => selectUserById(state, id))
     const isAdmin = user?.roles.includes(ROLES.ADMIN)
@@ -36,7 +36,7 @@ const UsersList = () => {
     if (isSuccess && isAdmin) {
         const { ids } = users
 
-        const tableContent = ids?.length && ids.map(userId => <User key={userId} userId={userId} />)
+        const tableContent = ids?.length && ids.map(userId => <User key={userId} userId={userId} setView={setView} setEditingUserId={setEditingUserId} />)
 
         content = (
             <div style={{

@@ -2,12 +2,21 @@ import { Link } from 'react-router-dom'
 import { useSelector } from "react-redux"
 import { useState, useEffect } from 'react'
 
-const DashHeader = ({view, currentConversationId, setView, setCurrentConversationId}) => {
+const DashHeader = ({view, currentConversationId, setView, setCurrentConversationId, setEditingUserId}) => {
     const {id, username} = useSelector(state => state.auth)
     const date = new Date()
     const today = new Intl.DateTimeFormat('en-US', { dateStyle: 'full' }).format(date)
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+
+    const editUser = () => {
+        localStorage.setItem('view', 'editUser')
+        setView('editUser')
+        localStorage.setItem('currentConversationId', '')
+        setCurrentConversationId('')
+        localStorage.setItem('editingUserId', id)
+        setEditingUserId(id)
+    }
 
     useEffect(() => {
         function handleResize() {
@@ -39,7 +48,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                     </Link>
                 </div> */}
                 <h1 className='dash-header__title' style={{margin: '0'}}>
-                        Hello <Link to={`/dash/users/${id}`} className='dash-header__title' style={{textDecoration: 'none'}}>{username}</Link> !
+                        Hello <Link onClick={editUser} className='dash-header__title' style={{textDecoration: 'none'}}>{username}</Link> !
                 </h1>
             </div>
         )
@@ -56,7 +65,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                     <p className='welcome__p'>{today}</p>
                 </div>
                 <h1 className='dash-header__title' style={{margin: '0'}}>
-                        Hello <Link to={`/dash/users/${id}`} className='dash-header__title' style={{textDecoration: 'none'}}>{username}</Link> !
+                    Hello <Link onClick={editUser} className='dash-header__title' style={{textDecoration: 'none'}}>{username}</Link> !
                 </h1>
             </div>
         )

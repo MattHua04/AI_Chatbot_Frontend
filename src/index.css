@@ -409,6 +409,11 @@ span {
   transform: scale(1.1);
 }
 
+.conversationButton:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .selectedConversationButton {
   cursor: pointer;
   width: 30rem;
@@ -1107,7 +1112,7 @@ tr {
 
 .form__label {
   font-size: 1.5rem;
-  margin-bottom: 0.2rem;
+  margin-top: 0.5rem;
 }
 
 .form__input{
@@ -1118,6 +1123,38 @@ tr {
   transition: 0.3s ease;
   border: 1px solid rgb(0, 0, 0);
   outline: 1px solid rgb(0, 0, 0);
+}
+
+.form__input::placeholder {
+  opacity: 0.55;
+}
+
+.form__submit-button-opaque {
+  cursor: pointer;
+  background-color: rgba(203, 214, 238, 1);
+  color: #5136d5;
+  transition: 0.3s ease;
+  padding: 0.5em 0.5em;
+  border-radius: 15px;
+  border-color: transparent;
+}
+
+.form__submit-button-opaque:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form__submit-button-opaque:hover {
+  cursor: pointer;
+  background-color: rgba(135, 75, 203, 1);
+  color: #ffffff;
+  transition: 0.3s ease;
+  padding: 0.5em 0.5em;
+  border-radius: 15px;
+  border-color: transparent;
+  transform: scale(1.05);
+  animation: pulse-opaque 1.5s infinite alternate ease-in-out;
 }
 
 .form__submit-button {
@@ -1146,6 +1183,15 @@ tr {
   border-color: transparent;
   transform: scale(1.05);
   animation: pulse 1.5s infinite alternate ease-in-out;
+}
+
+.form__block {
+  background-color: rgba(203, 214, 238, 0.718);
+  color: #5136d5;
+  transition: 0.3s ease;
+  padding: 0.5em 0.5em;
+  border-radius: 15px;
+  border-color: transparent;
 }
 
 .form__input--text {
@@ -1251,7 +1297,16 @@ tr {
     background-color: #5136d59a;
   }
   100% {
-    background-color: rgba(135, 75, 203, 0.718)
+    background-color: rgba(135, 75, 203, 0.718);
+  }
+}
+
+@keyframes pulse-opaque {
+  0% {
+    background-color: rgb(118, 103, 215);
+  }
+  100% {
+    background-color: rgb(143, 94, 203);
   }
 }
 

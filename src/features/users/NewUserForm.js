@@ -8,8 +8,8 @@ import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {selectUserById} from './usersApiSlice'
 
-const USER_REGEX = /^[A-z]{3,20}$/
-const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
+const USER_REGEX = /^[A-z]{1,}$/
+const PWD_REGEX = /^[A-z0-9!@#$%]{4,}$/
 
 const NewUserForm = ({lightmode, fullSize}) => {
     const navigate = useNavigate()
@@ -165,7 +165,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             verticalAlign: 'top',
                             fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                         }}>
-                        Roles:
+                        Role:
                     </label>
                     <select
                         id="roles"
@@ -196,7 +196,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             marginRight: '1rem',
                             verticalAlign: 'top',
                         }}>
-                        Roles:
+                        Role:
                     </label>
                     <select
                         id="roles"
@@ -217,8 +217,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                 </div>
             )
         }
-    } else {
-        chooseRoles = null
     }
 
     let chooseActive
@@ -244,14 +242,17 @@ const NewUserForm = ({lightmode, fullSize}) => {
             chooseActive = (
                 <button
                     className='home_button'
+                    name="status"
                     type='button'
                     onClick={onActiveChange}
-                    style={{fontSize: '1.5rem',
+                    style={{
+                        fontSize: '1.5rem',
                         flexGrow: '1',
                         border: 'none',
                         borderRadius: '15px',
                         padding: '0.3em 0.3em',
                         textDecoration: 'none',
+                        maxWidth: '18rem',
                     }}>
                     {active ? 'Active' : 'Inactive'}
                 </button>
@@ -289,6 +290,10 @@ const NewUserForm = ({lightmode, fullSize}) => {
                 form = (
                     <form className="form" onSubmit={e => e.preventDefault()}>
                         {message}
+                        <div className="form__title-row">
+                            <h2 style={{fontSize: '2.5rem'}}>New User</h2>
+                        </div>
+                        {chooseActive}
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
                             <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
                                 Username:
@@ -352,7 +357,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             </div>
                         </div>
                         {chooseRoles}
-                        {chooseActive}
                         <div style={{ display: 'flex', flexDirection: 'row'}}>
                             <button
                                 className="form__submit-button"
@@ -384,6 +388,15 @@ const NewUserForm = ({lightmode, fullSize}) => {
                 form = (
                     <form className="form" onSubmit={e => e.preventDefault()}>
                         {message}
+                        <div className="form__title-row">
+                            <h2 style={{fontSize: '2.5rem'}}>New User</h2>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                            <label className={fullSize ? "" : "form__label"} htmlFor="status" style={{marginRight: '1rem'}}>
+                                Status:
+                            </label>
+                            {chooseActive}
+                        </div>
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                             <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
                                 Username:
@@ -409,7 +422,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem'}}>
                                 Password:
                             </label>
-                            <div style={{maxWidth: '18rem', display: 'flex', flexDirection: 'row', width: '100%'}}>
+                            <div style={{maxWidth: '18rem', display: 'flex', flexGrow: '1', flexDirection: 'row', width: '100%'}}>
                                 <input
                                     className={`form__input ${validPwdClass}`}
                                     id="password"
@@ -419,9 +432,9 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                     onChange={onPasswordChanged}
                                     style={{
                                         textAlign: 'center',
-                                        flexGrow: '1',
-                                        maxWidth: '12.5rem',
-                                        width: '100%',
+                                        flex: '1',
+                                        minWidth: '0px',
+                                        marginRight: '1rem',
                                     }}
                                 />
                                 <button
@@ -430,7 +443,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                     title={showPassword? 'Hide Password' : 'Show Password'}
                                     onClick={onPwdVisibilityChanged}
                                     style={{
-                                        marginLeft: '1rem',
                                         border: 'none',
                                         borderRadius: '15px',
                                         padding: '0.3em 0.3em',
@@ -444,7 +456,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             </div>
                         </div>
                         {chooseRoles}
-                        {chooseActive}
                         <div style={{ display: 'flex', flexDirection: 'row'}}>
                             <button
                                 className="form__submit-button"
@@ -452,6 +463,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                 disabled={!canSave}
                                 onClick={onSaveUserClicked}
                                 style={{
+                                    fontSize: '1.5rem',
                                     padding: '0.2em 0.5em',
                                     flexGrow: '1',
                                     boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
@@ -484,6 +496,10 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             style={{gap: '0.5rem'}}
                             onSubmit={e => e.preventDefault()}>
                             {message}
+                            <div className="form__title-row">
+                                <h2 style={{fontSize: '2.5rem'}}>New User</h2>
+                            </div>
+                            {chooseActive}
                             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
                                 <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
                                     Username:
@@ -550,7 +566,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                 </div>
                             </div>
                             {chooseRoles}
-                            {chooseActive}
                             <div style={{ display: 'flex', flexDirection: 'row'}}>
                                 <button
                                     className="form__submit-button"
@@ -589,6 +604,15 @@ const NewUserForm = ({lightmode, fullSize}) => {
                     }}>
                         <form className="form" onSubmit={e => e.preventDefault()}>
                             {message}
+                            <div className="form__title-row">
+                                <h2 style={{fontSize: '2.5rem'}}>New User</h2>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                                <label className={fullSize ? "" : "form__label"} htmlFor="status" style={{marginRight: '1rem'}}>
+                                    Status:
+                                </label>
+                                {chooseActive}
+                            </div>
                             <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                                 <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
                                     Username:
@@ -649,7 +673,6 @@ const NewUserForm = ({lightmode, fullSize}) => {
                                 </div>
                             </div>
                             {chooseRoles}
-                            {chooseActive}
                             <div style={{ display: 'flex', flexDirection: 'row'}}>
                                 <button
                                     className="form__submit-button"
@@ -729,11 +752,7 @@ const NewUserForm = ({lightmode, fullSize}) => {
     const content = (
         <section>
             {header}
-            <div className='public__main'
-                style={{display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                    }}>
+            <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
                 {form}
             </div>
             {footer}

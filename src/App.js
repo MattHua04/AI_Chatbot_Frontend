@@ -18,6 +18,7 @@ import {useState} from 'react'
 function App() {
   const [view, setView] = useState('')
   const [currentConversationId, setCurrentConversationId] = useState('')
+  const [editingUserId, setEditingUserId] = useState('')
 
   return (
     <Routes>
@@ -31,13 +32,13 @@ function App() {
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>
             <Route element={<Prefetch />}>
-              <Route path="dash" element={<DashLayout view={view} currentConversationId={currentConversationId} setView={setView} setCurrentConversationId={setCurrentConversationId}/>}>
+              <Route path="dash" element={<DashLayout view={view} currentConversationId={currentConversationId} setView={setView} setCurrentConversationId={setCurrentConversationId} setEditingUserId={setEditingUserId} />}>
 
-              <Route index element={<Welcome view={view} currentConversationId={currentConversationId} setView={setView} setCurrentConversationId={setCurrentConversationId} />} />
+              <Route index element={<Welcome view={view} currentConversationId={currentConversationId} editingUserId={editingUserId} setView={setView} setCurrentConversationId={setCurrentConversationId} setEditingUserId={setEditingUserId} />} />
 
                 <Route path="users">
                   <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-                    <Route index element={<UsersList />} />
+                    <Route index element={<UsersList setView={setView} setEditingUserId={setEditingUserId} />} />
                   </Route>
                   <Route path=":id" element = {<EditUser />}></Route>
                 </Route>

@@ -11,8 +11,8 @@ import { useSelector } from 'react-redux'
 import { selectCurrentToken, selectCurrentId } from '../auth/authSlice'
 import useAuth from "../../hooks/useAuth"
 
-const USER_REGEX = /^[A-z]{3,20}$/
-const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
+const USER_REGEX = /^[A-z0-9]{0,}$/
+const PWD_REGEX = /^$|^[A-z0-9!@#$%]{4,}$/
 
 const EditUserForm = ({user}) => {
     const [updateUser, {
@@ -32,7 +32,7 @@ const EditUserForm = ({user}) => {
     const dispatch = useDispatch()
 
     const token = useSelector(selectCurrentToken)
-    const [username, setUsername] = useState(user.username)
+    const [username, setUsername] = useState()
     const [validUsername, setValidUsername] = useState(true)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
@@ -43,13 +43,13 @@ const EditUserForm = ({user}) => {
     const sourceId = useSelector(selectCurrentId)
     const isAdmin = loggedInUserRoles.includes('Admin')
     const targetUserIsAdmin = user.roles.includes('Admin')
+    const [deleteClicks, setDeleteClicks] = useState(0)
 
     const [sendLogout] = useSendLogoutMutation()
 
     const [update] = useUpdateMutation()
 
     useEffect(() => {
-        setUsername(user.username)
         setRoles(user.roles)
     }, [user])
 
@@ -150,15 +150,34 @@ const EditUserForm = ({user}) => {
     let err
     if (isError || isDelError) {
         err = <div className={errClass}>{errContent}</div>
-    } else {
-        err = null
+    }
+
+    let pwd_error
+    if (password && !validPassword) {
+        pwd_error = (
+            <div className="errmsg"
+                style={{
+                    fontSize: '1rem',
+                    padding: '0.75rem',
+                    margin: '0px',
+                    // color: 'red',
+                    // backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                }}>
+                {'At least 4 characters required'}
+            </div>
+        )
     }
 
     let roleSelect
     if (visibleRoles.length) {
         roleSelect = (
-            <>
-                <label className="form__label" htmlFor="roles">
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+            }}>
+                <label className="form__label" htmlFor="roles" style={{marginRight: '1rem'}}>
                     Role:
                 </label>
                 <select
@@ -169,103 +188,205 @@ const EditUserForm = ({user}) => {
                     size={visibleRoles.length}
                     value={roles}
                     onChange={onRolesChanged}
+                    style={{maxWidth: '18rem'}}
                 >
                     {options}
                 </select>
-            </>
+            </div>
         )
     }
 
     let chooseActive
     if (isAdmin) {
         chooseActive = (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+            }}>
+                <label className="form__label" htmlFor="status" style={{marginRight: '1rem'}}>
+                    Status:
+                </label>
+                <button
+                    className="conversationButton"
+                    name="status"
+                    onClick={onActiveChange}
+                    style={{
+                        fontSize: '1.5rem',
+                        flexGrow: '1',
+                        border: 'none',
+                        borderRadius: '15px',
+                        padding: '0.3em 0.3em',
+                        textDecoration: 'none',
+                        maxWidth: '18rem',
+                        marginRight: '0'
+                    }}
+                    disabled={targetUserIsAdmin}>
+                    {active ? 'Active' : 'Inactive'}
+                </button>
+            </div>
+        )
+    }
+
+    let deleteButton
+    if (deleteClicks === 0) {
+        deleteButton = (
             <button
                 className="form__submit-button"
-                onClick={onActiveChange}
-                style={{fontSize: '1em',
+                title="Delete"
+                onClick={() => setDeleteClicks(1)}
+                style={{
+                    fontSize: '1.5rem',
                     padding: '0.2em 0.5em',
-                    flexGrow: '1'
+                    boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
                 }}>
-                {active ? 'Active' : 'Inactive'}
+                Delete
             </button>
         )
-    } else {
-        chooseActive = null
+    } else if (deleteClicks === 1) {
+        deleteButton = (
+            <div className="form__block"
+                style={{
+                    color: 'white',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    backgroundColor: '#ff0000a2',
+                }}>
+                <div style={{marginBottom: '0.5rem'}}>Are You Sure?</div>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    gap: '1rem',
+                }}>
+                    <button
+                        className="form__submit-button-opaque"
+                        title="Delete"
+                        onClick={onDeleteUserClicked}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: '1',
+                            justifyContent: 'center',
+                            fontSize: '1.5rem',
+                            padding: '0.2em 0.5em',
+                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                            backgroundColor: 'rgba(203, 214, 238, 1)',
+                        }}>
+                        Yes
+                    </button>
+                    <button
+                        className="form__submit-button-opaque"
+                        title="Cancel"
+                        onClick={() => setDeleteClicks(0)}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexGrow: '1',
+                            justifyContent: 'center',
+                            fontSize: '1.5rem',
+                            padding: '0.2em 0.5em',
+                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                            backgroundColor: 'rgba(203, 214, 238, 1)',
+                        }}>
+                        No
+                    </button>
+                </div>
+            </div>
+        )
     }
 
     const content = (
-        <section style={{display: 'flex', flexDirection: 'column', flexGrow: '1'}}>
+        <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
             <form className="form" onSubmit={e => e.preventDefault()}>
                 {err}
                 <div className="form__title-row">
-                    <h2>Edit Profile</h2>
-                    <div className="form__action-buttons">
-                        <button
-                            className="icon-button"
-                            title="Save"
-                            onClick={onSaveUserClicked}
-                            disabled={!canSave}
-                        >
-                            <FontAwesomeIcon icon={faSave} />
-                        </button>
-                        <button
-                            className="icon-button"
-                            title="Delete"
-                            onClick={onDeleteUserClicked}
-                        >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </button>
-                    </div>
+                    <h2 style={{fontSize: '2.5rem'}}>Edit Profile</h2>
                 </div>
                 {chooseActive}
-                <label className="form__label" htmlFor="username">
-                    Username: <span className="nowrap">(3-20 letters)</span>
-                </label>
-                <input
-                    className={`form__input ${validUserClass}`}
-                    id="username"
-                    name="username"
-                    type="text"
-                    autoComplete="off"
-                    autoFocus
-                    value={username}
-                    onChange={onUsernameChanged}
-                />
-
-                <label className="form__label" htmlFor="password">
-                    Password: <span className="nowrap">(optional 4-12 characters)</span>
-                </label>
-                <div className="nowrap" style={{ display: 'flex' }}>
-                    <button
-                        className='home_button'
-                        type='button'
-                        title={showPassword? 'Hide Password' : 'Show Password'}
-                        onClick={handlePwdVisibility}
-                        style={{marginRight: '1rem',
-                            border: 'none',
-                            borderRadius: '15px',
-                            padding: '0.3em 0.3em',
-                            textDecoration: 'none',
-                            flexGrow: '1',
-                            maxWidth: '4rem',
-                        }}
-                    >
-                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                    </button>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                    <label className="form__label" htmlFor="username" style={{marginRight: '1rem'}}>
+                        Username:
+                    </label>
                     <input
-                        className={`form__input`}
-                        id="password"
-                        name="password"
-                        type={showPassword? 'text' : 'password'}
-                        value={password}
-                        onChange={onPasswordChanged}
+                        className={`form__input ${validUserClass}`}
+                        id="username"
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        autoFocus
+                        placeholder={user.username}
+                        value={username}
+                        onChange={onUsernameChanged}
                         style={{
-                            flex: '1',
-                            minWidth: '0px',
+                            maxWidth: '18rem',
+                            textAlign: 'center',
                         }}
                     />
                 </div>
+                {pwd_error}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                <label className="form__label" htmlFor="password" style={{marginRight: '1rem'}}>
+                    Password:
+                </label>
+                    <div className="nowrap" style={{ display: 'flex', maxWidth: '18rem', flexDirection: 'row', flexGrow: '1', justifyContent: 'space-between' }}>
+                        <input
+                            className={`form__input ${validPwdClass}`}
+                            id="password"
+                            name="password"
+                            type={showPassword? 'text' : 'password'}
+                            value={password}
+                            onChange={onPasswordChanged}
+                            style={{
+                                textAlign: 'center',
+                                flex: '1',
+                                minWidth: '0px',
+                                marginRight: '1rem',
+                            }}/>
+                        <button
+                            className='home_button'
+                            type='button'
+                            title={showPassword? 'Hide Password' : 'Show Password'}
+                            onClick={handlePwdVisibility}
+                            style={{
+                                border: 'none',
+                                borderRadius: '15px',
+                                padding: '0.3em 0.3em',
+                                textDecoration: 'none',
+                                flexGrow: '1',
+                                maxWidth: '4rem',
+                            }}>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </button>
+                    </div>
+                </div>
                 {roleSelect}
+                <button
+                    className="form__submit-button"
+                    title="Save"
+                    onClick={onSaveUserClicked}
+                    disabled={!canSave}
+                    style={{
+                        fontSize: '1.5rem',
+                        padding: '0.2em 0.5em',
+                        boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                    }}>
+                    Save
+                </button>
+                {deleteButton}
                 <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     {/* Hidden input to prevent autofill */}
                     <input type="password"
@@ -276,7 +397,7 @@ const EditUserForm = ({user}) => {
                     />
                 </div>
             </form>
-        </section>
+        </div>
     )
 
     return content
