@@ -507,7 +507,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
                     }}>
-                    <NewUserForm lightmode={true} fullSize={false} />
+                    <NewUserForm fullSize={false} />
                 </div>
             }
             {view === 'conversationView' &&

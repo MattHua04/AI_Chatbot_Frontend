@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom"
 import NewUserForm from "./NewUserForm"
 
-const NewUser = ({lightmode, fullSize}) => {
-    const content = <NewUserForm lightmode={lightmode} fullSize={fullSize} />
+const NewUser = ({fullSize}) => {
+    const content = <NewUserForm fullSize={fullSize} />
 
     return content
 }

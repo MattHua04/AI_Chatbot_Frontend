@@ -11,7 +11,7 @@ import {selectUserById} from './usersApiSlice'
 const USER_REGEX = /^[A-z]{1,}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,}$/
 
-const NewUserForm = ({lightmode, fullSize}) => {
+const NewUserForm = ({fullSize}) => {
     const navigate = useNavigate()
     const {id} = useSelector(state => state.auth)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
@@ -297,180 +297,92 @@ const NewUserForm = ({lightmode, fullSize}) => {
 
     let form
     if (showForm) {
-        if (lightmode) {
-            if (windowWidth <= 1000) {
-                form = (
-                    <form className="form" onSubmit={e => e.preventDefault()}>
-                        {message}
-                        {title}
-                        {chooseActive}
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
-                            <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
-                                Username:
-                            </label>
+        if (windowWidth <= 1000) {
+            form = (
+                <form className="form" onSubmit={e => e.preventDefault()}>
+                    {message}
+                    {title}
+                    {chooseActive}
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
+                        <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
+                            Username:
+                        </label>
+                        <input
+                            className={`form__input ${validUserClass}`}
+                            id="username"
+                            name="username"
+                            type="text"
+                            autoComplete="off"
+                            autoFocus
+                            value={username}
+                            onChange={onUsernameChanged}
+                            style={{
+                                textAlign: 'center',
+                                flexGrow: '1',
+                                right: '0',
+                                maxWidth: '18rem',
+                                fontSize: `${fullSize ? 'none' : '1.1rem'}`,
+                            }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between' }}>
+                        <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
+                            Password:
+                        </label>
+                        <div style={{maxWidth: '18rem', display: 'flex', flexDirection: 'row', width: '100%'}}>
                             <input
-                                className={`form__input ${validUserClass}`}
-                                id="username"
-                                name="username"
-                                type="text"
-                                autoComplete="off"
-                                autoFocus
-                                value={username}
-                                onChange={onUsernameChanged}
+                                className={`form__input ${validPwdClass}`}
+                                id="password"
+                                name="password"
+                                type={showPassword? 'text' : 'password'}
+                                value={password}
+                                onChange={onPasswordChanged}
                                 style={{
                                     textAlign: 'center',
                                     flexGrow: '1',
-                                    right: '0',
-                                    maxWidth: '18rem',
+                                    maxWidth: '12.5rem',
+                                    width: '100%',
                                     fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                                 }}
                             />
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between' }}>
-                            <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
-                                Password:
-                            </label>
-                            <div style={{maxWidth: '18rem', display: 'flex', flexDirection: 'row', width: '100%'}}>
-                                <input
-                                    className={`form__input ${validPwdClass}`}
-                                    id="password"
-                                    name="password"
-                                    type={showPassword? 'text' : 'password'}
-                                    value={password}
-                                    onChange={onPasswordChanged}
-                                    style={{
-                                        textAlign: 'center',
-                                        flexGrow: '1',
-                                        maxWidth: '12.5rem',
-                                        width: '100%',
-                                        fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                    }}
-                                />
-                                <button
-                                    className='home_button'
-                                    type='button'
-                                    title={showPassword? 'Hide Password' : 'Show Password'}
-                                    onClick={onPwdVisibilityChanged}
-                                    style={{
-                                        marginLeft: '1rem',
-                                        border: 'none',
-                                        borderRadius: '15px',
-                                        padding: '0.3em 0.3em',
-                                        textDecoration: 'none',
-                                        flexGrow: '1',
-                                        maxWidth: '4rem',
-                                        fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                    }}
-                                >
-                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                                </button>
-                            </div>
-                        </div>
-                        {chooseRoles}
-                        <div style={{ display: 'flex', flexDirection: 'row'}}>
                             <button
-                                className="form__submit-button"
-                                type='submit'
-                                disabled={!canSave}
-                                onClick={onSaveUserClicked}
+                                className='home_button'
+                                type='button'
+                                title={showPassword? 'Hide Password' : 'Show Password'}
+                                onClick={onPwdVisibilityChanged}
                                 style={{
-                                    fontSize: '1.5rem',
-                                    padding: '0.2em 0.5em',
+                                    marginLeft: '1rem',
+                                    border: 'none',
+                                    borderRadius: '15px',
+                                    padding: '0.3em 0.3em',
+                                    textDecoration: 'none',
                                     flexGrow: '1',
-                                    boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                                    maxWidth: '4rem',
                                     fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                }}>
-                                Register
+                                }}
+                            >
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </button>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                            {/* Hidden input to prevent autofill */}
-                            <input type="password"
-                                autoComplete="new-password"
-                                aria-autocomplete="none"
-                                data-custom-attribute="random-string"
-                                style={{ display: 'none' }}
-                            />
-                        </div>
-                    </form>
-                )
-            } else {
-                form = (
-                    <form className="form" onSubmit={e => e.preventDefault()}>
-                        {message}
-                        {title}
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                            <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
-                                Username:
-                            </label>
-                            <input
-                                className={`form__input ${validUserClass}`}
-                                id="username"
-                                name="username"
-                                type="text"
-                                autoComplete="off"
-                                autoFocus
-                                value={username}
-                                onChange={onUsernameChanged}
-                                style={{
-                                    textAlign: 'center',
-                                    flexGrow: '1',
-                                    right: '0',
-                                    maxWidth: '18rem',
-                                }}
-                            />
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                            <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem'}}>
-                                Password:
-                            </label>
-                            <div style={{maxWidth: '18rem', display: 'flex', flexGrow: '1', flexDirection: 'row', width: '100%'}}>
-                                <input
-                                    className={`form__input ${validPwdClass}`}
-                                    id="password"
-                                    name="password"
-                                    type={showPassword? 'text' : 'password'}
-                                    value={password}
-                                    onChange={onPasswordChanged}
-                                    style={{
-                                        textAlign: 'center',
-                                        flex: '1',
-                                        minWidth: '0px',
-                                        marginRight: '1rem',
-                                    }}
-                                />
-                                <button
-                                    className='home_button'
-                                    type='button'
-                                    title={showPassword? 'Hide Password' : 'Show Password'}
-                                    onClick={onPwdVisibilityChanged}
-                                    style={{
-                                        border: 'none',
-                                        borderRadius: '15px',
-                                        padding: '0.3em 0.3em',
-                                        textDecoration: 'none',
-                                        flexGrow: '1',
-                                        maxWidth: '4rem',
-                                    }}
-                                >
-                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                                </button>
-                            </div>
-                        </div>
-                        {chooseRoles}
+                    </div>
+                    {chooseRoles}
+                    <div style={{ display: 'flex', flexDirection: 'row'}}>
                         <button
                             className="form__submit-button"
                             type='submit'
                             disabled={!canSave}
                             onClick={onSaveUserClicked}
                             style={{
-                                fontSize: fullSize ? '1em': '1.5rem',
+                                fontSize: '1.5rem',
                                 padding: '0.2em 0.5em',
                                 flexGrow: '1',
                                 boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                                fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                             }}>
                             Register
                         </button>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                         {/* Hidden input to prevent autofill */}
                         <input type="password"
                             autoComplete="new-password"
@@ -478,273 +390,115 @@ const NewUserForm = ({lightmode, fullSize}) => {
                             data-custom-attribute="random-string"
                             style={{ display: 'none' }}
                         />
-                    </form>
-                )
-            }
-        } else {
-            if (windowWidth <= 1000) {
-                form = (
-                    <div style={{
-                        border: '6px solid rgba(103, 91, 209, 1)',
-                        backgroundColor: 'rgba(157, 126, 224, 1)',
-                        borderRadius: '20px',
-                        padding: '1rem',
-                    }}>
-                        <form className="form"
-                            style={{gap: '0.5rem'}}
-                            onSubmit={e => e.preventDefault()}>
-                            {message}
-                            <div className="form__title-row">
-                                <h2 style={{fontSize: '2.5rem'}}>New User</h2>
-                            </div>
-                            {chooseActive}
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
-                                <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
-                                    Username:
-                                </label>
-                                <input
-                                    className={`form__input ${validUserClass}`}
-                                    id="username"
-                                    name="username"
-                                    type="text"
-                                    autoComplete="off"
-                                    autoFocus
-                                    value={username}
-                                    onChange={onUsernameChanged}
-                                    style={{
-                                        textAlign: 'center',
-                                        flexGrow: '1',
-                                        right: '0',
-                                        maxWidth: '18rem',
-                                        fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                        padding: '0.2rem',
-                                    }}
-                                />
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between' }}>
-                                <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem', fontSize: `${fullSize ? 'none' : '1.1rem'}`}}>
-                                    Password:
-                                </label>
-                                <div style={{maxWidth: '18rem', display: 'flex', flexDirection: 'row', width: '100%'}}>
-                                    <input
-                                        className={`form__input ${validPwdClass}`}
-                                        id="password"
-                                        name="password"
-                                        type={showPassword? 'text' : 'password'}
-                                        value={password}
-                                        onChange={onPasswordChanged}
-                                        style={{
-                                            textAlign: 'center',
-                                            flexGrow: '1',
-                                            maxWidth: '12.5rem',
-                                            width: '100%',
-                                            fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                            padding: '0.2rem',
-                                        }}
-                                    />
-                                    <button
-                                        className='home_button'
-                                        type='button'
-                                        title={showPassword? 'Hide Password' : 'Show Password'}
-                                        onClick={onPwdVisibilityChanged}
-                                        style={{
-                                            marginLeft: '1rem',
-                                            border: 'none',
-                                            borderRadius: '15px',
-                                            padding: '0.3em 0.3em',
-                                            textDecoration: 'none',
-                                            flexGrow: '1',
-                                            minWidth: '2.5rem',
-                                            maxWidth: '4rem',
-                                            fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                                    </button>
-                                </div>
-                            </div>
-                            {chooseRoles}
-                            <div style={{ display: 'flex', flexDirection: 'row'}}>
-                                <button
-                                    className="form__submit-button"
-                                    type='submit'
-                                    disabled={!canSave}
-                                    onClick={onSaveUserClicked}
-                                    style={{
-                                        fontSize: '1.5rem',
-                                        padding: '0.2em 0.5em',
-                                        flexGrow: '1',
-                                        boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                                        fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                                    }}>
-                                    Register
-                                </button>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                                {/* Hidden input to prevent autofill */}
-                                <input type="password"
-                                    autoComplete="new-password"
-                                    aria-autocomplete="none"
-                                    data-custom-attribute="random-string"
-                                    style={{ display: 'none' }}
-                                />
-                            </div>
-                        </form>
-                    </div>
-                )
-            } else {
-                form = (
-                    <div style={{
-                        border: '6px solid rgba(103, 91, 209, 1)',
-                        backgroundColor: 'rgba(157, 126, 224, 1)',
-                        borderRadius: '20px',
-                        padding: '1.5rem',
-                    }}>
-                        <form className="form" onSubmit={e => e.preventDefault()}>
-                            {message}
-                            <div className="form__title-row">
-                                <h2 style={{fontSize: '2.5rem'}}>New User</h2>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                                <label className={fullSize ? "" : "form__label"} htmlFor="status" style={{marginRight: '1rem'}}>
-                                    Status:
-                                </label>
-                                {chooseActive}
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                                <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
-                                    Username:
-                                </label>
-                                <input
-                                    className={`form__input ${validUserClass}`}
-                                    id="username"
-                                    name="username"
-                                    type="text"
-                                    autoComplete="off"
-                                    autoFocus
-                                    value={username}
-                                    onChange={onUsernameChanged}
-                                    style={{
-                                        textAlign: 'center',
-                                        flexGrow: '1',
-                                        right: '0',
-                                        maxWidth: '18rem',
-                                    }}
-                                />
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                                <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem'}}>
-                                    Password:
-                                </label>
-                                <div style={{maxWidth: '18rem', display: 'flex', flexDirection: 'row', width: '100%'}}>
-                                    <input
-                                        className={`form__input ${validPwdClass}`}
-                                        id="password"
-                                        name="password"
-                                        type={showPassword? 'text' : 'password'}
-                                        value={password}
-                                        onChange={onPasswordChanged}
-                                        style={{
-                                            textAlign: 'center',
-                                            flexGrow: '1',
-                                            maxWidth: '12.5rem',
-                                            width: '100%',
-                                        }}
-                                    />
-                                    <button
-                                        className='home_button'
-                                        type='button'
-                                        title={showPassword? 'Hide Password' : 'Show Password'}
-                                        onClick={onPwdVisibilityChanged}
-                                        style={{
-                                            marginLeft: '1rem',
-                                            border: 'none',
-                                            borderRadius: '15px',
-                                            padding: '0.3em 0.3em',
-                                            textDecoration: 'none',
-                                            flexGrow: '1',
-                                            maxWidth: '4rem',
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                                    </button>
-                                </div>
-                            </div>
-                            {chooseRoles}
-                            <div style={{ display: 'flex', flexDirection: 'row'}}>
-                                <button
-                                    className="form__submit-button"
-                                    type='submit'
-                                    disabled={!canSave}
-                                    onClick={onSaveUserClicked}
-                                    style={{
-                                        fontSize: '1.5rem',
-                                        padding: '0.2em 0.5em',
-                                        flexGrow: '1',
-                                        boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                                    }}>
-                                    Register
-                                </button>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                                {/* Hidden input to prevent autofill */}
-                                <input type="password"
-                                    autoComplete="new-password"
-                                    aria-autocomplete="none"
-                                    data-custom-attribute="random-string"
-                                    style={{ display: 'none' }}
-                                />
-                            </div>
-                        </form>
-                    </div>
-                )
-            }
-        }
-    } else {
-        if (lightmode) {
-            form = (
-                <form  className="form" onSubmit={registerAnother}>
-                    {message}
-                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                        <button
-                            className="form__submit-button"
-                            autoFocus
-                            type='submit'
-                            style={{fontSize: '1.5rem',
-                                padding: '0.2em 0.5em',
-                                flexGrow: '1',
-                                outline: 'none',
-                            }}>
-                            Register Another User?
-                        </button>
                     </div>
                 </form>
             )
         } else {
             form = (
-                <div style={{
-                    border: '6px solid rgba(103, 91, 209, 1)',
-                    backgroundColor: 'rgba(157, 126, 224, 1)',
-                    borderRadius: '20px',
-                    padding: '1.5rem',
-                }}>
-                    <form  className="form" onSubmit={registerAnother}>
-                        {message}
+                <form className="form" onSubmit={e => e.preventDefault()}>
+                    {message}
+                    {title}
+                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                        <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
+                            Username:
+                        </label>
+                        <input
+                            className={`form__input ${validUserClass}`}
+                            id="username"
+                            name="username"
+                            type="text"
+                            autoComplete="off"
+                            autoFocus
+                            value={username}
+                            onChange={onUsernameChanged}
+                            style={{
+                                textAlign: 'center',
+                                flexGrow: '1',
+                                right: '0',
+                                maxWidth: '18rem',
+                            }}
+                        />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                        <label className={fullSize ? "" : "form__label"} htmlFor="password" style={{marginRight: '1rem'}}>
+                            Password:
+                        </label>
+                        <div style={{maxWidth: '18rem', display: 'flex', flexGrow: '1', flexDirection: 'row', width: '100%'}}>
+                            <input
+                                className={`form__input ${validPwdClass}`}
+                                id="password"
+                                name="password"
+                                type={showPassword? 'text' : 'password'}
+                                value={password}
+                                onChange={onPasswordChanged}
+                                style={{
+                                    textAlign: 'center',
+                                    flex: '1',
+                                    minWidth: '0px',
+                                    marginRight: '1rem',
+                                }}
+                            />
                             <button
-                                className="form__submit-button"
-                                autoFocus
-                                type='submit'
-                                style={{fontSize: '1.5rem',
-                                    padding: '0.2em 0.5em',
+                                className='home_button'
+                                type='button'
+                                title={showPassword? 'Hide Password' : 'Show Password'}
+                                onClick={onPwdVisibilityChanged}
+                                style={{
+                                    border: 'none',
+                                    borderRadius: '15px',
+                                    padding: '0.3em 0.3em',
+                                    textDecoration: 'none',
                                     flexGrow: '1',
-                                    outline: 'none',
-                                }}>
-                                Register Another User?
+                                    maxWidth: '4rem',
+                                }}
+                            >
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </button>
-                    </form>
-                </div>
+                        </div>
+                    </div>
+                    {chooseRoles}
+                    <button
+                        className="form__submit-button"
+                        type='submit'
+                        disabled={!canSave}
+                        onClick={onSaveUserClicked}
+                        style={{
+                            fontSize: fullSize ? '1em': '1.5rem',
+                            padding: '0.2em 0.5em',
+                            flexGrow: '1',
+                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                        }}>
+                        Register
+                    </button>
+                    {/* Hidden input to prevent autofill */}
+                    <input type="password"
+                        autoComplete="new-password"
+                        aria-autocomplete="none"
+                        data-custom-attribute="random-string"
+                        style={{ display: 'none' }}
+                    />
+                </form>
             )
         }
+    } else {
+        form = (
+            <form  className="form" onSubmit={registerAnother}>
+                {message}
+                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                    <button
+                        className="form__submit-button"
+                        autoFocus
+                        type='submit'
+                        style={{fontSize: '1.5rem',
+                            padding: '0.2em 0.5em',
+                            flexGrow: '1',
+                            outline: 'none',
+                        }}>
+                        Register Another User?
+                    </button>
+                </div>
+            </form>
+        )
     }
 
     let content
