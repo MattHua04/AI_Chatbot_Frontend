@@ -414,6 +414,38 @@ span {
   pointer-events: none;
 }
 
+.conversationButton-opaque {
+  cursor: pointer;
+  background-color: rgba(203, 214, 238, 1);
+  box-shadow: 0px 5px 8px rgba(84, 71, 209, 0.718);
+  color: #5136d5;
+  transition: 0.3s ease;
+  width: 30rem;
+  border: none;
+  border-radius: 10px;
+  padding: 0.3em 0.3em;
+  text-decoration: none;
+  margin-right: 0.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.conversationButton-opaque:hover {
+  cursor: pointer;
+  color: #ffffff;
+  transition: 0.3s ease;
+  animation: pulse-opaque 1.5s infinite alternate ease-in-out;
+  transform: scale(1.1);
+}
+
+.conversationButton-opaque:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .selectedConversationButton {
   cursor: pointer;
   width: 30rem;
@@ -553,6 +585,7 @@ span {
   background: linear-gradient(180deg, rgba(203, 214, 238, 0.718), rgba(203, 214, 238, 0.668), rgba(203, 214, 238, 0.5), rgba(203, 214, 238, 0.336), rgba(203, 214, 238, 0));
   position: sticky;
   top: 0;
+  z-index: 99999;
 }
 
 .dash-header__title-link:hover {
@@ -570,8 +603,7 @@ span {
 }
 
 .dash-header__title {
-  padding-top: 0.5em;
-  background-image: linear-gradient(180deg, #12009a, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
+  background-image: linear-gradient(180deg, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -580,8 +612,8 @@ span {
 }
 
 .dash-header__page-name {
-  padding-top: 1rem;
-  background-image: linear-gradient(180deg, #12009a, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
+  padding: 0;
+  background-image: linear-gradient(180deg, #12009a, #12009a, #5f45e3, #aa6fde, #5b19a7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1269,7 +1301,7 @@ tr {
   }
 
   .dash-container {
-    padding: 1em;
+    padding: 0.5em 1em;
   }
 
   .table {

@@ -135,11 +135,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const adjustTextareaHeight = () => {
         // Only adjust height if the textAreaHeight has not been manually resized
         if (textareaRef.current && input === '') {
-            console.log('no input')
             setTextAreaHeight(minTextAreaHeight)
             textareaRef.current.style.height = minTextAreaHeight + 'px'
         } else if (textareaRef.current && textAreaHeight === minTextAreaHeight) {
-            console.log('min height')
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
         } else {
             setTextAreaHeight(textareaRef.current.scrollHeight)
@@ -567,7 +565,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         <>
             <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`}
                 style={{
-                    height: fullScreen ? '100dvh' : '80dvh',
+                    height: fullScreen ? '100dvh' : '84dvh',
                 }}>
                 <div className='table__th'
                     ref={titleRef}

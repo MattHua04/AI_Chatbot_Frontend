@@ -10,19 +10,19 @@ const DashFooter = () => {
 
     const onGoHomeClicked = () => navigate(`/dash`)
 
-    let goHomeButton = null
-    if (pathname !== `/dash`) {
-        goHomeButton = (
-            <button
-                className="dash-footer__button icon-button"
-                style={{left: '47%'}}
-                title="Home"
-                onClick={onGoHomeClicked}
-            >
-                <FontAwesomeIcon icon={faHouse} />
-            </button>
-        )
-    }
+    let goHomeButton
+    // if (pathname !== `/dash`) {
+    //     goHomeButton = (
+    //         <button
+    //             className="dash-footer__button icon-button"
+    //             style={{left: '47%'}}
+    //             title="Home"
+    //             onClick={onGoHomeClicked}
+    //         >
+    //             <FontAwesomeIcon icon={faHouse} />
+    //         </button>
+    //     )
+    // }
 
     const [sendLogout, {
         isLoading,
@@ -42,29 +42,29 @@ const DashFooter = () => {
     if (isError) return <p>Error: {error.data?.message}</p>
 
     let logoutButton
-    if (pathname !== '/dash') {
-        logoutButton = (
-            <button
-                className="dash-footer__button icon-button"
-                style={{left: '53%'}}
-                title="Logout"
-                onClick={onLogOutClicked}
-            >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-            </button>
-        )
-    } else {
-        logoutButton = (
-            <button
-                className="dash-footer__button icon-button"
-                style={{left: '50%'}}
-                title="Logout"
-                onClick={onLogOutClicked}
-            >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-            </button>
-        )
-    }
+    // if (pathname !== '/dash') {
+    //     logoutButton = (
+    //         <button
+    //             className="dash-footer__button icon-button"
+    //             style={{left: '53%'}}
+    //             title="Logout"
+    //             onClick={onLogOutClicked}
+    //         >
+    //             <FontAwesomeIcon icon={faRightFromBracket} />
+    //         </button>
+    //     )
+    // } else {
+    //     logoutButton = (
+    //         <button
+    //             className="dash-footer__button icon-button"
+    //             style={{left: '50%'}}
+    //             title="Logout"
+    //             onClick={onLogOutClicked}
+    //         >
+    //             <FontAwesomeIcon icon={faRightFromBracket} />
+    //         </button>
+    //     )
+    // }
 
     const content = (
         <footer className="dash-footer">

@@ -334,8 +334,8 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    height: '80dvh',
-                    maxHeight: '80dvh',
+                    height: '84dvh',
+                    maxheight: '84dvh',
                 }}>
                     <div className='menu'
                         style={{
@@ -443,7 +443,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    height: '80dvh',
+                    height: '84dvh',
                 }}>
                     <button className='conversationButton'
                         style={{
@@ -532,8 +532,8 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             //     style={{display: 'flex',
             //         flexDirection: 'row',
             //         flexGrow: '1',
-            //         height: '80dvh',
-            //         maxHeight: '80dvh',
+            //         height: '84dvh',
+            //         maxheight: '84dvh',
             //     }}>
             //     <div style={{
             //             display: 'flex',
@@ -557,7 +557,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 style={{display: 'flex',
                     flexDirection: 'row',
                     flexGrow: '1',
-                    height: '80dvh',
+                    height: '84dvh',
                 }}>
                 <div style={{
                         display: 'flex',
