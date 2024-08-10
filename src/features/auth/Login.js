@@ -8,8 +8,8 @@ import { setCredentials } from './authSlice'
 import { useLoginMutation } from './authApiSlice'
 import usePersist from '../../hooks/usePersist'
 
-const USER_REGEX = /^[A-z]{3,20}$/
-const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
+const USER_REGEX = /^[A-z]{1,}$/
+const PWD_REGEX = /^[A-z0-9!@#$%]{4,}$/
 
 const Login = ({setView, setCurrentConversationId}) => {
     localStorage.setItem('view', '')

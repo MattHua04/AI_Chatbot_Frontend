@@ -109,6 +109,7 @@ const EditUserForm = ({user}) => {
 
     const onDeleteUserClicked = async () => {
         await deleteUser({sourceId: sourceId, id: user.id})
+        setDeleteClicks(0)
     }
 
     const handlePwdVisibility = (e) => {

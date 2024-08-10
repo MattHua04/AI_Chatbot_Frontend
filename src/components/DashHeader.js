@@ -105,6 +105,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                         style={{
                             textDecoration: 'none',
                             maxWidth: nameLength + 'px',
+                            minWidth: '7rem',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -120,6 +121,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                         style={{
                             textDecoration: 'none',
                             maxWidth: nameLength + 'px',
+                            minWidth: '7rem',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',

@@ -46,7 +46,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
 
     const openUserProfile = () => {
         setView(isAdmin ? 'usersList' : 'editUser')
-        setEditingUserId(isAdmin ? id: '')
+        setEditingUserId(!isAdmin ? id: '')
     }
 
     const openNewUserForm = () => {
