@@ -14,7 +14,7 @@ import useAuth from "../../hooks/useAuth"
 const USER_REGEX = /^[A-z0-9]{0,}$/
 const PWD_REGEX = /^$|^[A-z0-9!@#$%]{4,}$/
 
-const EditUserForm = ({user}) => {
+const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId}) => {
     const [updateUser, {
         isLoading,
         isSuccess,
@@ -32,7 +32,7 @@ const EditUserForm = ({user}) => {
     const dispatch = useDispatch()
 
     const token = useSelector(selectCurrentToken)
-    const [username, setUsername] = useState()
+    const [username, setUsername] = useState(user.username)
     const [validUsername, setValidUsername] = useState(true)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
@@ -66,7 +66,15 @@ const EditUserForm = ({user}) => {
             setUsername('')
             setPassword('')
             setRoles([])
-            navigate(-1)
+            if (isAdmin) {
+                localStorage.setItem('view', 'usersList')
+                setView('usersList')
+                setEditingUserId('')
+            } else {
+                localStorage.setItem('view', '')
+                setView('')
+                setEditingUserId('')
+            }
         } else if (isDelSuccess) {
             setUsername('')
             setPassword('')
@@ -74,8 +82,10 @@ const EditUserForm = ({user}) => {
             if (loggedInUser.id === user.id) {
                 sendLogout()
                 navigate(`/`)
-            } else {
-                navigate(-1)
+            } else if (isAdmin) {
+                localStorage.setItem('view', 'usersList')
+                setView('usersList')
+                setEditingUserId('')
             }
         }
     }, [isSuccess, isDelSuccess, navigate])

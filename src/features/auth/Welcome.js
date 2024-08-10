@@ -498,7 +498,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
                     }}>
-                    <EditUser uid={editingUserId} />
+                    <EditUser uid={editingUserId} setView={setView} setCurrentConversationId={setCurrentConversationId} setEditingUserId={setEditingUserId} />
                 </div>
             }
             {view === 'newUserForm' &&

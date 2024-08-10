@@ -398,6 +398,7 @@ const NewUserForm = ({fullSize}) => {
                 <form className="form" onSubmit={e => e.preventDefault()}>
                     {message}
                     {title}
+                    {chooseActive}
                     <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                         <label className={fullSize ? "" : "form__label"} htmlFor="username" style={{marginRight: '1rem'}}>
                             Username:

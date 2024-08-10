@@ -2,11 +2,10 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { selectUserById } from "./usersApiSlice"
 import EditUserForm from "./EditUserForm"
-import { isPending } from "@reduxjs/toolkit"
 import useAuth from "../../hooks/useAuth"
 import { selectCurrentId } from "../auth/authSlice"
 
-const EditUser = ({uid}) => {
+const EditUser = ({uid, setView, setCurrentConversationId, setEditingUserId}) => {
     const loggedInUserId = useSelector(selectCurrentId)
     let {id} = useParams()
     if (uid) {
@@ -21,7 +20,7 @@ const EditUser = ({uid}) => {
         return <div className="errmsg">Unauthorized</div>
     }
 
-    const content = user ? <EditUserForm user = {user} /> : <p>Loading...</p>
+    const content = user ? <EditUserForm user={user} setView={setView} setCurrentConversationId={setCurrentConversationId} setEditingUserId={setEditingUserId} /> : <p>Loading...</p>
 
     return content
 }
