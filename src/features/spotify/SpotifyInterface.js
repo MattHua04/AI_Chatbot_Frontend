@@ -12,6 +12,8 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const [spotifyState, setSpotifyState] = useState(null)
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
     const [controlPlayState, setControlPlayState] = useState(0) // -1 for prev, 0 for nothing, 1 for next
+    const [requestPlayState, setRequestPlayState] = useState(null)
+    const [requestControlPlayState, setRequestControlPlayState] = useState(null)
     const [currentSong, setCurrentSong] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The currently playing song
     const [songRequest, setSongRequest] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The requested song
     const [input, setInput] = useState('') // The text in song search box
@@ -79,7 +81,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
 
     // useEffect(() => {
     //     if (updateStateIsError) {
-    //         createState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+    //         createState({sourceId: id, songRequest, input, requestPlayState, requestControlPlayState, volume})
     //     }
     // }, [updateStateIsError, createStateIsError])
 
@@ -87,6 +89,8 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
         if (spotifyState) {
             setPlayState(spotifyState.playState)
             setControlPlayState(spotifyState.controlPlayState)
+            setRequestPlayState(spotifyState.requestPlayState)
+            setRequestControlPlayState(spotifyState.requestControlPlayState)
             setCurrentSong(spotifyState.currentSong)
             setSearchResults(spotifyState.searchResults)
             setSongRequest(spotifyState.songRequest)
@@ -98,9 +102,9 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
 
     useEffect(() => {
         if (hasBeenSuccess && !usingVolumeSlider) {
-            updateState({sourceId: id, songRequest, input, playState, controlPlayState, volume})
+            updateState({sourceId: id, songRequest, input, requestPlayState, requestControlPlayState, volume})
         }
-    }, [playState, controlPlayState, songRequest, input, volume, usingVolumeSlider])
+    }, [requestPlayState, requestControlPlayState, songRequest, input, volume, usingVolumeSlider])
 
     useEffect(() => {
         if (input.length) {
@@ -116,15 +120,15 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }
 
     const handlePlayPause = () => {
-        setPlayState(playState === 1 ? 0 : 1)
+        setRequestPlayState(playState === 1 ? 0 : 1)
     }
 
     const handlePrev = () => {
-        setControlPlayState(-1)
+        setRequestControlPlayState(-1)
     }
 
     const handleNext = () => {
-        setControlPlayState(1)
+        setRequestControlPlayState(1)
     }
 
     const handleSubmit = () => {
@@ -220,7 +224,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }, [pressedKeys])
 
     let musicBars
-    if (playState === 1) {
+    if (requestPlayState === 1 || (playState === 1 && requestPlayState === null)) {
         musicBars = (
             <div className="music-bars">
                 <div className="music-bar"></div>
@@ -276,7 +280,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                     cursor: 'pointer',
                 }}>
                     {musicBars}
-                    <div className={currentSong.title?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
+                    <div className={currentSong.title?.length > 15 && (requestPlayState === 1 || (playState === 1 && requestPlayState === null) || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
                         style={{cursor: 'pointer'}}>
                         {currentSong.title}
                     </div>
@@ -343,7 +347,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                     cursor: 'pointer',
                 }}>
                 {musicBars}
-                <div className={currentSong.title?.length > 15 && (playState === 1 || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
+                <div className={currentSong.title?.length > 15 && (requestPlayState === 1 || (playState === 1 && requestPlayState === null) || mouseInCurrentSong) ? 'scrollingSongTitle' : 'songTitle'}
                     style={{cursor: 'pointer'}}>
                     {currentSong.title}
                 </div>
@@ -480,7 +484,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                             fontSize: '15px',
                             boxShadow: 'none',
                         }}>
-                    <FontAwesomeIcon icon={playState === 1 ? faPause : faPlay} />
+                    <FontAwesomeIcon icon={requestPlayState === 1 || (playState === 1 && requestPlayState === null) ? faPause : faPlay} />
                 </button>
                 <button
                     className='home_button'
