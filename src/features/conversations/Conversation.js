@@ -77,7 +77,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     const handleOptions = () => setShowOptions(!showOptions)
 
     const handleClear = async () => {
-        await updateConversation({id: conversationId, user: conversation.user, title: title, content: []})
+        await updateConversation({id: conversationId, user: conversation.user, title: title, content: [], respond: false})
     }
 
     const handleDelete = async () => {
