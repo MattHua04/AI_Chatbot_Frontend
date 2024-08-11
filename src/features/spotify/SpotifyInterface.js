@@ -13,7 +13,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     const [playState, setPlayState] = useState(0) // 1 for playing 0 for paused
     const [controlPlayState, setControlPlayState] = useState(0) // -1 for prev, 0 for nothing, 1 for next
     const [requestPlayState, setRequestPlayState] = useState(null)
-    const [requestControlPlayState, setRequestControlPlayState] = useState(null)
     const [currentSong, setCurrentSong] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The currently playing song
     const [songRequest, setSongRequest] = useState({'title': '', 'uri': '', 'image': '', 'artistsOrOwner': ''}) // The requested song
     const [input, setInput] = useState('') // The text in song search box
@@ -81,7 +80,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
 
     // useEffect(() => {
     //     if (updateStateIsError) {
-    //         createState({sourceId: id, songRequest, input, requestPlayState, requestControlPlayState, volume})
+    //         createState({sourceId: id, songRequest, input, requestPlayState, controlPlayState, volume})
     //     }
     // }, [updateStateIsError, createStateIsError])
 
@@ -90,7 +89,6 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
             setPlayState(spotifyState.playState)
             setControlPlayState(spotifyState.controlPlayState)
             setRequestPlayState(spotifyState.requestPlayState)
-            setRequestControlPlayState(spotifyState.requestControlPlayState)
             setCurrentSong(spotifyState.currentSong)
             setSearchResults(spotifyState.searchResults)
             setSongRequest(spotifyState.songRequest)
@@ -102,9 +100,9 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
 
     useEffect(() => {
         if (hasBeenSuccess && !usingVolumeSlider) {
-            updateState({sourceId: id, songRequest, input, requestPlayState, requestControlPlayState, volume})
+            updateState({sourceId: id, songRequest, input, requestPlayState, controlPlayState, volume})
         }
-    }, [requestPlayState, requestControlPlayState, songRequest, input, volume, usingVolumeSlider])
+    }, [requestPlayState, controlPlayState, songRequest, input, volume, usingVolumeSlider])
 
     useEffect(() => {
         if (input.length) {
@@ -124,11 +122,11 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }
 
     const handlePrev = () => {
-        setRequestControlPlayState(-1)
+        setControlPlayState(-1)
     }
 
     const handleNext = () => {
-        setRequestControlPlayState(1)
+        setControlPlayState(1)
     }
 
     const handleSubmit = () => {
