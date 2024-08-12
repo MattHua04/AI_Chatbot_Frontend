@@ -80,7 +80,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
 
     // useEffect(() => {
     //     if (updateStateIsError) {
-    //         createState({sourceId: id, songRequest, input, requestPlayState, controlPlayState, volume})
+    //         createState({sourceId: id, songRequest, input, playState, requestPlayState, controlPlayState, volume})
     //     }
     // }, [updateStateIsError, createStateIsError])
 
