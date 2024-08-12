@@ -118,11 +118,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
     }
 
     const handlePlayPause = () => {
-        if (requestPlayState === null) {
-            setRequestPlayState(playState === 1 ? 0 : 1)
-        } else {
-            setRequestPlayState(requestPlayState === 1 ? 0 : 1)
-        }
+        setRequestPlayState(playState === 1 ? 0 : 1)
     }
 
     const handlePrev = () => {
