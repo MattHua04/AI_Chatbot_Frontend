@@ -286,9 +286,14 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         lastTextAreaAdjustClickRef.current = lastTextAreaAdjustClick
     }, [lastTextAreaAdjustClick])
 
-    // console.log(musicRef.current?.getBoundingClientRect())
-
     useEffect(() => {
+        const handleFocusInputShortcut = (e) => {
+            if (e.key === 'l' && e.metaKey) {
+                e.preventDefault()
+                textareaRef.current.focus()
+            }
+        }
+
         const handleEscapeKey = (e) => {
             if (e.key === 'Escape' && fullScreen) {
                 setFullScreen(false)
@@ -365,7 +370,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 }
             }
         }
-
+        
+        window.addEventListener('keydown', handleFocusInputShortcut)
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromConversationTitle)
         window.addEventListener('click', handleClickAwayFromMusic)
@@ -378,6 +384,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         window.addEventListener('click', quickAdjustTextArea)
 
         return () => {
+            window.removeEventListener('keydown', handleFocusInputShortcut)
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromConversationTitle)
             window.removeEventListener('click', handleClickAwayFromMusic)
