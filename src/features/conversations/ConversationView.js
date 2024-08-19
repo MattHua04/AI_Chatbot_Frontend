@@ -287,6 +287,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }, [lastTextAreaAdjustClick])
 
     useEffect(() => {
+        const handleClearConversationShortcut = async (e) => {
+            if (e.key === 'k' && e.metaKey) {
+                e.preventDefault()
+                await updateConversation({id: conversationId, user: conversation.user, title: conversation.title, content: [], respond: false})
+            }
+        }
+
         const handleFocusInputShortcut = (e) => {
             if (e.key === 'l' && e.metaKey) {
                 e.preventDefault()
@@ -371,6 +378,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             }
         }
         
+        window.addEventListener('keydown', handleClearConversationShortcut)
         window.addEventListener('keydown', handleFocusInputShortcut)
         window.addEventListener('keydown', handleEscapeKey)
         window.addEventListener('click', handleClickAwayFromConversationTitle)
@@ -384,6 +392,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         window.addEventListener('click', quickAdjustTextArea)
 
         return () => {
+            window.removeEventListener('keydown', handleClearConversationShortcut)
             window.removeEventListener('keydown', handleFocusInputShortcut)
             window.removeEventListener('keydown', handleEscapeKey)
             window.removeEventListener('click', handleClickAwayFromConversationTitle)
