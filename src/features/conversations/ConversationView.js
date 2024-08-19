@@ -19,6 +19,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [content, setContent] = useState(conversation?.content)
+    const [title, setTitle] = useState(conversation?.title)
     const [input, setInput] = useState('')
     const [cachedInput, setCachedInput] = useState('')
     const conversationContentRef = useRef(null)
@@ -112,9 +113,8 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }, [conversations, conversationId])
 
     useEffect(() => {
-        if (content && conversation && content !== conversation?.content) {
-            setContent(conversation?.content)
-        }
+        setContent(conversation?.content)
+        setTitle(conversation?.title)
     }, [conversation])
 
     useEffect(() => {
@@ -152,7 +152,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const handleSubmit = async (e) => {
         if (ableToSubmit) {
             const newContent = content ? [...content, ['User', input]] : [['User', input]]
-            await updateConversation({ id: conversationId, user: conversation.user, title: conversation.title, content: newContent, respond: true })
+            await updateConversation({ id: conversationId, user: conversation.user, title: title, content: newContent, respond: true })
         }
     }
 
@@ -290,7 +290,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         const handleClearConversationShortcut = async (e) => {
             if (e.key === 'k' && e.metaKey) {
                 e.preventDefault()
-                await updateConversation({id: conversationId, user: conversation.user, title: conversation.title, content: [], respond: false})
+                await updateConversation({id: conversationId, user: conversation.user, title: title, content: [], respond: false})
             }
         }
 
@@ -487,13 +487,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             <Link className="conversationTitle"
                 style={{textDecoration: 'none'}}
                 onClick={() => setShowConversationsList(!showConversationsList)}>
-                {conversation?.title}
+                {title}
             </Link>
         )
     } else {
         conversationTitle = (
             <p style={{color: '#5136d5'}}>
-                {conversation?.title}
+                {title}
             </p>
         )
     }
