@@ -248,6 +248,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, minTextAreaHeight), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
             } else if (e.type === "touchmove") {
+                e.preventDefault()
                 const touch = e.touches[0]
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
                 if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
