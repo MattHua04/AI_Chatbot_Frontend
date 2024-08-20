@@ -33,7 +33,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const newConversationRef = useRef(null)
     const [ableToSubmit, setAbleToSubmit] = useState(false)
     const [contentSize, setContentSize] = useState(0)
-    const minTextAreaHeight = 7 * window.innerHeight / 100
+    const [minTextAreaHeight, setMinTextAreaHeight] = useState(15 * 3.5)
     const [textAreaHeight, setTextAreaHeight] = useState(minTextAreaHeight)
     const [mouseDown, setMouseDown] = useState(false)
     const [showAdjustTextAreaButton, setShowAdjustTextAreaButton] = useState(false)
@@ -53,7 +53,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const [paddingTop, setPaddingTop] = useState('0px')
     const [paddingBottom, setPaddingBottom] = useState('0px')
     const [marginTop, setMarginTop] = useState('0px')
-
+    
     useEffect(() => {
         // Calculate padding and margin based on referenced elements
         const titleHeight = titleRef.current ? titleRef.current.clientHeight : 0
@@ -233,11 +233,13 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         if (mouseDown) {
             document.body.style.cursor = "default"
             setMouseDown(false)
+            checkScrollHeight()
         }
     }
 
     const handleMouseMove = (e) => {
         if (mouseDown) {
+            setShowDownButton(false)
             if (e.type === "mousemove") {
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
                 if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
@@ -286,6 +288,23 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         lastTextAreaAdjustClickRef.current = lastTextAreaAdjustClick
     }, [lastTextAreaAdjustClick])
 
+    const checkScrollHeight = () => {
+        if (conversationContentRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
+            if (scrollHeight - scrollTop > clientHeight + 20) {
+                setShowDownButton(true)
+                setStartedAdjustmentAtBottom(false)
+            } else {
+                setShowDownButton(false)
+                setStartedAdjustmentAtBottom(true)
+            }
+        }
+    }
+
+    useEffect(() => {
+        checkScrollHeight()
+    }, [conversation])
+
     useEffect(() => {
         const handleClearConversationShortcut = async (e) => {
             if (e.key === 'k' && e.metaKey) {
@@ -325,19 +344,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                     if (!musicButton || !musicButton.contains(e.target)) {
                         setShowMusicControls(false)
                     }
-                }
-            }
-        }
-
-        const checkScrollHeight = () => {
-            if (conversationContentRef.current && !mouseDown) {
-                const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
-                if (scrollHeight - scrollTop > clientHeight + 20) {
-                    setShowDownButton(true)
-                    setStartedAdjustmentAtBottom(false)
-                } else {
-                    setShowDownButton(false)
-                    setStartedAdjustmentAtBottom(true)
                 }
             }
         }
@@ -575,7 +581,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 editingPromptIndex={editingPromptIndex}
                 setEditingPromptIndex={setEditingPromptIndex}/>
         ))
-    } else conversationContent = null
+    }
 
     const conversationInterface = (
         <>
@@ -622,6 +628,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                         width: '100%',
                         height: '100%',
                         overflowY: 'auto',
+                        overflowX: 'hidden',
                         scrollbarWidth: 'none',
                         paddingBottom: paddingBottom,
                         paddingTop: paddingTop,
@@ -725,11 +732,10 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 overflow: 'auto',
                                 height: textAreaHeight + 'px',
                                 maxHeight: '50dvh',
-                                minHeight: '3dvh',
                                 width: '100%',
                                 whiteSpace: 'pre-wrap',
                                 textAlign: 'left',
-                                padding: '1.1em 1em',
+                                padding: '15px',
                                 lineHeight: '1.5em',
                                 boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
                                 marginTop: '1em',
