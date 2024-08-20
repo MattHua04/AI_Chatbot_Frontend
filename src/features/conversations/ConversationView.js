@@ -302,8 +302,10 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }
 
     useEffect(() => {
-        checkScrollHeight()
-    }, [conversation])
+        if (!mouseDown) {
+            checkScrollHeight()
+        }
+    }, [conversationContentRef.current?.clientHeight, conversationContentRef.current?.scrollHeight, conversationContentRef.current?.scrollTop])
 
     useEffect(() => {
         const handleClearConversationShortcut = async (e) => {
