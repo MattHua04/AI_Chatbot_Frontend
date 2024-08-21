@@ -224,24 +224,6 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             display: 'flex',
             flexDirection: 'column',
         }}>
-            <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
-                <button
-                    className='home_button addConversationButton'
-                    title="Create a New Conversation"
-                    onClick={openNewConversationForm}
-                    style={{
-                            width: '100%',
-                            border: 'none',
-                            borderRadius: '10px',
-                            padding: '0.3em 0.3em',
-                            textDecoration: 'none',
-                            fontSize: '16px',
-                        }}
-                >
-                    {addConversation}
-                </button>
-                {newConversation}
-            </div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -257,6 +239,23 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 maxWidth: 'calc(13rem + 60px)',
                 width: 'calc(13rem + 60px)',
                 }}>
+                <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
+                    <button
+                        className='home_button addConversationButton'
+                        title="Create a New Conversation"
+                        onClick={openNewConversationForm}
+                        style={{
+                                width: '100%',
+                                border: 'none',
+                                borderRadius: '10px',
+                                padding: '0.3em 0.3em',
+                                textDecoration: 'none',
+                                fontSize: '16px',
+                            }}>
+                        {addConversation}
+                    </button>
+                    {newConversation}
+                </div>
                 <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
             </div>
         </div>
