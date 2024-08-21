@@ -104,7 +104,17 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
 
     let defaultContent
     if (view === "") {
-        if (windowWidth <= 1000) {
+        if (windowWidth <= 500) {
+            <div className='welcome__default_box'>
+                <p className='welcome__default'>
+                    AI
+                </p>
+                <p className='welcome__default'>
+                    Chatbot
+                </p>
+            </div>
+        }
+        else if (windowWidth <= 1000) {
             defaultContent = (
                 <div className='welcome__default_box'>
                     <p className='welcome__default'>
