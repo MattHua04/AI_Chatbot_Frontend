@@ -171,18 +171,11 @@ const NewUserForm = ({fullSize}) => {
                         id="roles"
                         name="roles"
                         className={`form__select`}
-                        multiple={true}
+                        multiple={false}
                         size="3"
                         value={roles}
                         onChange={onRolesChanged}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            maxWidth: '18rem',
-                            justifyContent: 'space-between',
-                            fontSize: `${fullSize ? 'none' : '1.1rem'}`,
-                            padding: '0.2rem',
-                        }}>
+                        style={{maxWidth: '18rem', fontSize: '1.1rem'}}>
                         {options}
                     </select>
                 </div>
@@ -340,7 +333,6 @@ const NewUserForm = ({fullSize}) => {
                                 style={{
                                     textAlign: 'center',
                                     flexGrow: '1',
-                                    // maxWidth: '12.5rem',
                                     width: '100%',
                                     fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                                 }}

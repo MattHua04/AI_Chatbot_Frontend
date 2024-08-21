@@ -165,7 +165,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const validUserClass = !validUsername ? 'form__input--incomplete' : ''
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
-    const validRolesClass = !Boolean(roles.length) ? 'form__input--incomplete' : ''
+    const validRolesClass = roles.length === 0 ? 'form__input--incomplete' : ''
 
     const errContent = (error?.data?.message || delError?.data?.message) ?? ''
 
@@ -207,7 +207,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
                         id="roles"
                         name="roles"
                         className={`form__select ${validRolesClass}`}
-                        multiple={true}
+                        multiple={false}
                         size={visibleRoles.length}
                         value={roles}
                         onChange={onRolesChanged}
@@ -249,30 +249,22 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     if (isAdmin) {
         if (windowWidth <= 1000) {
             chooseActive = (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                }}>
-                    <button
-                        className="conversationButton"
-                        name="status"
-                        onClick={onActiveChange}
-                        style={{
-                            fontSize: '1.1rem',
-                            flexGrow: '1',
-                            border: 'none',
-                            borderRadius: '15px',
-                            padding: '0.3em 0.3em',
-                            textDecoration: 'none',
-                            maxWidth: '18rem',
-                            marginRight: '0'
-                        }}
-                        disabled={targetUserIsAdmin}>
-                        {active ? 'Active' : 'Inactive'}
-                    </button>
-                </div>
+                <button
+                    className="home_button"
+                    name="status"
+                    onClick={onActiveChange}
+                    style={{
+                        fontSize: '1.1rem',
+                        flexGrow: '1',
+                        border: 'none',
+                        borderRadius: '15px',
+                        padding: '0.3em 0.3em',
+                        textDecoration: 'none',
+                        marginRight: '0',
+                    }}
+                    disabled={targetUserIsAdmin}>
+                    {active ? 'Active' : 'Inactive'}
+                </button>
             )
         } else {
             chooseActive = (
@@ -286,7 +278,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
                         Status:
                     </label>
                     <button
-                        className="conversationButton"
+                        className="home_button"
                         name="status"
                         onClick={onActiveChange}
                         style={{
@@ -377,213 +369,217 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
         )
     }
 
-    let content
+    let form
     if (windowWidth <= 1000) {
-        content = (
-            <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
-                <form className="form" onSubmit={e => e.preventDefault()}>
-                    {err}
-                    <div className="form__title-row">
-                        <h2 style={{fontSize: '2.5rem'}}>Edit Profile</h2>
-                    </div>
-                    {chooseActive}
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                    }}>
-                        <label className="form__label" htmlFor="username" style={{fontSize: '1.1rem', marginRight: '1rem'}}>
-                            Username:
-                        </label>
-                        <input
-                            className={`form__input ${validUserClass}`}
-                            id="username"
-                            name="username"
-                            type="text"
-                            autoComplete="off"
-                            autoFocus
-                            placeholder={user.username}
-                            value={username}
-                            onChange={onUsernameChanged}
-                            style={{
-                                maxWidth: '18rem',
-                                textAlign: 'center',
-                                fontSize: '1.1rem', 
-                            }}
-                        />
-                    </div>
-                    {pwd_error}
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                    }}>
+        form = (
+            <form className="form" onSubmit={e => e.preventDefault()}>
+                {err}
+                <div className="form__title-row">
+                    <h2 style={{fontSize: '2.5rem'}}>Edit Profile</h2>
+                </div>
+                {chooseActive}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                    <label className="form__label" htmlFor="username" style={{fontSize: '1.1rem', marginRight: '1rem'}}>
+                        Username:
+                    </label>
+                    <input
+                        className={`form__input ${validUserClass}`}
+                        id="username"
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        autoFocus
+                        placeholder={user.username}
+                        value={username}
+                        onChange={onUsernameChanged}
+                        style={{
+                            maxWidth: '18rem',
+                            textAlign: 'center',
+                            fontSize: '1.1rem', 
+                        }}
+                    />
+                </div>
+                {pwd_error}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
                     <label className="form__label" htmlFor="password" style={{fontSize: '1.1rem', marginRight: '1rem'}}>
                         Password:
                     </label>
-                        <div className="nowrap" style={{ display: 'flex', maxWidth: '18rem', flexDirection: 'row', flexGrow: '1', justifyContent: 'space-between' }}>
-                            <input
-                                className={`form__input ${validPwdClass}`}
-                                id="password"
-                                name="password"
-                                type={showPassword? 'text' : 'password'}
-                                value={password}
-                                onChange={onPasswordChanged}
-                                style={{
-                                    textAlign: 'center',
-                                    flex: '1',
-                                    minWidth: '0px',
-                                    marginRight: '1rem',
-                                    fontSize: '1.1rem',
-                                }}/>
-                            <button
-                                className='home_button'
-                                type='button'
-                                title={showPassword? 'Hide Password' : 'Show Password'}
-                                onClick={handlePwdVisibility}
-                                style={{
-                                    border: 'none',
-                                    borderRadius: '15px',
-                                    padding: '0.3em 0.3em',
-                                    textDecoration: 'none',
-                                    flexGrow: '1',
-                                    maxWidth: '4rem',
-                                    fontSize: '1.1rem',
-                                }}>
-                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                            </button>
-                        </div>
+                    <div className="nowrap" style={{ display: 'flex', maxWidth: '18rem', flexDirection: 'row', flexGrow: '1', justifyContent: 'space-between' }}>
+                        <input
+                            className={`form__input ${validPwdClass}`}
+                            id="password"
+                            name="password"
+                            type={showPassword? 'text' : 'password'}
+                            value={password}
+                            onChange={onPasswordChanged}
+                            style={{
+                                textAlign: 'center',
+                                flexGrow: '1',
+                                width: '100%',
+                                marginRight: '1rem',
+                                fontSize: '1.1rem',
+                            }}/>
+                        <button
+                            className='home_button'
+                            type='button'
+                            title={showPassword? 'Hide Password' : 'Show Password'}
+                            onClick={handlePwdVisibility}
+                            style={{
+                                border: 'none',
+                                borderRadius: '15px',
+                                padding: '0.3em 0.3em',
+                                textDecoration: 'none',
+                                flexGrow: '1',
+                                minWidth: '4rem',
+                                fontSize: '1.1rem',
+                            }}>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </button>
                     </div>
-                    {roleSelect}
-                    <button
-                        className="form__submit-button"
-                        title="Save"
-                        onClick={onSaveUserClicked}
-                        disabled={!canSave}
-                        style={{
-                            fontSize: '1.1rem',
-                            padding: '0.2em 0.5em',
-                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                        }}>
-                        Save
-                    </button>
-                    {deleteButton}
-                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                        {/* Hidden input to prevent autofill */}
-                        <input type="password"
-                            autoComplete="new-password"
-                            aria-autocomplete="none"
-                            data-custom-attribute="random-string"
-                            style={{ display: 'none' }}
-                        />
-                    </div>
-                </form>
-            </div>
+                </div>
+                {roleSelect}
+                <button
+                    className="form__submit-button"
+                    title="Save"
+                    onClick={onSaveUserClicked}
+                    disabled={!canSave}
+                    style={{
+                        fontSize: '1.1rem',
+                        padding: '0.2em 0.5em',
+                        boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                    }}>
+                    Save
+                </button>
+                {deleteButton}
+                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                    {/* Hidden input to prevent autofill */}
+                    <input type="password"
+                        autoComplete="new-password"
+                        aria-autocomplete="none"
+                        data-custom-attribute="random-string"
+                        style={{ display: 'none' }}
+                    />
+                </div>
+            </form>
         )
     } else {
-        content = (
-            <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center', width: '100%'}}>
-                <form className="form" onSubmit={e => e.preventDefault()}>
-                    {err}
-                    <div className="form__title-row">
-                        <h2 style={{fontSize: '2.5rem'}}>Edit Profile</h2>
-                    </div>
-                    {chooseActive}
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                    }}>
-                        <label className="form__label" htmlFor="username" style={{marginRight: '1rem'}}>
-                            Username:
-                        </label>
-                        <input
-                            className={`form__input ${validUserClass}`}
-                            id="username"
-                            name="username"
-                            type="text"
-                            autoComplete="off"
-                            autoFocus
-                            placeholder={user.username}
-                            value={username}
-                            onChange={onUsernameChanged}
-                            style={{
-                                maxWidth: '18rem',
-                                textAlign: 'center',
-                            }}
-                        />
-                    </div>
-                    {pwd_error}
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                    }}>
-                    <label className="form__label" htmlFor="password" style={{marginRight: '1rem'}}>
-                        Password:
+        form = (
+            <form className="form" onSubmit={e => e.preventDefault()}>
+                {err}
+                <div className="form__title-row">
+                    <h2 style={{fontSize: '2.5rem'}}>Edit Profile</h2>
+                </div>
+                {chooseActive}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                    <label className="form__label" htmlFor="username" style={{marginRight: '1rem'}}>
+                        Username:
                     </label>
-                        <div className="nowrap" style={{ display: 'flex', maxWidth: '18rem', flexDirection: 'row', flexGrow: '1', justifyContent: 'space-between' }}>
-                            <input
-                                className={`form__input ${validPwdClass}`}
-                                id="password"
-                                name="password"
-                                type={showPassword? 'text' : 'password'}
-                                value={password}
-                                onChange={onPasswordChanged}
-                                style={{
-                                    textAlign: 'center',
-                                    flex: '1',
-                                    minWidth: '0px',
-                                    marginRight: '1rem',
-                                }}/>
-                            <button
-                                className='home_button'
-                                type='button'
-                                title={showPassword? 'Hide Password' : 'Show Password'}
-                                onClick={handlePwdVisibility}
-                                style={{
-                                    border: 'none',
-                                    borderRadius: '15px',
-                                    padding: '0.3em 0.3em',
-                                    textDecoration: 'none',
-                                    flexGrow: '1',
-                                    maxWidth: '4rem',
-                                }}>
-                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                            </button>
-                        </div>
-                    </div>
-                    {roleSelect}
-                    <button
-                        className="form__submit-button"
-                        title="Save"
-                        onClick={onSaveUserClicked}
-                        disabled={!canSave}
+                    <input
+                        className={`form__input ${validUserClass}`}
+                        id="username"
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        autoFocus
+                        placeholder={user.username}
+                        value={username}
+                        onChange={onUsernameChanged}
                         style={{
-                            fontSize: '1.5rem',
-                            padding: '0.2em 0.5em',
-                            boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
-                        }}>
-                        Save
-                    </button>
-                    {deleteButton}
-                    <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-                        {/* Hidden input to prevent autofill */}
-                        <input type="password"
-                            autoComplete="new-password"
-                            aria-autocomplete="none"
-                            data-custom-attribute="random-string"
-                            style={{ display: 'none' }}
-                        />
+                            maxWidth: '18rem',
+                            textAlign: 'center',
+                        }}
+                    />
+                </div>
+                {pwd_error}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                }}>
+                <label className="form__label" htmlFor="password" style={{marginRight: '1rem'}}>
+                    Password:
+                </label>
+                    <div className="nowrap" style={{ display: 'flex', maxWidth: '18rem', flexDirection: 'row', flexGrow: '1', justifyContent: 'space-between' }}>
+                        <input
+                            className={`form__input ${validPwdClass}`}
+                            id="password"
+                            name="password"
+                            type={showPassword? 'text' : 'password'}
+                            value={password}
+                            onChange={onPasswordChanged}
+                            style={{
+                                textAlign: 'center',
+                                flex: '1',
+                                minWidth: '0px',
+                                marginRight: '1rem',
+                            }}/>
+                        <button
+                            className='home_button'
+                            type='button'
+                            title={showPassword? 'Hide Password' : 'Show Password'}
+                            onClick={handlePwdVisibility}
+                            style={{
+                                border: 'none',
+                                borderRadius: '15px',
+                                padding: '0.3em 0.3em',
+                                textDecoration: 'none',
+                                flexGrow: '1',
+                                maxWidth: '4rem',
+                            }}>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </button>
                     </div>
-                </form>
-            </div>
+                </div>
+                {roleSelect}
+                <button
+                    className="form__submit-button"
+                    title="Save"
+                    onClick={onSaveUserClicked}
+                    disabled={!canSave}
+                    style={{
+                        fontSize: '1.5rem',
+                        padding: '0.2em 0.5em',
+                        boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
+                    }}>
+                    Save
+                </button>
+                {deleteButton}
+                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                    {/* Hidden input to prevent autofill */}
+                    <input type="password"
+                        autoComplete="new-password"
+                        aria-autocomplete="none"
+                        data-custom-attribute="random-string"
+                        style={{ display: 'none' }}
+                    />
+                </div>
+            </form>
         )
     }
+
+    const content = (
+        <section>
+            <div style={{display: 'flex', flexDirection: 'row', flexGrow: '1', justifyContent: 'center'}}>
+                {form}
+            </div>
+        </section>
+    )
 
     return content
 }
