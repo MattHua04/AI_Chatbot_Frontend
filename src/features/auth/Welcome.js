@@ -56,12 +56,21 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
     }, [view])
 
     const openUserProfile = () => {
-        setView(isAdmin ? 'usersList' : 'editUser')
-        setEditingUserId(!isAdmin ? id: '')
+        if (view === 'editUser' || view === 'usersList') {
+            setView('')
+            setEditingUserId('')
+        } else {
+            setView(isAdmin ? 'usersList' : 'editUser')
+            setEditingUserId(!isAdmin ? id: '')
+        }
     }
 
     const openNewUserForm = () => {
-        setView('newUserForm')
+        if (view === 'newUserForm') {
+            setView('')
+        } else {
+            setView('newUserForm')
+        }
     }
 
     const openNewConversationForm = () => {
@@ -180,7 +189,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 <button
                     className='home_button'
                     title="View User Profile"
-                    style={{ width: '12rem',
+                    style={{ width: '100%',
                         border: 'none',
                         borderRadius: '10px',
                         padding: '0.3em 0.3em',
@@ -284,7 +293,9 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
         </div>
     )
 
-    const panels = [musicControls, generalControls, conversations]
+    let panels
+    if (isAdmin) panels = [musicControls, generalControls, conversations]
+    else panels = [generalControls, conversations]
 
     const handleSwipedLeft = () => {
         if (!usingVolumeSlider) {
