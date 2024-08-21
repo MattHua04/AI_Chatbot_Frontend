@@ -214,7 +214,15 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
                 {profileButtons}
             </div>
-            <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
+        </div>
+    )
+
+    const conversations = (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+        }}>
+            <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem'}}>
                 <button
                     className='home_button addConversationButton'
                     title="Create a New Conversation"
@@ -232,25 +240,22 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 </button>
                 {newConversation}
             </div>
-        </div>
-    )
-
-    const conversations = (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: '1',
-            // maxHeight: '50dvh',
-            justifyContent: 'flex-start',
-            overflowX: 'visible',
-            overflowY: 'scroll',
-            // margin: '-3px -10px',
-            padding: '3px 10px',
-            borderRadius: '10px',
-            scrollbarWidth: 'none',
-            maxWidth: '13rem',
-            }}>
-            <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '1',
+                // maxHeight: '50dvh',
+                justifyContent: 'flex-start',
+                overflowX: 'visible',
+                overflowY: 'scroll',
+                margin: '-3px -10px',
+                padding: '3px 10px',
+                borderRadius: '10px',
+                scrollbarWidth: 'none',
+                maxWidth: '13rem',
+                }}>
+                <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+            </div>
         </div>
     )
 
