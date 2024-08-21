@@ -340,7 +340,7 @@ const NewUserForm = ({fullSize}) => {
                                 style={{
                                     textAlign: 'center',
                                     flexGrow: '1',
-                                    maxWidth: '12.5rem',
+                                    // maxWidth: '12.5rem',
                                     width: '100%',
                                     fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                                 }}
@@ -357,7 +357,7 @@ const NewUserForm = ({fullSize}) => {
                                     padding: '0.3em 0.3em',
                                     textDecoration: 'none',
                                     flexGrow: '1',
-                                    maxWidth: '4rem',
+                                    minWidth: '4rem',
                                     fontSize: `${fullSize ? 'none' : '1.1rem'}`,
                                 }}
                             >
