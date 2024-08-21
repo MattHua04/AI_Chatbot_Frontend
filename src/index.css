@@ -94,8 +94,8 @@ body::-webkit-scrollbar {
 
 body {
   font-family: 'Nunito', sans-serif;
-  height: 100vh;
-  max-height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
   background-color: rgb(201, 217, 255);
   color: var(--COLOR);
   background-image: url('./img/main_background.jpeg');
@@ -121,7 +121,7 @@ button:focus {
 
 #root {
   /* React root div */
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -176,8 +176,8 @@ span {
 }
 
 .public {
-  height: 100vh;
-  max-height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
   background-color: var(--BGCOLOR);
   color: var(--COLOR);
   background-image: url('../public/img/background.png');
@@ -575,7 +575,7 @@ span {
   top: 0;
   left: 0;
   width: 100dvw;
-  height: 100vh;
+  height: 100dvh;
   z-index: 9999;
   border-radius: 0;
   background-color: rgb(231, 237, 255);
