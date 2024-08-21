@@ -59,14 +59,14 @@ const NewConversationForm = ({uid, setView, setCurrentConversationId, setShowNew
 
     let err
     if (isError) {
-        err = <p className={errClass} style={{fontSize: '15px', padding: '0.2em 0em', marginBottom: '10px'}}>{errContent}</p>
+        err = <p className={errClass} style={{fontSize: '16px', padding: '0.2em 0em', marginBottom: '10px'}}>{errContent}</p>
     }
 
     const content = (
         <div style={{display: 'flex',
                 flexGrow: '1',
                 flexDirection: 'row',
-                fontSize: '15px',
+                fontSize: '16px',
                 marginTop: '5px'
                 }}>
             <div className={`conversationButton`}

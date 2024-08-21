@@ -274,7 +274,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                     marginBottom: '5px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    fontSize: '15px',
+                    fontSize: '16px',
                     fontWeight: 'bolder',
                     justifyContent: 'flex-start',
                     alignItems: 'flex-start',
@@ -341,7 +341,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                     marginBottom: '5px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    fontSize: '15px',
+                    fontSize: '16px',
                     fontWeight: 'bolder',
                     justifyContent: 'flex-start',
                     alignItems: 'flex-start',
@@ -385,7 +385,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         style={{
                             width: '100%',
                             height: '100%',
-                            fontSize: '15px',
+                            fontSize: '16px',
                             backgroundColor: 'transparent',
                         }}/>
                 </div>
@@ -398,7 +398,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                             borderRadius: '10px',
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
-                            fontSize: '15px',
+                            fontSize: '16px',
                             boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -469,7 +469,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                             borderRadius: '10px',
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
-                            fontSize: '15px',
+                            fontSize: '16px',
                             boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faBackwardStep} />
@@ -482,7 +482,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                             borderRadius: '10px',
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
-                            fontSize: '15px',
+                            fontSize: '16px',
                             boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={requestPlayState === 1 || (playState === 1 && requestPlayState === null) ? faPause : faPlay} />
@@ -495,7 +495,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                             borderRadius: '10px',
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
-                            fontSize: '15px',
+                            fontSize: '16px',
                             boxShadow: 'none',
                         }}>
                     <FontAwesomeIcon icon={faForwardStep} />

@@ -33,7 +33,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const newConversationRef = useRef(null)
     const [ableToSubmit, setAbleToSubmit] = useState(false)
     const [contentSize, setContentSize] = useState(0)
-    const [minTextAreaHeight, setMinTextAreaHeight] = useState(15 * 3.5)
+    const [minTextAreaHeight, setMinTextAreaHeight] = useState(16 * 3.5)
     const [textAreaHeight, setTextAreaHeight] = useState(minTextAreaHeight)
     const [mouseDown, setMouseDown] = useState(false)
     const [showAdjustTextAreaButton, setShowAdjustTextAreaButton] = useState(false)
@@ -555,7 +555,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 borderRadius: '10px',
                                 padding: '0.3em 0.3em',
                                 textDecoration: 'none',
-                                fontSize: '15px',
+                                fontSize: '16px',
                             }}
                     >
                         {addConversation}
@@ -722,7 +722,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                             placeholder="Ask Me Anything!"
                             autoFocus
                             style={{
-                                fontSize: '15px',
+                                fontSize: '16px',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 flexGrow: '1',
@@ -745,7 +745,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 marginRight: '1em',
                                 marginBottom: '1em',
                                 transition: 'none',
-                                touchAction: 'manipulation',
                                 zIndex: '9999',
                             }}/>
                         <button className='conversationSubmitButton'
@@ -755,7 +754,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 borderRadius: '10px',
                                 padding: '0.5em 1em',
                                 textDecoration: 'none',
-                                fontSize: '15px',
+                                fontSize: '16px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 border: 'none',

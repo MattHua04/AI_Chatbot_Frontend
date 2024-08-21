@@ -154,7 +154,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
         let message
         if (isError) {
             message = (
-                <p className='errmsg' style={{fontSize: '15px', padding: '0.2em 0em', marginBottom: '5px'}}>{error?.data?.message}</p>
+                <p className='errmsg' style={{fontSize: '16px', padding: '0.2em 0em', marginBottom: '5px'}}>{error?.data?.message}</p>
             )
         } else {
             message = null
@@ -324,7 +324,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
                     display: 'flex',
                     flexGrow: '1',
                     flexDirection: 'row',
-                    fontSize: '15px',
+                    fontSize: '16px',
                     marginBottom: '5px',
                     transform: `scale(${scale})`,
                     opacity: opacity,

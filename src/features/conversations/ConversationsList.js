@@ -24,7 +24,7 @@ const ConversationsList = ({setCurrentConversationId, setView}) => {
         content = (
             <div
                 className={`conversationButton`}
-                style={{textAlign: 'center', fontSize: '15px', width: '12rem'}}
+                style={{textAlign: 'center', fontSize: '16px', width: '12rem'}}
                 >
                     No Conversations
             </div>

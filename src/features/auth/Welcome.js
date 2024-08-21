@@ -138,7 +138,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                         padding: '0.3em 0.3em',
                         textDecoration: 'none',
                         marginRight: '0.5em',
-                        fontSize: '15px',
+                        fontSize: '16px',
                     }}
                     onClick={openUserProfile}
                 >
@@ -153,7 +153,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                         borderRadius: '10px',
                         padding: '0.3em 0.3em',
                         textDecoration: 'none',
-                        fontSize: '15px',
+                        fontSize: '16px',
                     }}
                     onClick={openNewUserForm}
                 >
@@ -172,7 +172,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                         borderRadius: '10px',
                         padding: '0.3em 0.3em',
                         textDecoration: 'none',
-                        fontSize: '15px',
+                        fontSize: '16px',
                     }}
                     onClick={openUserProfile}
                 >
@@ -225,7 +225,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                             borderRadius: '10px',
                             padding: '0.3em 0.3em',
                             textDecoration: 'none',
-                            fontSize: '15px',
+                            fontSize: '16px',
                         }}
                 >
                     {addConversation}
@@ -365,7 +365,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                                         borderRadius: '10px',
                                         padding: '0.3em 0.3em',
                                         textDecoration: 'none',
-                                        fontSize: '15px',
+                                        fontSize: '16px',
                                     }}
                             >
                                 {addConversation}
