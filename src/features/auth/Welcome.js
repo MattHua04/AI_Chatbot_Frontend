@@ -296,8 +296,8 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                                 padding: '6px',
                                 marginBottom: '5px',
                                 justifyContent: 'center',
-                                maxHeight: '6.7rem',
-                                height: '6.7rem',
+                                maxHeight: '110px',
+                                height: '110px',
                                 paddingBottom: '0px',
                                 overflow: 'visible',
                             }}
