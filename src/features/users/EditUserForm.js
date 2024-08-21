@@ -31,7 +31,6 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const token = useSelector(selectCurrentToken)
     const [username, setUsername] = useState(user.username)
     const [validUsername, setValidUsername] = useState(true)
     const [password, setPassword] = useState('')
@@ -77,7 +76,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
             setUsername('')
             setPassword('')
             setRoles([])
-            if (isAdmin) {
+            if (isAdmin && loggedInUser.id !== user.id) {
                 localStorage.setItem('view', 'usersList')
                 setView('usersList')
                 setEditingUserId('')
