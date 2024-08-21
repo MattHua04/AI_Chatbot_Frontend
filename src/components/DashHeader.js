@@ -272,7 +272,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
     }
 
     const content = (
-        <header className="dash-header">
+        <header className="dash-header" style={{position: windowWidth <= 1000 ? "relative" : "sticky"}}>
             {info}
         </header>
     )

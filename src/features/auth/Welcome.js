@@ -126,7 +126,9 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
         profileButtons = (
             <div style={{
                 display: 'flex',
-                gap: '1px',
+                flexDirection: windowWidth <= 1000 ? 'column' : 'row',
+                gap: windowWidth <= 1000 ? '5px' : '1px',
+                maxWidth: '13rem',
             }}>
                 <button
                     className='home_button'
@@ -211,7 +213,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             flexDirection: 'column',
             // marginRight: '9px',
         }}>
-            <div style={{display: 'block', marginBottom: '5px', width: '13rem'}}>
+            <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
                 {profileButtons}
             </div>
         </div>
@@ -222,7 +224,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             display: 'flex',
             flexDirection: 'column',
         }}>
-            <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem'}}>
+            <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
                 <button
                     className='home_button addConversationButton'
                     title="Create a New Conversation"
@@ -248,11 +250,12 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 justifyContent: 'flex-start',
                 overflowX: 'visible',
                 overflowY: 'scroll',
-                margin: '-3px -10px',
-                padding: '3px 10px',
+                margin: '-3px -30px',
+                padding: '3px 30px',
                 borderRadius: '10px',
                 scrollbarWidth: 'none',
-                maxWidth: '13rem',
+                maxWidth: 'calc(13rem + 60px)',
+                width: 'calc(13rem + 60px)',
                 }}>
                 <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
             </div>
