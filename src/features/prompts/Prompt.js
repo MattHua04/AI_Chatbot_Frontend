@@ -104,6 +104,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     }, [])
 
     const parsePromptContent = (content) => {
+        // return content
         const parts = content.split("```")
 
         const parsedContent = parts.map((part, index) => {
@@ -146,6 +147,21 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         lines.forEach((line, i) => {
                             if (containsMarkdown(line)) {
                                 temp.push(line)
+                                // if (line.includes(': ')) {
+                                //     const splitLine = line.split(': ', 2)
+                                //     console.log(splitLine)
+                                //     splitLine[1] = ": " + splitLine[1]
+                                //     formatted.push(
+                                //         <div style={{display: 'flex', flexDirection: 'row'}} key={`${index}-${i}`}>
+                                //             <Markdown components={{ a: CustomLink }}>{splitLine[0]}</Markdown>
+                                //             <MathJax dynamic hideUntilTypeset="every">
+                                //                 {splitLine[1]}
+                                //             </MathJax>
+                                //         </div>
+                                //     )
+                                // } else {
+                                //     temp.push(line)
+                                // }
                             } else {
                                 if (temp.length) {
                                     formatted.push(<Markdown key={`${index}-${i}-${i}`} components={{ a: CustomLink }}>{temp.join("\n")}</Markdown>)
@@ -154,7 +170,8 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 formatted.push(
                                         <MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>
                                             {line}
-                                        </MathJax>)
+                                        </MathJax>
+                                    )
                             }
                         })
                         if (temp.length) {
