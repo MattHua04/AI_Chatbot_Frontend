@@ -82,7 +82,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const handleFullScreen = () => {
         setFullScreen(!fullScreen)
         setShowConversationsList(false)
-        textareaRef.current?.focus()
+        // textareaRef.current?.focus()
     }
 
     const openNewConversationForm = () => {
@@ -248,7 +248,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 const newHeight = Math.min(Math.max(textAreaHeight - e.movementY, minTextAreaHeight), 50 * window.innerHeight / 100)
                 setTextAreaHeight(newHeight)
             } else if (e.type === "touchmove") {
-                e.preventDefault()
                 const touch = e.touches[0]
                 const { scrollTop, scrollHeight, clientHeight } = conversationContentRef.current
                 if (scrollTop === scrollHeight - clientHeight || startedAdjustmentAtBottom) {
@@ -596,6 +595,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 <div className='table__th'
                     ref={titleRef}
                     style={{
+                        position: fullScreen ? 'absolute' : '',
+                        top: '0',
+                        width: '100%',
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
