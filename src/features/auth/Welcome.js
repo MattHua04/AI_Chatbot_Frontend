@@ -12,6 +12,7 @@ import ConversationView from '../conversations/ConversationView'
 import { useState, useEffect, useRef } from 'react'
 import SpotifyInterface from '../spotify/SpotifyInterface'
 import { useSwipeable } from 'react-swipeable'
+import useIntersectionObserver from '../conversations/IntersectionObserver'
 
 const Welcome = ({view, currentConversationId, editingUserId, setView, setCurrentConversationId, setEditingUserId}) => {
     const id = useSelector(state => state.auth.id)
@@ -24,6 +25,16 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const [currentPanelIndex, setCurrentPanelIndex] = useState(0)
     const [usingVolumeSlider, setUsingVolumeSlider] = useState(false)
+    const selfRef = useRef(null)
+    const entries = useIntersectionObserver({
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    })
+    const entry = entries.find(entry => entry.target === selfRef.current)
+    const visibilityRatio = entry ? entry.intersectionRatio : 0
+    const scale = 0.7 + 0.3 * visibilityRatio
+    const opacity = visibilityRatio
 
     useEffect(() => {
         function handleResize() {
@@ -232,14 +243,26 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 justifyContent: 'flex-start',
                 overflowX: 'visible',
                 overflowY: 'scroll',
-                margin: '0px -30px',
-                padding: '-3px 30px',
+                margin: '-5px -30px',
+                marginBottom: '0px',
+                padding: '5px 30px',
+                paddingBottom: '0px',
                 borderRadius: '10px',
                 scrollbarWidth: 'none',
                 maxWidth: 'calc(13rem + 60px)',
                 width: 'calc(13rem + 60px)',
                 }}>
-                <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
+                <div data-observe
+                    ref={selfRef}
+                    style={{
+                        display: 'block',
+                        marginBottom: '5px',
+                        maxWidth: '13rem',
+                        width: '13rem',
+                        transform: `scale(${scale})`,
+                        opacity: opacity,
+                        transition: 'transform 0.1s ease',
+                        }}>
                     <button
                         className='home_button addConversationButton'
                         title="Create a New Conversation"
