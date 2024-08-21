@@ -115,7 +115,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
     let spotifyInterface
     if (isAdmin) {
         spotifyInterface = (
-            <div style={{maxWidth: '13rem', marginBottom: '10px'}}>
+            <div style={{maxWidth: '13rem', marginBottom: '10px', zIndex: '999'}}>
                 <SpotifyInterface usingVolumeSlider={usingVolumeSlider} setUsingVolumeSlider={setUsingVolumeSlider}/>
             </div>
         )
@@ -200,7 +200,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
 
     // Mobile swipeable side bar components
     const musicControls = (
-        <div style={{marginRight: '15px'}}>
+        <div style={{ zIndex: '999'}}>
             {spotifyInterface}
         </div>
     )
@@ -469,6 +469,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 justifyContent: 'center',
                 alignItems: 'flex-start',
                 borderRadius: '10px',
+                overflow: 'auto',
             }}>
             {view === '' &&
                 <div className="conversation-interface"
@@ -524,32 +525,16 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
     let content
     if (windowWidth <= 1000) {
         content = (
-            <div>
-            {sideBar}
-            {mainContent}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '1',
+                height: '90dvh',
+                maxHeight: '90dvh',
+            }}>
+                {sideBar}
+                {mainContent}
             </div>
-            // <section className="welcome"
-            //     style={{display: 'flex',
-            //         flexDirection: 'row',
-            //         flexGrow: '1',
-            //         height: '84dvh',
-            //         maxheight: '84dvh',
-            //     }}>
-            //     <div style={{
-            //             display: 'flex',
-            //             flexDirection: 'column',
-            //             flexGrow: '1',
-            //         }}>
-            //         {sideBar}
-            //         <div style={{
-            //                 display: 'flex',
-            //                 flexDirection: 'row',
-            //                 flexGrow: '1',
-            //             }}>
-            //             {mainContent}
-            //         </div>
-            //     </div>
-            // </section>
         )
     } else {
         content = (

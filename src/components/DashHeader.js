@@ -85,55 +85,104 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
 
     let options
     if (showOptions) {
-        options = (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                position: 'relative',
-                zIndex: '1',
-            }}>
-                <div ref={optionsRef}
-                    style={{
-                        marginRight: '20px',
+        if (windowWidth <= 1000) {
+            options = (
+                <div style={{
+                        position: 'absolute',
+                        justifyContent: 'center',
+                        width: '13rem',
+                        top: '2.5rem',
+                        right: '50%',
+                        transform: 'translateX(50%)',
+                        zIndex: '1',
                     }}>
-                    <button className="conversationButton-opaque"
-                        onClick={() => {
-                            editUser()
-                            setShowOptions(false)
-                        }}
-                        style={{
-                            textDecoration: 'none',
-                            maxWidth: nameLength + 'px',
-                            minWidth: '7rem',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '10px',
-                            marginBottom: '5px',
-                            marginRight: '0',
-                        }}>
-                        Profile
-                        <FontAwesomeIcon icon={faUser}/>
-                    </button>
-                    <button className="conversationButton-opaque"
-                        onClick={onLogOutClicked}
-                        style={{
-                            textDecoration: 'none',
-                            maxWidth: nameLength + 'px',
-                            minWidth: '7rem',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '10px',
-                            marginRight: '0',
-                        }}>
-                        Logout
-                        <FontAwesomeIcon icon={faRightFromBracket}/>
-                    </button>
+                    <div ref={optionsRef}>
+                        <button className="conversationButton-opaque"
+                            onClick={() => {
+                                editUser()
+                                setShowOptions(false)
+                            }}
+                            style={{
+                                textDecoration: 'none',
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginBottom: '5px',
+                                marginRight: '0',
+                            }}>
+                            Profile
+                            <FontAwesomeIcon icon={faUser}/>
+                        </button>
+                        <button className="conversationButton-opaque"
+                            onClick={onLogOutClicked}
+                            style={{
+                                textDecoration: 'none',
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginRight: '0',
+                            }}>
+                            Logout
+                            <FontAwesomeIcon icon={faRightFromBracket}/>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        } else {
+            options = (
+                <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        position: 'relative',
+                        zIndex: '1',
+                    }}>
+                    <div ref={optionsRef}
+                        style={{
+                            marginRight: '20px',
+                        }}>
+                        <button className="conversationButton-opaque"
+                            onClick={() => {
+                                editUser()
+                                setShowOptions(false)
+                            }}
+                            style={{
+                                textDecoration: 'none',
+                                maxWidth: nameLength + 'px',
+                                minWidth: '7rem',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginBottom: '5px',
+                                marginRight: '0',
+                            }}>
+                            Profile
+                            <FontAwesomeIcon icon={faUser}/>
+                        </button>
+                        <button className="conversationButton-opaque"
+                            onClick={onLogOutClicked}
+                            style={{
+                                textDecoration: 'none',
+                                maxWidth: nameLength + 'px',
+                                minWidth: '7rem',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginRight: '0',
+                            }}>
+                            Logout
+                            <FontAwesomeIcon icon={faRightFromBracket}/>
+                        </button>
+                    </div>
+                </div>
+            )
+        }
     }
 
     let userBlock
@@ -145,7 +194,6 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                         display: 'flex',
                         flexDirection: 'column',
                         textAlign: 'right',
-                        padding: '0.5em 1em',
                         zIndex: '9999',
                     }}>
                     <h1 className='dash-header__title' style={{margin: '0', padding: '0'}}>
@@ -201,15 +249,7 @@ const DashHeader = ({view, currentConversationId, setView, setCurrentConversatio
                 style={{
                     flexDirection: 'column',
                 }}>
-                {/* <div>
-                    <Link to="/dash" onClick={resetPage} style={{textDecoration: 'none'}}>
-                        <h1 className="dash-header__page-name">AI Chatbot</h1>
-                    </Link>
-                </div> */}
                 {userBlock}
-                {/* <h1 className='dash-header__title' style={{margin: '0', padding: '0'}}>
-                        Hello <Link onClick={onUsernameClicked} className='dash-header__title' style={{textDecoration: 'none'}}>{username}</Link> !
-                </h1> */}
             </div>
         )
     } else {

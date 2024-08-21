@@ -590,7 +590,6 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
         <>
             <div className={`conversation-interface ${fullScreen ? 'full-screen' : ''}`}
                 style={{
-                    height: fullScreen ? '100dvh' : '84dvh',
                     zIndex: fullScreen ? '99999' : '0',
                 }}>
                 <div className='table__th'
@@ -746,6 +745,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 marginRight: '1em',
                                 marginBottom: '1em',
                                 transition: 'none',
+                                touchAction: 'manipulation',
                                 zIndex: '9999',
                             }}/>
                         <button className='conversationSubmitButton'

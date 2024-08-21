@@ -1275,7 +1275,7 @@ tr {
   gap: 0.5em;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 1000px) {
   h1 {
     font-size: 2rem;
   }
@@ -1290,7 +1290,7 @@ tr {
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1000px) {
 
   body {
     font-size: 1.25rem;
