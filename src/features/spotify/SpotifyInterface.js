@@ -268,7 +268,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         "artist artist"
                     `,
                     rowGap: '0px',
-                    columnGap: '5px',
+                    // columnGap: '5px',
                     width: '100%',
                     height: '100%',
                     marginBottom: '5px',
@@ -335,7 +335,7 @@ const SpotifyInterface = ({usingVolumeSlider, setUsingVolumeSlider}) => {
                         "musicBars title"
                     `,
                     rowGap: '0px',
-                    columnGap: '5px',
+                    // columnGap: '5px',
                     width: '100%',
                     height: '2em',
                     marginBottom: '5px',
