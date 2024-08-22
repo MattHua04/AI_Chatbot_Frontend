@@ -157,15 +157,17 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     }
 
     useEffect(() => {
-        setAbleToSubmit(
-            input?.trim().length > 0
-            && ((
-                content?.length
-                && content[content?.length - 1][0] !== 'User'
-                && content[content?.length - 1][0] === 'AI'
-                && content[content?.length - 1][1] !== '...'
-            ) || content?.length === 0)
-        )
+        if (content) {
+            setAbleToSubmit(
+                input?.trim().length > 0
+                && ((
+                    content?.length
+                    && content[content?.length - 1][0] !== 'User'
+                    && content[content?.length - 1][0] === 'AI'
+                    && content[content?.length - 1][1] !== '...'
+                ) || content?.length === 0)
+            )
+        }
     }, [input, content])
 
     useEffect(() => {

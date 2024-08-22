@@ -138,7 +138,7 @@ const Login = ({setView, setCurrentConversationId}) => {
                                 className={`form__input ${validUserClass}`}
                                 style={{
                                     fontSize: '0.75em',
-                                    textAlign: 'left',
+                                    textAlign: 'center',
                                     flexGrow: '1',
                                     width: '100%',
                                     minWidth: '10rem',
@@ -161,7 +161,7 @@ const Login = ({setView, setCurrentConversationId}) => {
                                     style={{
                                         fontSize: '0.75em',
                                         width: '100%',
-                                        textAlign: 'left',
+                                        textAlign: 'center',
                                         flexGrow: '1',
                                         minWidth: '10rem',
                                         textIndent: '1rem',

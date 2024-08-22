@@ -233,7 +233,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
 
     // Mobile swipeable side bar components
     const musicControls = (
-        <div style={{ zIndex: '999'}}>
+        <div style={{ zIndex: '999', marginTop: '6px'}}>
             {spotifyInterface}
         </div>
     )
@@ -242,7 +242,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            // marginRight: '9px',
+            marginTop: '6px',
         }}>
             <div style={{display: 'block', marginBottom: '5px', maxWidth: '13rem', width: '13rem'}}>
                 {profileButtons}
@@ -259,14 +259,11 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 display: 'flex',
                 flexDirection: 'column',
                 flexGrow: '1',
-                // maxHeight: '50dvh',
                 justifyContent: 'flex-start',
                 overflowX: 'visible',
                 overflowY: 'scroll',
-                margin: '-5px -30px',
-                marginBottom: '0px',
-                padding: '5px 30px',
-                paddingBottom: '0px',
+                margin: '0px -30px',
+                padding: '6px 30px',
                 borderRadius: '10px',
                 scrollbarWidth: 'none',
                 maxWidth: 'calc(13rem + 60px)',
@@ -345,7 +342,6 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                                 flexGrow: '1',
                                 backgroundColor: 'rgba(203, 214, 238, 0.718)',
                                 borderRadius: '10px',
-                                padding: '6px',
                                 marginBottom: '5px',
                                 justifyContent: 'center',
                                 maxHeight: '110px',

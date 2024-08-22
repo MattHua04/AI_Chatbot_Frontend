@@ -4,6 +4,7 @@ import { useUpdateConversationMutation } from '../conversations/conversationsApi
 import { useState, useEffect, useRef } from 'react'
 import Markdown from 'react-markdown'
 import { MathJax, MathJaxContext } from 'better-react-mathjax'
+import MarkdownRenderer from './MarkdownRenderer'
 
 const Prompt = ({conversation, conversationId, conversationContent, conversationSize, promptId, editingPromptIndex, setEditingPromptIndex}) => {
     const [prompt, setPrompt] = useState(conversationContent[promptId])
@@ -109,7 +110,28 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
 
         const parsedContent = parts.map((part, index) => {
             if (index % 2 === 0) {
+                // return part
+                return <MarkdownRenderer markdown={part} key={index}/>
                 // Segment display math mode blocks
+                function latexToMarkdown(latex) {
+                    latex = latex.replace(/\$(.*?)\$/g, (match, equation) => {
+                        return `\\(${equation}\\)`
+                    })
+                
+                    latex = latex.replace(/\$\$(.*?)\$\$/gs, (match, equation) => {
+                        return `\\[\n${equation}\n\\]`
+                    })
+                
+                    return latex
+                }
+
+                // const markdown = latexToMarkdown(part)
+                // return part
+                // return <MathJax dynamic hideUntilTypeset="every" key={index}>
+                //             {part}
+                //         </MathJax>
+                return <Markdown key={index} components={{ a: CustomLink }}>{part}</Markdown>
+
                 const mathModeRegex = /(\\\[)([^\[\]]*?)(\\\])/g
                 const segments = []
                 let match
@@ -229,7 +251,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 )
             }
         })
-        
+        return parsedContent
         return <MathJaxContext>{parsedContent}</MathJaxContext>
     }
 

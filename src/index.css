@@ -649,7 +649,7 @@ span {
 
 .dash-footer {
   background: linear-gradient(0deg, rgba(203, 214, 238, 0.718), rgba(203, 214, 238, 0.668), rgba(203, 214, 238, 0.292), rgba(203, 214, 238, 0));
-  font-size: 30px;
+  /* font-size: 30px; */
   /* height: 60px; */
   position: sticky;
   bottom: 0;
