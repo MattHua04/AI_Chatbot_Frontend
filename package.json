@@ -28,6 +28,9 @@
     "react-scripts": "5.0.1",
     "react-slider": "^2.0.6",
     "react-swipeable": "^7.0.1",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-math": "^6.0.0",
     "requirements": "^2.0.0"
   },
   "scripts": {
