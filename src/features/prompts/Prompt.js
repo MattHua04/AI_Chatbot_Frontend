@@ -2,8 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare, faSave, faXmarkCircle, faCopy as faSolidCopy, faCheck, faRotate, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { useUpdateConversationMutation } from '../conversations/conversationsApiSlice'
 import { useState, useEffect, useRef } from 'react'
-import Markdown from 'react-markdown'
-import { MathJax, MathJaxContext } from 'better-react-mathjax'
 import MarkdownRenderer from './MarkdownRenderer'
 
 const Prompt = ({conversation, conversationId, conversationContent, conversationSize, promptId, editingPromptIndex, setEditingPromptIndex}) => {
@@ -22,14 +20,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     const lastPromptClickRef = useRef(lastPromptClick)
     const doubleClickListeners = useRef([])
 
-    const CustomLink = ({ href, children }) => {
-        return (
-            <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
-                {children}
-            </a>
-        )
-    }
-
     useEffect(() => {
         setParsedPromptContent(parsePromptContent(promptContent))
     }, [promptContent, copiedDict])
@@ -46,30 +36,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
         paddingLeft: '2rem',
         textOverflow: 'clip',
         overflowX: 'auto'
-    }
-
-    function containsMarkdown(line) {
-        // Define regex patterns for various markdown elements
-        const markdownPatterns = [
-            /(#+)(.*)/,                           // headers
-            /\[([^\[]+)\]\(([^\)]+)\)/,  // links
-            /(\*\*(.*?)\*\*)|(\_\_(.*?)\_\_)/g,            // bold
-            /(\*(.*?)\*)|(\_(.*?)\_)/g,                       // italics
-            /\~\~(.*?)\~\~/,                     // del
-            /\:\"(.*?)\"\:/,                         // quote
-            /`(.*?)`/,                         // inline code
-            /\n\*(.*)/,                          // ul lists
-            /\n[0-9]+\.(.*)/,                    // ol lists
-            /\n(&gt|\>)(.*)/,               // blockquotes
-            /\n-{5,}/,                                // horizontal rule
-            /\n([^\n]+)\n/,                         // add paragraphs
-            /<\/ul>\s?<ul>/,                                  // fix extra ul
-            /<\/ol>\s?<ol>/,                                  // fix extra ol
-            /<\/blockquote><blockquote>/                   // fix extra blockquote
-        ]
-    
-        // Check if the line matches any markdown pattern
-        return markdownPatterns.some(pattern => pattern.test(line))
     }
 
     const copyToClipboard = (text, index) => {
@@ -105,91 +71,23 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     }, [])
 
     const parsePromptContent = (content) => {
-        // return content
         const parts = content.split("```")
 
         const parsedContent = parts.map((part, index) => {
             if (index % 2 === 0) {
-                // // return part
-                // // Segment display math mode blocks
-                // const convertLatexDelimiters = (markdown) => {
-                //     // Convert inline math delimiters
-                //     const convertedInline = markdown.replace(/\\\((.*?)\\\)/g, '$$ $1 $$');
+                function convertDelimiters(input) {
+                    // Convert inline math: \( ... \) to $ ... $
+                    let output = input.replace(/\\\((.*?)\\\)/g, '$$$1$')
                     
-                //     // Convert block math delimiters
-                //     const convertedBlock = convertedInline.replace(/\\\[(.*?)\\\]/g, '$$$$ $1 $$$$');
-                  
-                //     return convertedBlock;
-                // };
+                    // Convert display math: \[ ... \] to $$ ... $$, including newlines inside
+                    output = output.replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$')
+                    
+                    return output
+                  }
 
-                // const markdown = convertLatexDelimiters(part)
-                // return <MarkdownRenderer markdown={markdown} key={index}/>
-                // // return part
-                // // return <MathJax dynamic hideUntilTypeset="every" key={index}>
-                // //             {part}
-                // //         </MathJax>
-                // return <Markdown key={index} components={{ a: CustomLink }}>{part}</Markdown>
-
-                const mathModeRegex = /(\\\[)([^\[\]]*?)(\\\])/g
-                const segments = []
-                let match
-                let lastIndex = 0
-                while ((match = mathModeRegex.exec(part)) !== null) {
-                    // Push text that comes before the current match
-                    if (lastIndex < match.index) {
-                        segments.push({
-                            latex: false,
-                            content: part.slice(lastIndex, match.index).trim(),
-                        })
-                    }
-                    // Push the match
-                    segments.push({
-                        latex: true,
-                        content: match[1] + match[2] + match[3],
-                    })
-                    // Update the lastIndex to the end of the current match
-                    lastIndex = mathModeRegex.lastIndex
-                }
-                // Push any remaining text after the last match
-                if (lastIndex < part.length) {
-                    segments.push({
-                        latex: false,
-                        content: part.slice(lastIndex).trim(),
-                    })
-                }
-
-                // Format the segments as MathJax or Markdown
-                const formatted = []
-                segments.forEach((segment, index) => {
-                    if (!segment.latex) {
-                        let lines = segment.content.split("\n")
-                        let temp = []
-                        lines.forEach((line, i) => {
-                            if (containsMarkdown(line)) {
-                                temp.push(line)
-                            } else {
-                                if (temp.length) {
-                                    formatted.push(<Markdown key={`${index}-${i}-${i}`} components={{ a: CustomLink }}>{temp.join("\n")}</Markdown>)
-                                    temp = []
-                                }
-                                formatted.push(
-                                        <MathJax dynamic hideUntilTypeset="every" key={`${index}-${i}`}>
-                                            {line}
-                                        </MathJax>
-                                    )
-                            }
-                        })
-                        if (temp.length) {
-                            formatted.push(<Markdown key={index} components={{ a: CustomLink }}>{temp.join("\n")}</Markdown>)
-                        }
-                    } else {
-                        formatted.push(
-                                <MathJax dynamic hideUntilTypeset="every" key={index}>
-                                    {segment.content}
-                                </MathJax>)
-                    }
-                })
-                return formatted
+                const markdown = convertDelimiters(part)
+                console.log(markdown)
+                return <MarkdownRenderer markdown={markdown} key={index}/>
             } else {
                 const language = part.substring(0, part.indexOf("\n"))
                 const code = part.substring(part.indexOf("\n") + 1)

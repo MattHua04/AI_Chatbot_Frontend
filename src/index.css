@@ -160,10 +160,6 @@ li {
 
 span {
   word-wrap: break-word;
-  white-space: pre-wrap;
-  display: inline-block;
-  line-height: 1.5rem;
-  padding-bottom: 0.75rem;
 }
 
 /* || PAGES */
@@ -648,14 +644,13 @@ span {
 }
 
 .dash-footer {
-  background: linear-gradient(0deg, rgba(203, 214, 238, 0.718), rgba(203, 214, 238, 0.668), rgba(203, 214, 238, 0.292), rgba(203, 214, 238, 0));
+  background: linear-gradient(0deg, rgba(203, 214, 238, 0.718), rgba(203, 214, 238, 0.668), rgba(203, 214, 238, 0.475), rgba(203, 214, 238, 0.292), rgba(203, 214, 238, 0.2), rgba(203, 214, 238, 0));
   /* font-size: 30px; */
   /* height: 60px; */
   position: sticky;
   bottom: 0;
   z-index: 1;
-  padding-bottom: 0.5em;
-  padding-top: 1em;
+  padding-top: 2.5em;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;

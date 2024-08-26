@@ -123,7 +123,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     </p>
                 </div>
             )
-        } else if (windowWidth <= 1000) {
+        } else if (windowWidth <= 1400) {
             defaultContent = (
                 <div className='welcome__default_box'>
                     <p className='welcome__default'>
