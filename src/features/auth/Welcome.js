@@ -57,10 +57,10 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
 
     const openUserProfile = () => {
         if (isAdmin) {
-            if (view === 'userList') {
+            if (view === 'usersList') {
                 setView('')
                 setEditingUserId('')
-            } else if (view === 'editUser') {
+            } else {
                 setView('usersList')
                 setEditingUserId('')
             }
