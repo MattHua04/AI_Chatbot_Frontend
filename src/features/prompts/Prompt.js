@@ -132,8 +132,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 )
             }
         })
-        // return parsedContent
-        return <MathJaxContext>{parsedContent}</MathJaxContext>
+        return parsedContent
     }
 
     const [updateConversation, {
