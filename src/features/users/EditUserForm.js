@@ -73,9 +73,9 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
 
     useEffect(() => {
         if (isSuccess) {
-            setUsername('')
+            setUsername(user.username)
             setPassword('')
-            setRole()
+            setRole(user.role)
             if (isAdmin && loggedInUser.id !== user.id) {
                 localStorage.setItem('view', 'usersList')
                 setView('usersList')
@@ -88,7 +88,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
         } else if (isDelSuccess) {
             setUsername('')
             setPassword('')
-            setRole()
+            setRole('')
             if (loggedInUser.id === user.id) {
                 sendLogout()
                 navigate(`/`)
