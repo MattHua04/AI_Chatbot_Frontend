@@ -160,7 +160,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const validUserClass = !validUsername ? 'form__input--incomplete' : ''
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
-    const validRoleClass = role !== '' ? 'form__input--incomplete' : ''
+    const validRoleClass = role === '' ? 'form__input--incomplete' : ''
 
     const errContent = (error?.data?.message || delError?.data?.message) ?? ''
 
