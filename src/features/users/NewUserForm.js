@@ -8,20 +8,20 @@ import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {selectUserById} from './usersApiSlice'
 
-const USER_REGEX = /^[A-z]{1,}$/
+const USER_REGEX = /^[A-z0-9]{1,}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,}$/
 
 const NewUserForm = ({fullSize}) => {
     const navigate = useNavigate()
     const {id} = useSelector(state => state.auth)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
-    const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
+    const isAdmin = loggedInUser?.role === ROLES.ADMIN
     const path = useLocation().pathname
     const [username, setUsername] = useState('')
     const [validUsername, setValidUsername] = useState(false)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
-    const [roles, setRoles] = useState([ROLES.USER])
+    const [role, setRole] = useState(ROLES.USER)
     const [active, setActive] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showForm, setShowForm] = useState(true)
@@ -68,13 +68,13 @@ const NewUserForm = ({fullSize}) => {
         if (isSuccess && path.includes('/login/new')) {
             setUsername('')
             setPassword('')
-            setRoles([ROLES.USER])
+            setRole(ROLES.USER)
             setActive(false)
             navigate('/login')
         } else if (isSuccess) {
             setUsername('')
             setPassword('')
-            setRoles([ROLES.USER])
+            setRole(ROLES.USER)
             setActive(false)
             setShowForm(false)
             setShowMessage(true)
@@ -83,12 +83,8 @@ const NewUserForm = ({fullSize}) => {
 
     const onUsernameChanged = e => setUsername(e.target.value)
     const onPasswordChanged = e => setPassword(e.target.value)
-    const onRolesChanged = e => {
-        const values = Array.from(
-            e.target.selectedOptions,
-            (option) => option.value
-        )
-        setRoles(values)
+    const onRoleChanged = e => {
+        setRole(e.target.selectedOptions[0].value)
     }
     const onActiveChange = e => {
         e.preventDefault()
@@ -98,7 +94,7 @@ const NewUserForm = ({fullSize}) => {
     const onSaveUserClicked = async (e) => {
         e.preventDefault()
         if (canSave) {
-            await addNewUser({username, password, roles, active})
+            await addNewUser({username, password, role, active})
         }
     }
 
@@ -153,10 +149,10 @@ const NewUserForm = ({fullSize}) => {
         )
     }
 
-    let chooseRoles
+    let chooseRole
     if (isAdmin) {
         if (windowWidth <= 1000) {
-            chooseRoles = (
+            chooseRole = (
                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between'}}>
                     <label className={fullSize ? "" : "form__label"}
                         htmlFor="roles"
@@ -173,15 +169,15 @@ const NewUserForm = ({fullSize}) => {
                         className={`form__select`}
                         multiple={false}
                         size="3"
-                        value={roles}
-                        onChange={onRolesChanged}
+                        value={role}
+                        onChange={onRoleChanged}
                         style={{maxWidth: '18rem', fontSize: '1.1rem'}}>
                         {options}
                     </select>
                 </div>
             )
         } else {
-            chooseRoles = (
+            chooseRole = (
                 <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                     <label className={fullSize ? "" : "form__label"}
                         htmlFor="roles"
@@ -195,10 +191,10 @@ const NewUserForm = ({fullSize}) => {
                         id="roles"
                         name="roles"
                         className={`form__select`}
-                        multiple={true}
+                        multiple={false}
                         size="3"
-                        value={roles}
-                        onChange={onRolesChanged}
+                        value={role}
+                        onChange={onRoleChanged}
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -357,7 +353,7 @@ const NewUserForm = ({fullSize}) => {
                             </button>
                         </div>
                     </div>
-                    {chooseRoles}
+                    {chooseRole}
                     <div style={{ display: 'flex', flexDirection: 'row'}}>
                         <button
                             className="form__submit-button"
@@ -449,7 +445,7 @@ const NewUserForm = ({fullSize}) => {
                             </button>
                         </div>
                     </div>
-                    {chooseRoles}
+                    {chooseRole}
                     <button
                         className="form__submit-button"
                         type='submit'
@@ -479,13 +475,16 @@ const NewUserForm = ({fullSize}) => {
                 {message}
                 <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                     <button
-                        className="form__submit-button"
+                        className="home_button"
                         autoFocus
                         type='submit'
-                        style={{fontSize: '1.5rem',
-                            padding: '0.2em 0.5em',
+                        style={{
+                            fontSize: '1.5rem',
+                            border: 'none',
+                            borderRadius: '15px',
+                            padding: '0.3em 1em',
+                            textDecoration: 'none',
                             flexGrow: '1',
-                            outline: 'none',
                         }}>
                         Register Another User?
                     </button>

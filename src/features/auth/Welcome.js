@@ -17,7 +17,7 @@ import useIntersectionObserver from '../conversations/IntersectionObserver'
 const Welcome = ({view, currentConversationId, editingUserId, setView, setCurrentConversationId, setEditingUserId}) => {
     const id = useSelector(state => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
-    const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
+    const isAdmin = loggedInUser?.role === ROLES.ADMIN
     const [showNewConversation, setShowNewConversation] = useState(false)
     const newConversationRef = useRef(null)
     const sideBarRef = useRef(null)
@@ -545,6 +545,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     style={{
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
+                        overflowY: 'auto',
                     }}>
                     <UsersList setView={setView} setEditingUserId={setEditingUserId} />
                 </div>
@@ -554,6 +555,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     style={{
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
+                        overflowY: 'auto',
                     }}>
                     <EditUser uid={editingUserId} setView={setView} setCurrentConversationId={setCurrentConversationId} setEditingUserId={setEditingUserId} />
                 </div>
@@ -563,6 +565,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     style={{
                         padding: '1rem 0.5rem',
                         backgroundColor: 'rgba(203, 214, 238, 0.718)',
+                        overflowY: 'auto',
                     }}>
                     <NewUserForm fullSize={false} />
                 </div>

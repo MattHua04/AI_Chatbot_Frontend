@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentToken, selectCurrentId } from '../auth/authSlice'
 import useAuth from "../../hooks/useAuth"
 
-const USER_REGEX = /^[A-z0-9]{0,}$/
+const USER_REGEX = /^[A-z0-9]{1,}$/
 const PWD_REGEX = /^$|^[A-z0-9!@#$%]{4,}$/
 
 const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId}) => {
@@ -35,13 +35,13 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     const [validUsername, setValidUsername] = useState(true)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
-    const [roles, setRoles] = useState(user.roles)
+    const [role, setRole] = useState(user.role)
     const [active, setActive] = useState(user.active)
     const [showPassword, setShowPassword] = useState(false)
-    const { roles: loggedInUserRoles } = useAuth()
+    const { role: loggedInUserRole } = useAuth()
     const sourceId = useSelector(selectCurrentId)
-    const isAdmin = loggedInUserRoles.includes('Admin')
-    const targetUserIsAdmin = user.roles.includes('Admin')
+    const isAdmin = loggedInUserRole === 'Admin'
+    const targetUserIsAdmin = user.role === 'Admin'
     const [deleteClicks, setDeleteClicks] = useState(0)
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
@@ -60,7 +60,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
     const [update] = useUpdateMutation()
 
     useEffect(() => {
-        setRoles(user.roles)
+        setRole(user.role)
     }, [user])
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
         if (isSuccess) {
             setUsername('')
             setPassword('')
-            setRoles([])
+            setRole()
             if (isAdmin && loggedInUser.id !== user.id) {
                 localStorage.setItem('view', 'usersList')
                 setView('usersList')
@@ -88,7 +88,7 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
         } else if (isDelSuccess) {
             setUsername('')
             setPassword('')
-            setRoles([])
+            setRole()
             if (loggedInUser.id === user.id) {
                 sendLogout()
                 navigate(`/`)
@@ -102,24 +102,20 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
 
     const onUsernameChanged = e => setUsername(e.target.value)
     const onPasswordChanged = e => setPassword(e.target.value)
-    const onRolesChanged = e => {
-        const values = Array.from(
-            e.target.selectedOptions,
-            (option) => option.value
-        )
-        setRoles(values)
+    const onRoleChanged = e => {
+        setRole(e.target.selectedOptions[0].value)
     }
     const onActiveChange = e => !targetUserIsAdmin ? setActive(!active) : setActive(active)
 
     const onSaveUserClicked = async (e) => {
         if (password) {
-            await updateUser({sourceId: sourceId, id: user.id, username, password, roles, active})
+            await updateUser({sourceId: sourceId, id: user.id, username, password, role, active})
             if (loggedInUser.id === user.id) {
                 const { accessToken, id, active } = await update({ username }).unwrap()
                 dispatch(setCredentials({ accessToken, username, id, active }))
             }
         } else {
-            await updateUser({sourceId: sourceId, id: user.id, username, roles, active})
+            await updateUser({sourceId: sourceId, id: user.id, username, role, active})
             if (loggedInUser.id === user.id) {
                 const { accessToken, id, active } = await update({ username }).unwrap()
                 dispatch(setCredentials({ accessToken, username, id, active }))
@@ -137,11 +133,11 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
         setShowPassword(prev => !prev)
     }
 
-    // Admin users can change other users' roles
+    // Admin users can change other users' role
     const {id} = useSelector(state => state.auth)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
 
-    const visibleRoles = loggedInUser?.roles.includes(ROLES.ADMIN) ? [ROLES.ADMIN, ROLES.USER, ROLES.DEMO] : []
+    const visibleRoles = loggedInUser?.role === ROLES.ADMIN ? [ROLES.ADMIN, ROLES.USER, ROLES.DEMO] : []
 
     const options = Object.values(ROLES)
         .filter(role => visibleRoles.includes(role))
@@ -156,15 +152,15 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
 
     let canSave
     if (password && !validPassword) {
-        canSave = [roles.length, validUsername, validPassword].every(Boolean) && !isLoading
+        canSave = [role !== '', validUsername, validPassword].every(Boolean) && !isLoading
     } else {
-        canSave = [roles.length, validUsername].every(Boolean) && !isLoading
+        canSave = [role !== '', validUsername].every(Boolean) && !isLoading
     }
 
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const validUserClass = !validUsername ? 'form__input--incomplete' : ''
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
-    const validRolesClass = roles.length === 0 ? 'form__input--incomplete' : ''
+    const validRoleClass = role !== '' ? 'form__input--incomplete' : ''
 
     const errContent = (error?.data?.message || delError?.data?.message) ?? ''
 
@@ -205,11 +201,11 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
                     <select
                         id="roles"
                         name="roles"
-                        className={`form__select ${validRolesClass}`}
+                        className={`form__select ${validRoleClass}`}
                         multiple={false}
                         size={visibleRoles.length}
-                        value={roles}
-                        onChange={onRolesChanged}
+                        value={role}
+                        onChange={onRoleChanged}
                         style={{maxWidth: '18rem', fontSize: '1.1rem'}}
                     >
                         {options}
@@ -230,11 +226,11 @@ const EditUserForm = ({user, setView, setCurrentConversationId, setEditingUserId
                     <select
                         id="roles"
                         name="roles"
-                        className={`form__select ${validRolesClass}`}
-                        multiple={true}
+                        className={`form__select ${validRoleClass}`}
+                        multiple={false}
                         size={visibleRoles.length}
-                        value={roles}
-                        onChange={onRolesChanged}
+                        value={role}
+                        onChange={onRoleChanged}
                         style={{maxWidth: '18rem'}}
                     >
                         {options}

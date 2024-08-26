@@ -13,8 +13,8 @@ const EditUser = ({uid, setView, setCurrentConversationId, setEditingUserId}) =>
     }
     const loggedInUser = useSelector(state => selectUserById(state, loggedInUserId))
     const user = useSelector(state => selectUserById(state, id))
-    const {roles} = useAuth()
-    const isAdmin = roles.includes('Admin')
+    const {role} = useAuth()
+    const isAdmin = role === 'Admin'
 
     if (!isAdmin && loggedInUserId !== id || !loggedInUser?.active) {
         return <div className="errmsg">Unauthorized</div>

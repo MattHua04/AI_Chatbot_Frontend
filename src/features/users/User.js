@@ -21,7 +21,7 @@ const User = ({ userId, setView, setEditingUserId }) => {
 
     const changeActive = (e) => {
         e.preventDefault()
-        updateUser({sourceId: sourceId, id: userId, username: user.username, roles: user.roles, active: !user.active})
+        updateUser({sourceId: sourceId, id: userId, username: user.username, role: user.role, active: !user.active})
     }
 
     if (user) {
@@ -32,13 +32,11 @@ const User = ({ userId, setView, setEditingUserId }) => {
             setEditingUserId(userId)
         }
 
-        const userRolesString = user.roles.toString().replaceAll(',', ', ')
-
         return (
             <tr className="table__row user">
-                <td className={`table__cell`}>{user.username}</td>
-                <td className={`table__cell`}>{userRolesString}</td>
-                <td className={`table__cell`}>
+                <td className='table__cell'>{user.username}</td>
+                <td className='table__cell'>{user.role}</td>
+                <td className='table__cell'>
                     <button
                         className="icon-button table__button"
                         onClick={changeActive}>
@@ -52,7 +50,7 @@ const User = ({ userId, setView, setEditingUserId }) => {
                             }}/>
                     </button>
                 </td>
-                <td className={`table__cell`}>
+                <td className='table__cell'>
                     <button
                         className="icon-button table__button"
                         onClick={handleEdit}

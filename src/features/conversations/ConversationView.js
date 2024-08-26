@@ -16,7 +16,7 @@ import SpotifyInterface from '../spotify/SpotifyInterface'
 const ConversationView = ({conversationId, setCurrentConversationId, setView, usingVolumeSlider, setUsingVolumeSlider}) => {
     const id = useSelector((state) => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
-    const isAdmin = loggedInUser?.roles.includes(ROLES.ADMIN)
+    const isAdmin = loggedInUser?.role === ROLES.ADMIN
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [content, setContent] = useState(conversation?.content)
     const [title, setTitle] = useState(conversation?.title)

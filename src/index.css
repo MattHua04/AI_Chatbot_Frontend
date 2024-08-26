@@ -706,7 +706,6 @@ tr {
   color: var(--TABLE-COLOR);
   gap: 0.3em;
   border-collapse: collapse;
-  overflow: auto;
   padding-bottom: 10px;
   scrollbar-width: none;
   justify-content: center;
@@ -737,7 +736,7 @@ tr {
 .table__body {
   /* display: block; */
   overflow-y: auto;
-  height: calc(75vh - 126px);
+  /* height: calc(75vh - 126px); */
 }
 .table__cell {
   color: #5136d5;
