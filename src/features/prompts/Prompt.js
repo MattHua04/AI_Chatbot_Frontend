@@ -491,15 +491,14 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                         style={{
                             borderRadius: '10px',
                             padding: '0.5em 1em',
-                            paddingBottom: '0.45em',
                             textDecoration: 'none',
                             fontSize: '16px',
                             display: 'flex',
+                            flexDirection: 'column',
+                            flexGrow: '1',
                             alignItems: 'center',
                             marginLeft: '1em',
                             marginRight: '1em',
-                            display: 'flex',
-                            flexDirection: 'column',
                         }}>
                         <pre ref={promptRef}
                             style={{
@@ -591,7 +590,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                 </div>
             )
 
-        }else textBubble = null
+        }
 
         return textBubble
 
