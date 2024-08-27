@@ -68,8 +68,8 @@ const DashFooter = () => {
 
     const content = (
         <footer className="dash-footer">
-            {goHomeButton}
-            {logoutButton}
+            {/* {goHomeButton}
+            {logoutButton} */}
         </footer>
     )
     return content

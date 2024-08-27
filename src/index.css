@@ -144,13 +144,14 @@ h5 {
   /* margin-bottom: 1rem; */
 }
 
-ul {
-  padding-left: 2.5rem;
-  line-height: 0rem;
+.katex-display {
+  overflow: hidden; /* Or hidden as needed */
 }
 
-ol {
-  padding-left: 1.5rem;
+
+ul,
+ol{
+  padding-left: 2rem;
   line-height: 0rem;
 }
 
@@ -645,12 +646,11 @@ span {
 
 .dash-footer {
   background: linear-gradient(0deg, rgba(203, 214, 238, 0.718), rgba(203, 214, 238, 0.668), rgba(203, 214, 238, 0.475), rgba(203, 214, 238, 0.292), rgba(203, 214, 238, 0.2), rgba(203, 214, 238, 0));
-  /* font-size: 30px; */
-  /* height: 60px; */
-  position: sticky;
+  position: absolute;
+  width: 100%;
   bottom: 0;
   z-index: 1;
-  padding-top: 2.5em;
+  height: 2.5em;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
@@ -1274,7 +1274,7 @@ tr {
 
 @media screen and (max-width: 1000px) {
   body {
-    overflow-y: auto;
+    /* overflow-y: auto; */
   }
 
   h1 {

@@ -12,11 +12,13 @@ import ConversationsList from './ConversationsList'
 import NewConversation from './NewConversation'
 import { Buffer } from 'buffer'
 import SpotifyInterface from '../spotify/SpotifyInterface'
+import { text } from '@fortawesome/fontawesome-svg-core'
 
 const ConversationView = ({conversationId, setCurrentConversationId, setView, usingVolumeSlider, setUsingVolumeSlider}) => {
     const id = useSelector((state) => state.auth.id)
     const loggedInUser = useSelector((state) => selectUserById(state, id))
     const isAdmin = loggedInUser?.role === ROLES.ADMIN
+    const [conversationLoaded, setConversationLoaded] = useState(false)
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [content, setContent] = useState(conversation?.content)
     const [title, setTitle] = useState(conversation?.title)
@@ -53,6 +55,21 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
     const [paddingTop, setPaddingTop] = useState('0px')
     const [paddingBottom, setPaddingBottom] = useState('0px')
     const [marginTop, setMarginTop] = useState('0px')
+
+    useEffect(() => {
+        if (conversation === undefined && conversationLoaded) {
+            setCurrentConversationId('')
+            setView('')
+            localStorage.setItem('view', '')
+            localStorage.setItem('conversationId', '')
+        } else if (conversation !== undefined && !conversationLoaded) {
+            setConversationLoaded(true)
+        }
+    }, [conversation, conversationLoaded])
+
+    useEffect(() => {
+        setConversationLoaded(false)
+    }, [conversationId])
     
     useEffect(() => {
         // Calculate padding and margin based on referenced elements
@@ -138,7 +155,9 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
             setTextAreaHeight(minTextAreaHeight)
             textareaRef.current.style.height = minTextAreaHeight + 'px'
         } else if (textareaRef.current && textAreaHeight === minTextAreaHeight) {
-            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+            const newHeight = textareaRef.current.scrollHeight
+            // textareaRef.current.style.height = `${newHeight}px`
+            setTextAreaHeight(newHeight)
         } else {
             setTextAreaHeight(textareaRef.current.scrollHeight)
         }
@@ -168,7 +187,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 ) || content?.length === 0)
             )
         }
-    }, [input, content])
+    }, [input, content, fullScreen])
 
     useEffect(() => {
         if (content) setContentSize(Buffer.byteLength(JSON.stringify(content), 'utf8'))
@@ -363,7 +382,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                 removeAdjustTextAreaTimeout()
                 const id = setTimeout(() => {
                     hideAdjustTextAreaButton(false)
-                }, 333)
+                }, 100)
                 setTimeoutId(id)
             }
         }
@@ -634,8 +653,7 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                         flexGrow: '1',
                         width: '100%',
                         height: '100%',
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
+                        overflow: 'auto',
                         scrollbarWidth: 'none',
                         paddingBottom: paddingBottom,
                         paddingTop: paddingTop,
@@ -738,12 +756,14 @@ const ConversationView = ({conversationId, setCurrentConversationId, setView, us
                                 resize: 'none',
                                 overflow: 'auto',
                                 height: textAreaHeight + 'px',
+                                minHeight: '3.5rem',
                                 maxHeight: '50dvh',
                                 width: '100%',
                                 whiteSpace: 'pre-wrap',
                                 textAlign: 'left',
-                                padding: '15px',
-                                lineHeight: '1.5em',
+                                padding: '1rem',
+                                // paddingBottom: '0rem',
+                                lineHeight: '1.5rem',
                                 boxShadow: '0px 5px 8px rgba(84, 71, 209, 0.718)',
                                 marginTop: '1em',
                                 marginLeft: '1em',

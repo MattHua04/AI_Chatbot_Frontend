@@ -525,7 +525,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                 justifyContent: 'center',
                 alignItems: 'flex-start',
                 borderRadius: '10px',
-                overflow: 'auto',
+                overflowY: 'auto',
             }}>
             {view === '' &&
                 <div className="conversation-interface"

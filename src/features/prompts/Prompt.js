@@ -71,6 +71,7 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
     }, [])
 
     const parsePromptContent = (content) => {
+        // return content
         const parts = content.split("```")
 
         const parsedContent = parts.map((part, index) => {
@@ -83,10 +84,9 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                     output = output.replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$')
                     
                     return output
-                  }
+                }
 
                 const markdown = convertDelimiters(part)
-                console.log(markdown)
                 return <MarkdownRenderer markdown={markdown} key={index}/>
             } else {
                 const language = part.substring(0, part.indexOf("\n"))
@@ -118,9 +118,10 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     copyToClipboard(code, index)
                                 }}
                                 style={{
-                                    width: 'auto',
+                                    width: '2.5rem',
                                     padding: '0.3em 0.7em',
                                     boxShadow: 'none',
+                                    textOverflow: 'clip',
                                 }}>
                                     {copiedDict[index] ? <FontAwesomeIcon icon={faCheck}/> : <FontAwesomeIcon icon={faSolidCopy} />}
                             </button>
@@ -386,7 +387,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 alignItems: 'center',
                                 marginRight: '1em',
                                 marginLeft: '1em',
-                                // maxWidth: '65dvw',
                                 width: '100%',
                             }}>
                             <textarea
@@ -461,7 +461,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                     whiteSpace: 'pre-wrap',
                                     padding: '0.5em 0em',
                                     maxWidth: '59dvw',
-                                    // overflowX: 'clip',
                                 }}>
                                 {promptContent}
                             </pre>
@@ -499,7 +498,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                             alignItems: 'center',
                             marginLeft: '1em',
                             marginRight: '1em',
-                            // maxWidth: '65dvw',
                             display: 'flex',
                             flexDirection: 'column',
                         }}>
@@ -511,8 +509,6 @@ const Prompt = ({conversation, conversationId, conversationContent, conversation
                                 marginRight: '0.45em',
                                 wordWrap: 'break-word',
                                 whiteSpace: 'pre-wrap',
-                                // maxWidth: '59dvw',
-                                // overflowX: 'clip',
                             }}>
                             {parsedPromptContent}
                         </pre>
