@@ -2,7 +2,7 @@ import { useGetConversationsQuery } from "./conversationsApiSlice"
 import Conversation from "./Conversation"
 import { useSelector } from "react-redux"
 
-const ConversationsList = ({setCurrentConversationId, setView}) => {
+const ConversationsList = ({currentConversationId, setCurrentConversationId, setView}) => {
     const id = useSelector((state) => state.auth.id)
 
     const {
@@ -37,6 +37,7 @@ const ConversationsList = ({setCurrentConversationId, setView}) => {
                     key={conversationId}
                     conversationId={conversationId}
                     conversations={conversations}
+                    currentConversationId={currentConversationId}
                     setCurrentConversationId={setCurrentConversationId}
                     setView={setView}/>
             )) 

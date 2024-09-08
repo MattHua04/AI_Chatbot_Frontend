@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useUpdateConversationMutation, useDeleteConversationMutation, useGetConversationsQuery } from './conversationsApiSlice'
 import useIntersectionObserver from './IntersectionObserver'
 
-const Conversation = ({ conversationId, conversations, setCurrentConversationId, setView }) => {
+const Conversation = ({ conversationId, conversations, currentConversationId, setCurrentConversationId, setView }) => {
     const [conversation, setConversation] = useState(useSelector(state => selectConversationById(state, conversationId)))
     const [conversationContent, setConversationContent] = useState(conversation ? conversation.content : '')
     const [edit, setEdit] = useState(false)
@@ -81,7 +81,7 @@ const Conversation = ({ conversationId, conversations, setCurrentConversationId,
     }
 
     const handleDelete = async () => {
-        if (conversations.ids?.length === 1 && localStorage.getItem('currentConversationId') === conversationId) {
+        if (conversations.ids?.length === 1 && currentConversationId === conversationId) {
             localStorage.setItem('view', '')
             setView('')
             setCurrentConversationId('')

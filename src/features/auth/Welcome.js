@@ -60,24 +60,30 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
             if (view === 'usersList') {
                 setView('')
                 setEditingUserId('')
+                setCurrentConversationId('')
             } else {
                 setView('usersList')
                 setEditingUserId('')
+                setCurrentConversationId('')
             }
         } else if (!isAdmin && view === 'editUser') {
             setView('')
             setEditingUserId('')
+            setCurrentConversationId('')
         } else {
             setView(isAdmin ? 'usersList' : 'editUser')
             setEditingUserId(!isAdmin ? id: '')
+            setCurrentConversationId('')
         }
     }
 
     const openNewUserForm = () => {
         if (view === 'newUserForm') {
             setView('')
+            setCurrentConversationId('')
         } else {
             setView('newUserForm')
+            setCurrentConversationId('')
         }
     }
 
@@ -304,7 +310,7 @@ const Welcome = ({view, currentConversationId, editingUserId, setView, setCurren
                     </button>
                     {newConversation}
                 </div>
-                <ConversationsList setCurrentConversationId={setCurrentConversationId} setView={setView}/>
+                <ConversationsList currentConversationId={currentConversationId} setCurrentConversationId={setCurrentConversationId} setView={setView}/>
             </div>
         </div>
     )
